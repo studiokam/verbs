@@ -1,7 +1,6 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Home extends CI_Controller {
+class Add extends CI_Controller {
 
 	public function index()
 	{
@@ -9,9 +8,9 @@ class Home extends CI_Controller {
 			'data' => 'dziś',
 			'cena' => 120,
 			'wiek' => 23
-		];
-		$this->load->view('home.html');
-		// json_encode($policy);
+        ];
+        $this->load->view('home.html');
+		echo json_encode($policy);
 	}
 
 	public function start_data()
