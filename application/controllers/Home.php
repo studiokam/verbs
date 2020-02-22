@@ -5,22 +5,20 @@ class Home extends CI_Controller {
 
 	public function index()
 	{
-		$policy = [
-			'data' => 'dziś',
-			'cena' => 120,
-			'wiek' => 23
-		];
-		$this->load->view('home.html');
-		// json_encode($policy);
+		$data = array(
+			'title' => 'Irregular Verbs'
+		);
+		$this->load->view('themes/header', $data);
+		$this->load->view('home');
 	}
 
 	public function start_data()
 	{
-		$policy = [
+		$policy = array(
 			'data' => 'dziś',
 			'cena' => 120,
 			'wiek' => 23
-		];
+		);
 
 		echo json_encode($policy);
 

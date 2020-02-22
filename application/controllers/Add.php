@@ -4,24 +4,33 @@ class Add extends CI_Controller {
 
 	public function index()
 	{
-		$policy = [
-			'data' => 'dziś',
-			'cena' => 120,
-			'wiek' => 23
-        ];
-        $this->load->view('home.html');
-		echo json_encode($policy);
+		$data = array(
+			'title' => 'Add Verb'
+		);
+		$this->load->view('themes/header', $data);
+		$this->load->view('add');
 	}
 
-	public function start_data()
+	public function addNew()
 	{
-		$policy = [
+		$data = $this->input->post(null, true);
+		v('data');
+		v($data);
+		$policy = array(
 			'data' => 'dziś',
 			'cena' => 120,
 			'wiek' => 23
-		];
+		);
 
 		echo json_encode($policy);
 
+	}
+
+	public function startData()
+	{
+		$data = array(
+			'baseUrl' => base_url()
+		);
+		echo json_encode($data);
 	}
 }
