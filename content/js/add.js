@@ -7,7 +7,8 @@ var app = new Vue({
         verbPastSimple2: '',
         verbPastParticiple1: '',
         verbPastParticiple2: '',
-        newVerbPLAdditional: '',
+        verbPLAdditional: '',
+		verbPronunciation: '',
         emptyFieldsError: false,
         verbExistsError: false,
         insertOK: false,
@@ -16,21 +17,21 @@ var app = new Vue({
     methods: {
 
         dataToSend() {
-            let data = {
-                'verbPL': this.verbPL,
-                'verbInf': this.verbInf,
-                'verbPastSimple1': this.verbPastSimple1,
-                'verbPastSimple2': this.verbPastSimple2,
-                'verbPastParticiple1': this.verbPastParticiple1,
-                'verbPastParticiple2': this.verbPastParticiple2,
-                'newVerbPLAdditional': this.newVerbPLAdditional
-            }
-
-            return data;
+			return {
+				'verbPL': this.verbPL,
+				'verbInf': this.verbInf,
+				'verbPastSimple1': this.verbPastSimple1,
+				'verbPastSimple2': this.verbPastSimple2,
+				'verbPastParticiple1': this.verbPastParticiple1,
+				'verbPastParticiple2': this.verbPastParticiple2,
+				'verbPLAdditional': this.verbPLAdditional,
+				'verbPronunciation': this.verbPronunciation
+			};
         },
         addVerbs() {
-            let data2 = this.dataToSend();
-            console.log(data2);
+            let data = this.dataToSend();
+            console.log(typeof data);
+            console.log(data);
             // axios.post('add/addNew', data2)
             // .then((response) => {
             // 	let resp = response.data;
@@ -53,7 +54,7 @@ var app = new Vue({
               axios({
                 method: 'post',
                 url: 'add/addNew',
-                data: data2,
+                data: data,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
               })
               .then((response) => {

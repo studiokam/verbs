@@ -1,0 +1,17 @@
+// validacja
+- ValidatorInterface (po co)
+- PolicyValidatorDecorator (dlaczego w nazwie jest decorator)
+- AbstractValidatorDecorator (po co ona? jeśli jest kilka dekoratorów to chyba część jest do abstract)
+- AbstractValidatorDecorator - nie za bardzo rozumiem co się tu dzieje i po co
+- trzeba jeszcze zrobić sprawdzenie czy dodawanego czasownika nie ma już w DB - gdzie to zrobić?
+
+
+// pliki composer.lock i composer.json są w 2 lokalizacjach - jak powinno być i dlaczego?
+// katalog vendor jest w application a nie na zewnątrz - dalczego? (tak ma być? po instalacji CI jest inaczej)
+
+// dlaczego Policy_model jest w models a nie w Onion?
+
+// kiedy tworzymy namespacze a kiedy nie - tzn. w models nie ma namespace, czy dlatego, że są one "ładowane" przez $this->load-model(..)?
+
+// nazewnictwo - w models używamy podkreślenie zamiast camel, why?
+

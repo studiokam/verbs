@@ -34,7 +34,11 @@
 				</div>
 				<div class="col-md-12 pb-1">
 					<label class="my-label-in-form">PL dodatkowy opis</label>
-					<textarea name="newVerbPLAdditional" rows="3" class="form-control" v-model="newVerbPLAdditional"></textarea>
+					<textarea name="verbPLAdditional" rows="3" class="form-control" v-model="verbPLAdditional"></textarea>
+				</div>
+				<div class="col-md-12 pb-1">
+					<label class="my-label-in-form">Wymowa</label>
+					<input type="text" class="form-control" v-model="verbPronunciation" placeholder="... / ... / ...">
 				</div>
 			</div>
 		</form>

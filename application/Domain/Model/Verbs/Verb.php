@@ -33,7 +33,7 @@ class Verb
 	private $verbPastSimple1;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * Verb - II form, Past Simple (not required)
 	 * Czasownik - II forma, Past Simple (nie wymagane)
 	 * Czasownik w II i III formie mogą mieć jedną lub dwie możliwości
@@ -49,7 +49,7 @@ class Verb
 	private $verbPastParticiple1;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * Verb - II form, Past Practiciple (not required)
 	 * Czasownik - II forma, Past Practiciple (nie wymagane)
 	 * Czasownik w II i III formie mogą mieć jedną lub dwie możliwości
@@ -57,11 +57,18 @@ class Verb
 	private $verbPastParticiple2 = null;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * PL additional description (not required)
-	 * PL Dodatkowy Opis, kontekst
+	 * PL Dodatkowy Opis, kontekst (nie wymagane)
 	 */
-	private $newVerbPLAdditional = null;
+	private $verbPLAdditional = null;
+
+	/**
+	 * @var string|null
+	 * Verb Pronunciation (not required)
+	 * Wymowa czasownika (nie wymagane)
+	 */
+	private $verbPronunciation = null;
 
 	/**
 	 * @return int
@@ -128,7 +135,7 @@ class Verb
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getVerbPastSimple2(): ?string
 	{
@@ -136,7 +143,7 @@ class Verb
 	}
 
 	/**
-	 * @param string $verbPastSimple2
+	 * @param string|null $verbPastSimple2
 	 */
 	public function setVerbPastSimple2(?string $verbPastSimple2): void
 	{
@@ -160,7 +167,7 @@ class Verb
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getVerbPastParticiple2(): ?string
 	{
@@ -168,7 +175,7 @@ class Verb
 	}
 
 	/**
-	 * @param string $verbPastParticiple2
+	 * @param string|null $verbPastParticiple2
 	 */
 	public function setVerbPastParticiple2(?string $verbPastParticiple2): void
 	{
@@ -176,19 +183,34 @@ class Verb
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getNewVerbPLAdditional(): ?string
+	public function getverbPLAdditional(): ?string
 	{
-		return $this->newVerbPLAdditional;
+		return $this->verbPLAdditional;
 	}
 
 	/**
-	 * @param string $newVerbPLAdditional
+	 * @param string|null $verbPLAdditional
 	 */
-	public function setNewVerbPLAdditional(?string $newVerbPLAdditional): void
+	public function setverbPLAdditional(?string $verbPLAdditional): void
 	{
-		$this->newVerbPLAdditional = $newVerbPLAdditional;
+		$this->verbPLAdditional = $verbPLAdditional;
 	}
 
+	/**
+	 * @return string|null
+	 */
+	public function getPronunciation(): ?string
+	{
+		return $this->verbPronunciation;
+	}
+
+	/**
+	 * @param string|null $verbPronunciation
+	 */
+	public function setPronunciation(?string $verbPronunciation): void
+	{
+		$this->verbPronunciation = $verbPronunciation;
+	}
 }
