@@ -2,6 +2,8 @@
 
 	<div class="add-new-verb">
 		<a class="add-menu" :href="baseUrl">Home</a>
+		<a class="add-word-menu" :href="baseUrl">Nowe słowo EN</a>
+		<a class="add-verb-menu" :href="baseUrl">Nowy czasownik EN</a>
 		<form>
 			<div class="form-row">
 				<div class="col verb-pl-name">Nowy czasownik</div>
