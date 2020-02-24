@@ -4,8 +4,8 @@
 namespace application\Application\Service;
 
 
+use application\Application\Service\Exceptions\ValidationException;
 use application\Application\Service\Validations\ValidationErrorHandler;
-use application\Application\Service\Validations\ValidationException;
 use application\Application\Service\Validations\VerbValidator;
 use application\Domain\Model\Verbs\Verb;
 

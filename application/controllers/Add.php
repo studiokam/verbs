@@ -1,7 +1,8 @@
 <?php
 
 use application\Application\Service\createVerbService;
-use application\Application\Service\Validations\ValidationException;
+use application\Application\Service\Exceptions\ValidationException;
+use application\Application\Service\Validations\VerbValidator;
 
 class Add extends CI_Controller {
 
@@ -24,19 +25,15 @@ class Add extends CI_Controller {
 	{
 //		$data = $this->input->post(null, false);
 		$data = file_get_contents("php://input");
-//		v($data);
-//		var_dump(json_decode($data, true));
-//		exit();
 		$verb = $this->verbModel->createVerbFromPost(json_decode($data, true));
-//		$verb = $this->verbModel->createVerbFromPost(json_decode($data));
+
 //		$servicePremium = app_helper::getContainer()->get('create_verb_service');
 		$createVerb = new createVerbService();
 		try {
 			$createVerb->execute($verb);
 		} catch (ValidationException $e) {
-			echo json_encode($e);
+			echo json_encode($e->getErrorsMessages());
 		}
-		v($data);
 		$response = array(
 			'status' => 1,
 			'message' => 'Dodano do DB'

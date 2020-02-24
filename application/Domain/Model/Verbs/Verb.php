@@ -12,20 +12,20 @@ class Verb
 	private $id;
 
 	/**
-	 * @var string Verb in PL
+	 * @var string|null Verb in PL
 	 * Czasownik po polsku
 	 */
 	private $verbPL;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * Verb - I form, Infinitive
 	 * Czasownik - II forma, Infinitive
 	 */
 	private $verbInf;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * Verb - II form, Past Simple (required)
 	 * Czasownik - II forma, Past Simple (wymagane)
 	 * Czasownik w II i III formie mogą mieć jedną lub dwie możliwości
@@ -41,7 +41,7 @@ class Verb
 	private $verbPastSimple2 = null;
 
 	/**
-	 * @var string
+	 * @var string|null
 	 * Verb - II form, Past Practiciple (required)
 	 * Czasownik - II forma, Past Practiciple (wymagane)
 	 * Czasownik w II i III formie mogą mieć jedną lub dwie możliwości
@@ -87,49 +87,49 @@ class Verb
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getVerbPL(): string
+	public function getVerbPL(): ?string
 	{
 		return $this->verbPL;
 	}
 
 	/**
-	 * @param string $verbPL
+	 * @param string|null $verbPL
 	 */
-	public function setVerbPL(string $verbPL): void
+	public function setVerbPL(?string $verbPL): void
 	{
 		$this->verbPL = $verbPL;
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getVerbInf(): string
+	public function getVerbInf(): ?string
 	{
 		return $this->verbInf;
 	}
 
 	/**
-	 * @param string $verbInf
+	 * @param string|null $verbInf
 	 */
-	public function setVerbInf(string $verbInf): void
+	public function setVerbInf(?string $verbInf): void
 	{
 		$this->verbInf = $verbInf;
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getVerbPastSimple1(): string
+	public function getVerbPastSimple1(): ?string
 	{
 		return $this->verbPastSimple1;
 	}
 
 	/**
-	 * @param string $verbPastSimple1
+	 * @param string|null $verbPastSimple1
 	 */
-	public function setVerbPastSimple1(string $verbPastSimple1): void
+	public function setVerbPastSimple1(?string $verbPastSimple1): void
 	{
 		$this->verbPastSimple1 = $verbPastSimple1;
 	}
@@ -151,17 +151,17 @@ class Verb
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getVerbPastParticiple1(): string
+	public function getVerbPastParticiple1(): ?string
 	{
 		return $this->verbPastParticiple1;
 	}
 
 	/**
-	 * @param string $verbPastParticiple1
+	 * @param string|null $verbPastParticiple1
 	 */
-	public function setVerbPastParticiple1(string $verbPastParticiple1): void
+	public function setVerbPastParticiple1(?string $verbPastParticiple1): void
 	{
 		$this->verbPastParticiple1 = $verbPastParticiple1;
 	}
@@ -185,7 +185,7 @@ class Verb
 	/**
 	 * @return string|null
 	 */
-	public function getverbPLAdditional(): ?string
+	public function getVerbPLAdditional(): ?string
 	{
 		return $this->verbPLAdditional;
 	}
@@ -193,7 +193,7 @@ class Verb
 	/**
 	 * @param string|null $verbPLAdditional
 	 */
-	public function setverbPLAdditional(?string $verbPLAdditional): void
+	public function setVerbPLAdditional(?string $verbPLAdditional): void
 	{
 		$this->verbPLAdditional = $verbPLAdditional;
 	}
@@ -201,7 +201,7 @@ class Verb
 	/**
 	 * @return string|null
 	 */
-	public function getPronunciation(): ?string
+	public function getVerbPronunciation(): ?string
 	{
 		return $this->verbPronunciation;
 	}
@@ -209,8 +209,10 @@ class Verb
 	/**
 	 * @param string|null $verbPronunciation
 	 */
-	public function setPronunciation(?string $verbPronunciation): void
+	public function setVerbPronunciation(?string $verbPronunciation): void
 	{
 		$this->verbPronunciation = $verbPronunciation;
 	}
+
+
 }

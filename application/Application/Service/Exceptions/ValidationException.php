@@ -1,9 +1,11 @@
 <?php
 
 
-namespace application\Application\Service\Validations;
+namespace application\Application\Service\Exceptions;
 
 
+
+use application\Application\Service\Validations\ValidationErrorHandler;
 
 class ValidationException extends \Exception
 {
