@@ -6,44 +6,8 @@
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
 	<services>
-		<service id="service_provider"
-				 class="application\Infrastructure\Core\ServiceProvider"/>
-
-		<service id="database"
-				 class="application\Infrastructure\Core\CIDatabase"/>
-
-		<service id="default_email_configurator"
-				 class="application\Infrastructure\Core\Configurators\EmailConfigConfigurator"/>
-
-		<service id="default_ws_configurator"
-				 class="application\Infrastructure\Core\Configurators\WSConfigConfigurator"/>
-
-		<service id="default_tubapay_configurator"
-				 class="application\Infrastructure\Core\Configurators\TubaPayConfigConfigurator"/>
-
-		<service id="common_policy_repository"
-				 class="application\Infrastructure\Policy\CommonPolicyRepository">
-			<argument type="service" id="database"/>
-		</service>
-
-		<service id="attribute_repository"
-				 class="application\Infrastructure\Policy\Common\AttributeRepository">
-			<argument type="service" id="database"/>
-		</service>
-
-		<service id="attribute_repository"
-				 class="application\Infrastructure\Policy\Common\AttributeRepository">
-			<argument type="service" id="database"/>
-		</service>
-
-		<service id="premium_calculator_krbr_service"
-				 class="application\Application\Service\Product\Travel\KRBR\CalculatePolicyPremiumService">
-			<argument type="service" id="common_policy_repository"/>
-			<argument type="service" id="bdt_repository"/>
-			<argument type="service" id="codif_repository"/>
-		</service>
-
-
+		<service id="create_verb_service"
+				 class="application\Application\Service\CreateVerbService"/>
 
 	</services>
 </container>

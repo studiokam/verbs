@@ -1,10 +1,8 @@
 <?php
 
-use application\Application\Service\createVerbService;
 use application\Application\Service\Exceptions\ValidationException;
-use application\Application\Service\Validations\VerbValidator;
 
-class Add extends CI_Controller {
+class AddVerb extends CI_Controller {
 
 	public function __construct()
 	{
@@ -14,9 +12,9 @@ class Add extends CI_Controller {
 
 	public function index()
 	{
-		$data = array(
+		$data = [
 			'title' => 'Add Verb'
-		);
+		];
 		$this->load->view('themes/header', $data);
 		$this->load->view('add');
 	}
@@ -27,20 +25,19 @@ class Add extends CI_Controller {
 		$data = file_get_contents("php://input");
 		$verb = $this->verbModel->createVerbFromPost(json_decode($data, true));
 
-//		$servicePremium = app_helper::getContainer()->get('create_verb_service');
-		$createVerb = new createVerbService();
 		try {
+			$createVerb = app_helper::getContainer()->get('create_verb_service');
+			/** @var application\Application\Service\CreateVerbService $createVerb */
 			$createVerb->execute($verb);
 		} catch (ValidationException $e) {
-			echo json_encode($e->getErrorsMessages());
+			echo json_encode(['status' => 0, 'errors' => $e->getErrorsMessages()]);
+			return;
+		} catch (\Exception $e) {
+			echo json_encode(['status' => 0, 'errors' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.']);
+			return;
 		}
-		$response = array(
-			'status' => 1,
-			'message' => 'Dodano do DB'
-		);
 
-		echo json_encode($response);
-
+		echo json_encode(['status' => 1, 'message' => 'Dodano do DBa']);
 	}
 
 	public function startData()

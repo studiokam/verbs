@@ -30,43 +30,21 @@ var app = new Vue({
         },
         addVerbs() {
             let data = this.dataToSend();
-            console.log(typeof data);
-            console.log(data);
-            // axios.post('add/addNew', data2)
-            // .then((response) => {
-            // 	let resp = response.data;
-            // 	console.log(resp);
-            // 	this.data = resp.data;
-            // })
-            // .catch(error => {
-            //     console.log(error);
-            //   });
-            // axios.post('add/addNew', {
-            //     firstName: 'Finn',
-            //     lastName: 'Williams'
-            //   })
-            //   .then((response) => {
-            //     console.log(response.data);
-            //   }, (error) => {
-            //     console.log(error);
-            //   });
-
-              axios({
-                method: 'post',
-                url: 'add/addNew',
-                data: data,
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-              })
-              .then((response) => {
-                    console.log(response.data);
-                  }, (error) => {
-                    console.log(error);
-                  });  
-            
+			axios({
+				method: 'post',
+				url: 'addVerb/addNew',
+				data: data,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				console.log(response.data);
+			}, (error) => {
+				console.log(error);
+			});
         }
     },
     mounted() {
-		axios.get('add/startData')
+		axios.get('addVerb/startData')
 		.then((response) => {
 			let resp = response.data;
             console.log(resp);

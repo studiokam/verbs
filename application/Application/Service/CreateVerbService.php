@@ -9,7 +9,7 @@ use application\Application\Service\Validations\ValidationErrorHandler;
 use application\Application\Service\Validations\VerbValidator;
 use application\Domain\Model\Verbs\Verb;
 
-class createVerbService
+class CreateVerbService
 {
 	/**
 	 * @param Verb $verb
