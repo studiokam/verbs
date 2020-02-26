@@ -21,6 +21,11 @@ class AddVerb extends CI_Controller {
 
 	public function addNew()
 	{
+		// todo
+		// - sprawdzenie czy dodawany verb jest już w db
+		// - czy podawana nazwa PL jest podana, jesli tak to zasugerowanie
+		//   podania innej lub dodatkowego opisu do kontekstu
+
 //		$data = $this->input->post(null, false);
 		$data = file_get_contents("php://input");
 		$verb = $this->verbModel->createVerbFromPost(json_decode($data, true));

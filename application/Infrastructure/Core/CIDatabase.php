@@ -19,6 +19,11 @@ class CIDatabase implements DatabaseInterface
 		return $this->db->query($sqlCommand, $params)->result();
 	}
 
+	public function selectAll($sqlCommand)
+	{
+		return $this->db->query($sqlCommand)->result();
+	}
+
 	public function execute($sqlCommand, $params = [])
 	{
 		return $this->db->query($sqlCommand, $params);

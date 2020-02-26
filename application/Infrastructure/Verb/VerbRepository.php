@@ -25,4 +25,10 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 
 		return $this->db->execute($sql, $params);
 	}
+
+	public function getAllVerbs()
+	{
+		$sql = 'SELECT * FROM verb';
+		return $this->db->selectAll($sql);
+	}
 }

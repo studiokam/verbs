@@ -21,5 +21,10 @@
 			<argument type="service" id="database"/>
 		</service>
 
+		<service id="get_verbs_list"
+				 class="application\Application\Service\GetVerbsListService">
+			<argument type="service" id="database"/>
+		</service>
+
 	</services>
 </container>

@@ -14,13 +14,17 @@ class Home extends CI_Controller {
 
 	public function start_data()
 	{
-		$policy = array(
-			'data' => 'dziś',
-			'cena' => 120,
-			'wiek' => 23
+		// Get all verbs
+		/** @var application\Application\Service\GetVerbsListService $allVerbs */
+		$allVerbs = app_helper::getContainer()->get('get_verbs_list');
+		$result = $allVerbs->execute();
+
+		$data = array(
+			'allVerbs' => $result,
+			'numberOfVerbs' => count($result)
 		);
 
-		echo json_encode($policy);
+		echo json_encode($data);
 
 	}
 }
