@@ -28,7 +28,10 @@ class AddVerb extends CI_Controller {
 		try {
 			$createVerb = app_helper::getContainer()->get('create_verb_service');
 			/** @var application\Application\Service\CreateVerbService $createVerb */
-			$createVerb->execute($verb);
+			$response = $createVerb->execute($verb);
+			if ($response != true) {
+				echo json_encode(['status' => 0, 'errors' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.']);
+			}
 		} catch (ValidationException $e) {
 			echo json_encode(['status' => 0, 'errors' => $e->getErrorsMessages()]);
 			return;

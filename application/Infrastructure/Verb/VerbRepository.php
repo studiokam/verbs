@@ -1,45 +1,28 @@
 <?php
-namespace application\Verb;
+namespace application\Infrastructure\Verb;
 
 
 use application\Domain\Model\Abstracts\AbstractRepository;
-use application\Domain\Model\Interfaces\DatabaseInterface;
+use application\Domain\Model\Verbs\Verb;
+use application\Domain\Model\Verbs\VerbRepositoryInterface;
 
-class VerbRepository extends AbstractRepository implements DatabaseInterface
+class VerbRepository extends AbstractRepository implements VerbRepositoryInterface
 {
-
-	public function select($sqlCommand, $params = [])
+	public function addNewVerb(Verb $verb)
 	{
-		// TODO: Implement select() method.
-	}
+		$sql = 'INSERT INTO verb (pl, plAdditional, inf, pastSimp1, pastSimp2, pastPrac1, pastPrac2, pronunciation) 
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
-	public function execute($sqlCommand, $params = [])
-	{
-		// TODO: Implement execute() method.
-	}
+		$params = [];
+		$params[] = $verb->getVerbPL();
+		$params[] = $verb->getVerbPLAdditional();
+		$params[] = $verb->getVerbInf();
+		$params[] = $verb->getVerbPastSimple1();
+		$params[] = $verb->getVerbPastSimple2();
+		$params[] = $verb->getVerbPastParticiple1();
+		$params[] = $verb->getVerbPastParticiple2();
+		$params[] = $verb->getVerbPronunciation();
 
-	public function affectedRows()
-	{
-		// TODO: Implement affectedRows() method.
-	}
-
-	public function lastInsertId()
-	{
-		// TODO: Implement lastInsertId() method.
-	}
-
-	public function getQueryRow($sqlCommand, $params = [])
-	{
-		// TODO: Implement getQueryRow() method.
-	}
-
-	public function queryResult($query, $params = [])
-	{
-		// TODO: Implement queryResult() method.
-	}
-
-	public function escapeLikeString(string $string)
-	{
-		// TODO: Implement escapeLikeString() method.
+		return $this->db->execute($sql, $params);
 	}
 }

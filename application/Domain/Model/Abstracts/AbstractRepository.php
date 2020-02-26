@@ -1,10 +1,10 @@
 <?php
-
-
 namespace application\Domain\Model\Abstracts;
 
 
+
 use application\Domain\Model\Interfaces\DatabaseInterface;
+
 class AbstractRepository
 {
 	/**

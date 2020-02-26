@@ -6,8 +6,15 @@
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
 	<services>
+
+		<service id="database"
+				 class="application\Infrastructure\Core\CIDatabase"/>
+
+
 		<service id="create_verb_service"
-				 class="application\Application\Service\CreateVerbService"/>
+				 class="application\Application\Service\CreateVerbService">
+			<argument type="service" id="database"/>
+		</service>
 
 	</services>
 </container>
