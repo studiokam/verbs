@@ -37,6 +37,16 @@ var app = new Vue({
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			})
 			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					alert('dodano. ' + resp.message);
+				} else {
+					if (resp.validationErrors === 1) {
+						alert('błąd walidacji')
+					} else {
+						alert('błąd zapisu. ' + resp.error)
+					}
+				}
 				console.log(response.data);
 			}, (error) => {
 				console.log(error);

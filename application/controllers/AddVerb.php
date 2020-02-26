@@ -30,13 +30,13 @@ class AddVerb extends CI_Controller {
 			/** @var application\Application\Service\CreateVerbService $createVerb */
 			$response = $createVerb->execute($verb);
 			if ($response != true) {
-				echo json_encode(['status' => 0, 'errors' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.']);
+				echo json_encode(['status' => 0, 'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.']);
 			}
 		} catch (ValidationException $e) {
-			echo json_encode(['status' => 0, 'errors' => $e->getErrorsMessages()]);
+			echo json_encode(['status' => 0, 'validationErrors' => 1, 'errors' => $e->getErrorsMessages()]);
 			return;
 		} catch (\Exception $e) {
-			echo json_encode(['status' => 0, 'errors' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.']);
+			echo json_encode(['status' => 0, 'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.']);
 			return;
 		}
 
