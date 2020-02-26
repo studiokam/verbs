@@ -16,5 +16,10 @@
 			<argument type="service" id="database"/>
 		</service>
 
+		<service id="verb_repository"
+				 class="application\Infrastructure\Verb\VerbRepository">
+			<argument type="service" id="database"/>
+		</service>
+
 	</services>
 </container>

@@ -37,7 +37,9 @@ class CreateVerbService
 			throw new ValidationException($validateHandler);
 		}
 
-		$verbRepo = new VerbRepository($this->database);
+		$verbRepo = \app_helper::getContainer('verb_repository');
+//		$verbRepo = new VerbRepository($this->database);
+		/** @var VerbRepository $verbRepo */
 		return $verbRepo->addNewVerb($verb);
 	}
 }
