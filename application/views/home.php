@@ -122,6 +122,7 @@
 				</div>
 				<div id="settings" class="ml-20" v-on:click="goTo('addVerb')">+ czasownik</div>
 				<div id="settings" class="ml-20" v-on:click="goTo('addWord')">+ słowo</div>
+				<div id="settings" class="ml-20" v-on:click="goTo('groups')">grupy</div>
 				<div id="settings" class="ml-20"><i class="fa fa-home fa-lg" v-on:click="goTo('')"></i></div>
 				<div id="settings" class="ml-20"><i class="fa fa-paperclip" v-on:click="goTo('?verbShowType=5&group=9&repeat=2')"></i></div>
 				<div id="settings" class="ml-20"><i class="fa fa-link" v-on:click="linkShow = true"></i></div>

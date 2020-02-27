@@ -213,6 +213,4 @@ class Verb
 	{
 		$this->verbPronunciation = $verbPronunciation;
 	}
-
-
 }

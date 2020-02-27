@@ -10,17 +10,33 @@
 		<service id="database"
 				 class="application\Infrastructure\Core\CIDatabase"/>
 
-
-		<service id="create_verb_service"
-				 class="application\Application\Service\CreateVerbService">
-			<argument type="service" id="database"/>
-		</service>
+		<!--Repository-->
 
 		<service id="verb_repository"
 				 class="application\Infrastructure\Verb\VerbRepository">
 			<argument type="service" id="database"/>
 		</service>
 
+		<service id="group_repository"
+				 class="application\Infrastructure\Group\GroupRepository">
+			<argument type="service" id="database"/>
+		</service>
+
+
+		<!--Services-->
+
+		<service id="create_verb_service"
+				 class="application\Application\Service\CreateVerbService">
+			<argument type="service" id="database"/>
+		</service>
+
+		<service id="create_group_service"
+				 class="application\Application\Service\CreateGroupService">
+			<argument type="service" id="database"/>
+		</service>
+
+
+		<!--Get data-->
 		<service id="get_verbs_list"
 				 class="application\Application\Service\GetVerbsListService">
 			<argument type="service" id="database"/>

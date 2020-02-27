@@ -186,3 +186,18 @@ body, html {
 	box-shadow: 0px 0px 33px 6px rgba(0,0,0,0.1);
 	position: relative;
 }
+
+/* groups */
+.group {
+	border: 1px solid #dbdbdb;
+	padding: 20px;
+	border-radius: 5px;
+	background: #f7f7f7;
+	margin-bottom: 10px;
+}
+.group-name {
+	float: left;
+}
+.group-options {
+	float: right;
+}
