@@ -25,54 +25,16 @@
 				<div class="col verb-pl-name">Dodane</div>
 			</div>
 			<hr>
-			<div class="group">
+
+			<div class="group" v-for="group in allGroups">
 				<div class="group-name">
-					<strong>Wszystkie czasowniki</strong><br>
+					<strong>{{group.groupName}}</strong><br>
 					<small>Liczba czasowników przypisana do grupy: 12</small>
 				</div>
 				<div class="group-options">Edytuj / Usuń</div>
 				<div class="clearfix"></div>
 			</div>
-			<div class="group">
-				<div class="group-name">
-					<strong>Wszystkie czasowniki</strong><br>
-					<small>Liczba czasowników przypisana do grupy: 12</small>
-				</div>
-				<div class="group-options">Edytuj / Usuń</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="group">
-				<div class="group-name">
-					<strong>Wszystkie czasowniki</strong><br>
-					<small>Liczba czasowników przypisana do grupy: 12</small>
-				</div>
-				<div class="group-options">Edytuj / Usuń</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="group">
-				<div class="group-name">
-					<strong>Wszystkie czasowniki</strong><br>
-					<small>Liczba czasowników przypisana do grupy: 12</small>
-				</div>
-				<div class="group-options">Edytuj / Usuń</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="group">
-				<div class="group-name">
-					<strong>Wszystkie czasowniki</strong><br>
-					<small>Liczba czasowników przypisana do grupy: 12</small>
-				</div>
-				<div class="group-options">Edytuj / Usuń</div>
-				<div class="clearfix"></div>
-			</div>
-			<div class="group">
-				<div class="group-name">
-					<strong>Wszystkie czasowniki</strong><br>
-					<small>Liczba czasowników przypisana do grupy: 12</small>
-				</div>
-				<div class="group-options">Edytuj / Usuń</div>
-				<div class="clearfix"></div>
-			</div>
+
 
 		</form>
 

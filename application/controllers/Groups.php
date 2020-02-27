@@ -18,6 +18,17 @@ class Groups extends CI_Controller {
 		$this->load->view('groups');
 	}
 
+	public function startData()
+	{
+		$allGroups = $this->getAllGroups();
+
+		$data = array(
+			'baseUrl' => base_url(),
+			'allGroups' => $allGroups
+		);
+		echo json_encode($data);
+	}
+
 	public function addNew()
 	{
 		// todo
@@ -44,14 +55,17 @@ class Groups extends CI_Controller {
 			return;
 		}
 
-		echo json_encode(['status' => 1, 'message' => 'Dodano do DBa']);
+		$allGroups = $this->getAllGroups();
+
+		echo json_encode(['status' => 1, 'allGroups' => $allGroups, 'message' => 'Dodano do DBa']);
 	}
 
-	public function startData()
+	private function getAllGroups()
 	{
-		$data = array(
-			'baseUrl' => base_url()
-		);
-		echo json_encode($data);
+		// Get all groups
+		/** @var application\Application\Service\GetGroupsListService $allGroups */
+		$allGroups = app_helper::getContainer()->get('get_groups_list');
+		return $allGroups->execute();
 	}
+
 }

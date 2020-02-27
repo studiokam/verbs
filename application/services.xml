@@ -42,5 +42,10 @@
 			<argument type="service" id="database"/>
 		</service>
 
+		<service id="get_groups_list"
+				 class="application\Application\Service\GetGroupsListService">
+			<argument type="service" id="database"/>
+		</service>
+
 	</services>
 </container>

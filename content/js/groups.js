@@ -3,6 +3,7 @@ var app = new Vue({
     data: {
 		groupName: '',
 		groupAdditional: '',
+		allGroups: '',
         emptyFieldsError: false,
         verbExistsError: false,
         insertOK: false,
@@ -27,6 +28,7 @@ var app = new Vue({
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
+					this.allGroups = resp.allGroups;
 					alert('dodano. ' + resp.message);
 				} else {
 					if (resp.validationErrors === 1) {
@@ -45,6 +47,7 @@ var app = new Vue({
 		axios.get('groups/startData')
 		.then((response) => {
 			let resp = response.data;
+			this.allGroups = resp.allGroups;
             console.log(resp);
             this.baseUrl = resp.baseUrl;
 		});

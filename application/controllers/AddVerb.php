@@ -19,6 +19,14 @@ class AddVerb extends CI_Controller {
 		$this->load->view('add');
 	}
 
+	public function startData()
+	{
+		$data = array(
+			'baseUrl' => base_url()
+		);
+		echo json_encode($data);
+	}
+
 	public function addNew()
 	{
 		// todo
@@ -46,13 +54,5 @@ class AddVerb extends CI_Controller {
 		}
 
 		echo json_encode(['status' => 1, 'message' => 'Dodano do DBa']);
-	}
-
-	public function startData()
-	{
-		$data = array(
-			'baseUrl' => base_url()
-		);
-		echo json_encode($data);
 	}
 }

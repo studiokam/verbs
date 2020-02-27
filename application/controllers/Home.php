@@ -14,10 +14,7 @@ class Home extends CI_Controller {
 
 	public function start_data()
 	{
-		// Get all verbs
-		/** @var application\Application\Service\GetVerbsListService $allVerbs */
-		$allVerbs = app_helper::getContainer()->get('get_verbs_list');
-		$result = $allVerbs->execute();
+		$result = $this->getAllVerbs();
 
 		$data = array(
 			'allVerbs' => $result,
@@ -26,5 +23,13 @@ class Home extends CI_Controller {
 
 		echo json_encode($data);
 
+	}
+
+	public function getAllVerbs()
+	{
+		// Get all verbs
+		/** @var application\Application\Service\GetVerbsListService $allVerbs */
+		$allVerbs = app_helper::getContainer()->get('get_verbs_list');
+		return $allVerbs->execute();
 	}
 }
