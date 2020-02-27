@@ -10,14 +10,14 @@ use application\Domain\Model\Groups\GroupRepositoryInterface;
 
 class GroupRepository extends AbstractRepository implements GroupRepositoryInterface
 {
-	public function addNewGroup(Group $verb)
+	public function addNewGroup(Group $group)
 	{
 		$sql = 'INSERT INTO groups (groupName, groupAdditional) 
 				VALUES (?, ?)';
 
 		$params = [];
-		$params[] = $verb->getGroupName();
-		$params[] = $verb->getGroupAdditional();
+		$params[] = $group->getGroupName();
+		$params[] = $group->getGroupAdditional();
 
 		return $this->db->execute($sql, $params);
 	}
@@ -33,6 +33,18 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 		$sql = 'DELETE FROM groups WHERE id = ?';
 		$params = [];
 		$params[] = $id;
+		return $this->db->execute($sql, $params);
+	}
+
+	public function updateGroup(Group $group)
+	{
+		$sql = 'UPDATE groups SET groupName = ?, groupAdditional = ? WHERE id = ?';
+
+		$params = [];
+		$params[] = $group->getGroupName();
+		$params[] = $group->getGroupAdditional();
+		$params[] = $group->getId();
+
 		return $this->db->execute($sql, $params);
 	}
 }

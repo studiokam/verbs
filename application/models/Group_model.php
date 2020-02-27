@@ -9,6 +9,10 @@ class Group_model extends CI_Model
 	{
 		$verb = new Group();
 
+		if (!empty($uiDataArray['id'])) {
+			$verb->setId($uiDataArray['id']);
+		}
+
 		if (!empty($uiDataArray['groupName'])) {
 			$verb->setGroupName($uiDataArray['groupName']);
 		}

@@ -4,7 +4,7 @@
 		<a class="add-menu" :href="baseUrl">Home</a>
 		<a class="add-word-menu" :href="baseUrl">Nowe słowo EN</a>
 		<a class="add-verb-menu" :href="baseUrl">Nowy czasownik EN</a>
-		<form>
+		<div>
 			<div class="form-row">
 				<div class="col verb-pl-name">Grupy <span v-if="editVerb">- edycja grupy</span></div>
 			</div>
@@ -53,7 +53,7 @@
 			</div>
 
 
-		</form>
+		</div>
 
 
 

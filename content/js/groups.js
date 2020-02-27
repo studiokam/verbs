@@ -92,7 +92,8 @@ var app = new Vue({
 				let resp = response.data;
 				if (resp.status === 1) {
 					this.allGroups = resp.allGroups;
-					this.cleanForm();
+					this.clearForm();
+					this.editVerb = false;
 				}
 			}, (error) => {
 				console.log(error);
