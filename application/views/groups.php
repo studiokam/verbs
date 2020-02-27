@@ -29,7 +29,7 @@
 			<div class="group" v-for="group in allGroups">
 				<div class="group-name">
 					<strong>{{group.groupName}}</strong><br>
-					<small>Liczba czasowników przypisana do grupy: 12</small>
+<!--					<small>Liczba czasowników przypisana do grupy: 12</small>-->
 				</div>
 				<div class="group-options">Edytuj / Usuń</div>
 				<div class="clearfix"></div>

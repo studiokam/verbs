@@ -29,7 +29,8 @@ var app = new Vue({
 				let resp = response.data;
 				if (resp.status === 1) {
 					this.allGroups = resp.allGroups;
-					alert('dodano. ' + resp.message);
+					this.clearForm();
+					// alert('dodano. ' + resp.message);
 				} else {
 					if (resp.validationErrors === 1) {
 						alert('błąd walidacji')
@@ -41,7 +42,11 @@ var app = new Vue({
 			}, (error) => {
 				console.log(error);
 			});
-        }
+        },
+		clearForm() {
+        	this.groupName = '';
+        	this.groupAdditional = '';
+		}
     },
     mounted() {
 		axios.get('groups/startData')
