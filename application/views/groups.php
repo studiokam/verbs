@@ -31,7 +31,9 @@
 					<strong>{{group.groupName}}</strong><br>
 <!--					<small>Liczba czasowników przypisana do grupy: 12</small>-->
 				</div>
-				<div class="group-options">Edytuj / Usuń</div>
+				<div class="group-options">
+					Edytuj / <button class="btn btn-sm btn-danger" @click="deleteDroup(group.id)">Usuń</button>
+				</div>
 				<div class="clearfix"></div>
 			</div>
 

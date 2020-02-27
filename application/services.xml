@@ -47,5 +47,11 @@
 			<argument type="service" id="database"/>
 		</service>
 
+		<!--Delete data-->
+		<service id="delete_group_service"
+				 class="application\Application\Service\DeleteGroupService">
+			<argument type="service" id="database"/>
+		</service>
+
 	</services>
 </container>
