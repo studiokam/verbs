@@ -1,18 +1,21 @@
 var app = new Vue({
     el: '#app',
     data: {
+    	id: '',
 		groupName: '',
 		groupAdditional: '',
 		allGroups: '',
         emptyFieldsError: false,
         verbExistsError: false,
         insertOK: false,
-        baseUrl: ''
+        baseUrl: '',
+		editVerb: false
     },
     methods: {
 
         dataToSend() {
 			return {
+				'id': this.id,
 				'groupName': this.groupName,
 				'groupAdditional': this.groupAdditional,
 			};
@@ -45,7 +48,7 @@ var app = new Vue({
 			});
         },
 
-		deleteDroup(id) {
+		deleteGroup(id) {
 			axios({
 				method: 'post',
 				url: 'groups/deleteGroup',
@@ -63,7 +66,41 @@ var app = new Vue({
 
 		},
 
+		editGroup(id) {
+
+        	for (let i = 0; i < this.allGroups.length; i++) {
+				if (this.allGroups[i].id == id) {
+					this.groupName = this.allGroups[i].groupName;
+					this.groupAdditional = this.allGroups[i].groupAdditional;
+					this.id = this.allGroups[i].id;
+					this.editVerb = true;
+				}
+			}
+		},
+
+		editGroupSend() {
+			let data = this.dataToSend();
+			console.log(data);
+
+			axios({
+				method: 'post',
+				url: 'groups/editGroup',
+				data: data,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.allGroups = resp.allGroups;
+					this.cleanForm();
+				}
+			}, (error) => {
+				console.log(error);
+			});
+		},
+
 		clearForm() {
+        	this.id = '';
         	this.groupName = '';
         	this.groupAdditional = '';
 		}

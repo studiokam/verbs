@@ -114,4 +114,10 @@ class Groups extends CI_Controller {
 		]);
 	}
 
+	public function editGroup() {
+		// todo
+		// sprawdzić czy jest juz grupa o takiej nazwie
+		
+	}
+
 }

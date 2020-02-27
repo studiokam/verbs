@@ -6,7 +6,7 @@
 		<a class="add-verb-menu" :href="baseUrl">Nowy czasownik EN</a>
 		<form>
 			<div class="form-row">
-				<div class="col verb-pl-name">Grupy</div>
+				<div class="col verb-pl-name">Grupy <span v-if="editVerb">- edycja grupy</span></div>
 			</div>
 			<hr class="mb-0">
 			<div class="form-row verbs-form">
@@ -19,7 +19,21 @@
 					<textarea name="groupAdditional" rows="2" class="form-control" v-model="groupAdditional"></textarea>
 				</div>
 			</div>
-			<button type="button" class="btn btn-success btn-block mt-20" @click="addGroup">Dodaj</button>
+			<button type="button" class="btn btn-success btn-block mt-20" @click="addGroup" v-if="!editVerb">Dodaj</button>
+			<div>
+				<div class="row">
+					<div class="col-sm-8">
+						<button type="button" class="btn btn-success btn-block mt-20" @click="editGroupSend()" v-if="editVerb">Zapisz</button>
+					</div>
+					<div class="col-sm-4">
+						<button type="button" class="btn btn-info btn-block mt-20"
+								@click="editVerb = false; groupName = ''; groupAdditional = ''; id =''"
+								v-if="editVerb">Wróć
+						</button>
+					</div>
+				</div>
+			</div>
+
 			<hr>
 			<div class="form-row">
 				<div class="col verb-pl-name">Dodane</div>
@@ -32,7 +46,8 @@
 <!--					<small>Liczba czasowników przypisana do grupy: 12</small>-->
 				</div>
 				<div class="group-options">
-					Edytuj / <button class="btn btn-sm btn-danger" @click="deleteDroup(group.id)">Usuń</button>
+					<button class="btn btn-sm btn-danger" @click="editGroup(group.id)">Edytuj</button> /
+					<button class="btn btn-sm btn-danger" @click="deleteGroup(group.id)">Usuń</button>
 				</div>
 				<div class="clearfix"></div>
 			</div>
