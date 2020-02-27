@@ -120,6 +120,9 @@
 						{{presentVerb.inf}} - {{presentVerb.pastSimp}} - {{presentVerb.pastPrac}}
 					</div>
 				</div>
+				<div id="settings" class="ml-20" v-on:click="goTo('addVerb')">+ czasownik</div>
+				<div id="settings" class="ml-20" v-on:click="goTo('addWord')">+ słowo</div>
+				<div id="settings" class="ml-20" v-on:click="goTo('groups')">grupy</div>
 				<div id="settings" class="ml-20"><i class="fa fa-home fa-lg" v-on:click="goTo('')"></i></div>
 				<div id="settings" class="ml-20"><i class="fa fa-paperclip" v-on:click="goTo('?verbShowType=5&group=9&repeat=2')"></i></div>
 				<div id="settings" class="ml-20"><i class="fa fa-link" v-on:click="linkShow = true"></i></div>
@@ -219,7 +222,12 @@
 			<button type="button" class="btn btn-sm btn-secondary float-right ml-1" v-on:click="copyLink()">Kopiuj link</button>
 		</div>
 	</transition>
-
+	<div class="container mt-50 mb-50">
+		Lista czasowników: <br>
+		<div v-for="verb in data">
+			{{verb.id}} / {{verb.pl}} / {{verb.inf}} / {{verb.pastSimp1}} / {{verb.pastPrac1}} <br>
+		</div>
+	</div>
 </div>
 </body>
 	<script type="text/javascript" src="content/js/home.js"></script>

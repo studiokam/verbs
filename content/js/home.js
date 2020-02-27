@@ -668,7 +668,7 @@ var app = new Vue({
 		.then((response) => {
 			let resp = response.data;
 			console.log(resp);
-			this.data = resp.data;
+			this.data = resp.allVerbs;
 		});
 
         this.verbsListTemp = this.verbsList.slice();

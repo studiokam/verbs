@@ -7,7 +7,8 @@ var app = new Vue({
         verbPastSimple2: '',
         verbPastParticiple1: '',
         verbPastParticiple2: '',
-        newVerbPLAdditional: '',
+        verbPLAdditional: '',
+		verbPronunciation: '',
         emptyFieldsError: false,
         verbExistsError: false,
         insertOK: false,
@@ -16,56 +17,44 @@ var app = new Vue({
     methods: {
 
         dataToSend() {
-            let data = {
-                'verbPL': this.verbPL,
-                'verbInf': this.verbInf,
-                'verbPastSimple1': this.verbPastSimple1,
-                'verbPastSimple2': this.verbPastSimple2,
-                'verbPastParticiple1': this.verbPastParticiple1,
-                'verbPastParticiple2': this.verbPastParticiple2,
-                'newVerbPLAdditional': this.newVerbPLAdditional
-            }
-
-            return data;
+			return {
+				'verbPL': this.verbPL,
+				'verbInf': this.verbInf,
+				'verbPastSimple1': this.verbPastSimple1,
+				'verbPastSimple2': this.verbPastSimple2,
+				'verbPastParticiple1': this.verbPastParticiple1,
+				'verbPastParticiple2': this.verbPastParticiple2,
+				'verbPLAdditional': this.verbPLAdditional,
+				'verbPronunciation': this.verbPronunciation
+			};
         },
         addVerbs() {
-            let data2 = this.dataToSend();
-            console.log(data2);
-            // axios.post('add/addNew', data2)
-            // .then((response) => {
-            // 	let resp = response.data;
-            // 	console.log(resp);
-            // 	this.data = resp.data;
-            // })
-            // .catch(error => {
-            //     console.log(error);
-            //   });
-            // axios.post('add/addNew', {
-            //     firstName: 'Finn',
-            //     lastName: 'Williams'
-            //   })
-            //   .then((response) => {
-            //     console.log(response.data);
-            //   }, (error) => {
-            //     console.log(error);
-            //   });
-
-              axios({
-                method: 'post',
-                url: 'add/addNew',
-                data: data2,
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-              })
-              .then((response) => {
-                    console.log(response.data);
-                  }, (error) => {
-                    console.log(error);
-                  });  
-            
+            let data = this.dataToSend();
+			axios({
+				method: 'post',
+				url: 'addVerb/addNew',
+				data: data,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					alert('dodano. ' + resp.message);
+				} else {
+					if (resp.validationErrors === 1) {
+						alert('błąd walidacji')
+					} else {
+						alert('błąd zapisu. ' + resp.error)
+					}
+				}
+				console.log(response.data);
+			}, (error) => {
+				console.log(error);
+			});
         }
     },
     mounted() {
-		axios.get('add/startData')
+		axios.get('addVerb/startData')
 		.then((response) => {
 			let resp = response.data;
             console.log(resp);
