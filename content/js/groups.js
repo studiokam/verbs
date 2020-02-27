@@ -17,6 +17,7 @@ var app = new Vue({
 				'groupAdditional': this.groupAdditional,
 			};
         },
+
 		addGroup() {
             let data = this.dataToSend();
 			axios({
@@ -43,6 +44,25 @@ var app = new Vue({
 				console.log(error);
 			});
         },
+
+		deleteDroup(id) {
+			axios({
+				method: 'post',
+				url: 'groups/deleteGroup',
+				data: id,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.allGroups = resp.allGroups;
+				}
+			}, (error) => {
+				console.log(error);
+			});
+
+		},
+
 		clearForm() {
         	this.groupName = '';
         	this.groupAdditional = '';

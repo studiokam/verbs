@@ -27,4 +27,12 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 		$sql = 'SELECT * FROM groups';
 		return $this->db->selectAll($sql);
 	}
+
+	public function deleteGroup($id)
+	{
+		$sql = 'DELETE FROM groups WHERE id = ?';
+		$params = [];
+		$params[] = $id;
+		return $this->db->execute($sql, $params);
+	}
 }
