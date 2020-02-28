@@ -31,4 +31,12 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		$sql = 'SELECT * FROM verb';
 		return $this->db->selectAll($sql);
 	}
+
+	public function deleteVerb($id)
+	{
+		$sql = 'DELETE FROM verb WHERE id = ?';
+		$params = [];
+		$params[] = $id;
+		return $this->db->execute($sql, $params);
+	}
 }
