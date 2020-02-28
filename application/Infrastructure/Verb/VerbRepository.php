@@ -58,4 +58,35 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 
 		return $this->db->execute($sql, $params);
 	}
+
+	public function addVerbToGroup($data)
+	{
+		$sql = 'INSERT INTO verb_group_relation (verb_id, group_id)
+					VALUES (?, ?)';
+		$params = [];
+		$params[] = $data['verbId'];
+		$params[] = $data['groupId'];
+
+		return $this->db->execute($sql, $params);
+	}
+
+	public function getGroupsForVerbs($verbId)
+	{
+		$sql = 'SELECT vgr.id as relationId, g.id, g.groupName, g.groupAdditional FROM verb_group_relation vgr
+				JOIN groups g on g.id = vgr.group_id
+				WHERE verb_id = ? ORDER BY g.groupName';
+
+		$params = [];
+		$params[] = $verbId;
+
+		return $this->db->select($sql, $params);
+	}
+
+	public function deleteVerbFromGroup($id)
+	{
+		$sql = 'DELETE FROM verb_group_relation WHERE id = ?';
+		$params = [];
+		$params[] = $id;
+		return $this->db->execute($sql, $params);
+	}
 }

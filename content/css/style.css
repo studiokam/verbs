@@ -209,6 +209,12 @@ body, html {
 	color: #f94747;
 	cursor: pointer;
 }
+.zi-100 {
+	z-index: 100;
+}
+.ml--40 {
+	margin-left: -40px;
+}
 
 /* groups */
 .group {

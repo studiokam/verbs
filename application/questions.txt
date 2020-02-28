@@ -15,3 +15,7 @@
 
 // nazewnictwo - w models używamy podkreślenie zamiast camel, why?
 
+// konstruktor Verbs / addVerbToGroup() tutaj do execute() podaję $data i jest to tablica z ID czasownika i grupy.
+   Powinienem tworzyćz tego wczesniej obiekt czy podawać w takiej formie? W obiekcie wtedy będzie tylko id
+
+// VerbRepository w metodach daję zawsze $params = []; może powinno się tworzyć pole private $params = [] i używać this->params ?

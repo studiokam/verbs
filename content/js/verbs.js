@@ -14,7 +14,12 @@ var app = new Vue({
         verbExistsError: false,
         insertOK: false,
         baseUrl: '',
+
 		allVerbs: '',
+		allGroups: '',
+		verbGroups: '',
+
+		verbsListSelect: '',
 
 		showAllVerbs: true,
 		showEditVerb: false
@@ -54,7 +59,6 @@ var app = new Vue({
 						alert('błąd zapisu. ' + resp.error)
 					}
 				}
-				console.log(response.data);
 			}, (error) => {
 				console.log(error);
 			});
@@ -76,9 +80,6 @@ var app = new Vue({
 			});
 		},
 		editVerb(id) {
-			console.log(id);
-			console.log(this.allVerbs);
-
 			for (let i = 0; i < this.allVerbs.length; i++) {
 				if (this.allVerbs[i].id == id) {
 					this.id = this.allVerbs[i].id;
@@ -94,11 +95,26 @@ var app = new Vue({
 					this.showEditVerb = true;
 				}
 			}
+			console.log(this.id);
+			axios({
+				method: 'post',
+				url: 'verbs/getVerbGroups',
+				data: this.id,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				console.log(resp);
+				if (resp.status === 1) {
+					this.verbGroups = resp.data;
+				}
+			}, (error) => {
+				console.log(error);
+			});
 		},
 
 		editVerbSend() {
 			let data = this.dataToSend();
-			console.log(data);
 
 			axios({
 				method: 'post',
@@ -116,10 +132,50 @@ var app = new Vue({
 				console.log(error);
 			});
 		},
+		addVerbToGroup() {
+			axios({
+				method: 'post',
+				url: 'verbs/addVerbToGroup',
+				data: {verbId: this.id, groupId: this.verbsListSelect},
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.verbGroups = resp.data;
+					// this.endVerbEdit();
+					console.log('ok');
+					console.log(resp.data);
+				}
+			}, (error) => {
+				console.log(error);
+			});
+		},
+		deleteVerbFromGroup(id) {
+			axios({
+				method: 'post',
+				url: 'verbs/deleteVerbFromGroup',
+				data: {verbId: this.id, relationId: id},
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.verbGroups = resp.data;
+					// this.endVerbEdit();
+					console.log('ok');
+					console.log(resp.data);
+				}
+			}, (error) => {
+				console.log(error);
+			});
+		},
 
 		endVerbEdit() {
 			this.showAllVerbs = true;
 			this.showEditVerb = false;
+			this.verbsListSelect = '';
+			this.verbGroups = '';
 			this.clearForm();
 		},
 		clearForm() {
@@ -138,9 +194,9 @@ var app = new Vue({
 		axios.get('Verbs/startData')
 		.then((response) => {
 			let resp = response.data;
-            console.log(resp);
             this.baseUrl = resp.baseUrl;
             this.allVerbs = resp.allVerbs;
+            this.allGroups = resp.allGroups;
 		});
 
     },

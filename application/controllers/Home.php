@@ -29,7 +29,7 @@ class Home extends CI_Controller {
 	{
 		// Get all verbs
 		/** @var application\Application\Service\GetVerbsListService $allVerbs */
-		$allVerbs = app_helper::getContainer()->get('get_verbs_list');
+		$allVerbs = app_helper::getContainer()->get('get_verbs_list_service');
 		return $allVerbs->execute();
 	}
 }

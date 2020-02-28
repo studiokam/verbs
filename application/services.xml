@@ -37,12 +37,12 @@
 
 
 		<!--Get data-->
-		<service id="get_verbs_list"
+		<service id="get_verbs_list_service"
 				 class="application\Application\Service\GetVerbsListService">
 			<argument type="service" id="database"/>
 		</service>
 
-		<service id="get_groups_list"
+		<service id="get_groups_list_service"
 				 class="application\Application\Service\GetGroupsListService">
 			<argument type="service" id="database"/>
 		</service>
@@ -70,6 +70,24 @@
 				 class="application\Application\Service\UpdateVerbService">
 			<argument type="service" id="database"/>
 		</service>
+
+
+		<!--Other-->
+		<service id="add_verb_to_group_service"
+				 class="application\Application\Service\AddVerbToGroupService">
+			<argument type="service" id="database"/>
+		</service>
+
+		<service id="get_groups_for_verb_service"
+				 class="application\Application\Service\GetGroupsForVerbsService">
+			<argument type="service" id="database"/>
+		</service>
+
+		<service id="delete_verb_from_group_service"
+				 class="application\Application\Service\DeleteVerbFromGroupService">
+			<argument type="service" id="database"/>
+		</service>
+
 
 	</services>
 </container>
