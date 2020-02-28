@@ -54,6 +54,11 @@
 			<argument type="service" id="database"/>
 		</service>
 
+		<service id="delete_verb_service"
+				 class="application\Application\Service\DeleteVerbService">
+			<argument type="service" id="database"/>
+		</service>
+
 
 		<!--Delete data-->
 		<service id="update_group_service"

@@ -12,7 +12,8 @@ var app = new Vue({
         emptyFieldsError: false,
         verbExistsError: false,
         insertOK: false,
-        baseUrl: ''
+        baseUrl: '',
+		allVerbs: ''
     },
     methods: {
 
@@ -32,14 +33,15 @@ var app = new Vue({
             let data = this.dataToSend();
 			axios({
 				method: 'post',
-				url: 'addVerb/addNew',
+				url: 'Verbs/addNew',
 				data: data,
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 			})
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					alert('dodano. ' + resp.message);
+					this.allVerbs = resp.allVerbs;
+					this.clearForm();
 				} else {
 					if (resp.validationErrors === 1) {
 						alert('błąd walidacji')
@@ -51,14 +53,40 @@ var app = new Vue({
 			}, (error) => {
 				console.log(error);
 			});
-        }
+        },
+		deleteVerb(id) {
+			axios({
+				method: 'post',
+				url: 'verbs/deleteVerb',
+				data: id,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.allVerbs = resp.allVerbs;
+				}
+			}, (error) => {
+				console.log(error);
+			});
+		},
+		clearForm() {
+			this.verbPL = '';
+			this.verbInf = '';
+			this.verbPastSimple1 = '';
+			this.verbPastSimple2 = '';
+			this.verbPastParticiple1 = '';
+			this.verbPastParticiple2 = '';
+			this.verbPLAdditional = '';
+		}
     },
     mounted() {
-		axios.get('addVerb/startData')
+		axios.get('Verbs/startData')
 		.then((response) => {
 			let resp = response.data;
             console.log(resp);
             this.baseUrl = resp.baseUrl;
+            this.allVerbs = resp.allVerbs;
 		});
 
     },

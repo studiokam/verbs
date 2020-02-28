@@ -9,7 +9,7 @@
 	<title><?php echo $title; ?></title>
 
 	<link rel="stylesheet" href="content/css/mp.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 	<link rel="stylesheet" href="content/css/style.css">
 	  
   	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>

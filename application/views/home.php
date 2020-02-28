@@ -120,7 +120,7 @@
 						{{presentVerb.inf}} - {{presentVerb.pastSimp}} - {{presentVerb.pastPrac}}
 					</div>
 				</div>
-				<div id="settings" class="ml-20" v-on:click="goTo('addVerb')">+ czasownik</div>
+				<div id="settings" class="ml-20" v-on:click="goTo('verbs')">+ czasownik</div>
 				<div id="settings" class="ml-20" v-on:click="goTo('addWord')">+ słowo</div>
 				<div id="settings" class="ml-20" v-on:click="goTo('groups')">grupy</div>
 				<div id="settings" class="ml-20"><i class="fa fa-home fa-lg" v-on:click="goTo('')"></i></div>
