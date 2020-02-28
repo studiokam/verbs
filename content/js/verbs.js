@@ -1,6 +1,7 @@
 var app = new Vue({
     el: '#app',
     data: {
+    	id: '',
         verbPL: '',
         verbInf: '',
         verbPastSimple1: '',
@@ -13,12 +14,16 @@ var app = new Vue({
         verbExistsError: false,
         insertOK: false,
         baseUrl: '',
-		allVerbs: ''
+		allVerbs: '',
+
+		showAllVerbs: true,
+		showEditVerb: false
     },
     methods: {
 
         dataToSend() {
 			return {
+				'id': this.id,
 				'verbPL': this.verbPL,
 				'verbInf': this.verbInf,
 				'verbPastSimple1': this.verbPastSimple1,
@@ -70,7 +75,55 @@ var app = new Vue({
 				console.log(error);
 			});
 		},
+		editVerb(id) {
+			console.log(id);
+			console.log(this.allVerbs);
+
+			for (let i = 0; i < this.allVerbs.length; i++) {
+				if (this.allVerbs[i].id == id) {
+					this.id = this.allVerbs[i].id;
+					this.verbPL = this.allVerbs[i].pl;
+					this.verbInf = this.allVerbs[i].inf;
+					this.verbPastSimple1 = this.allVerbs[i].pastSimp1;
+					this.verbPastSimple2 = this.allVerbs[i].pastSimp2;
+					this.verbPastParticiple1 = this.allVerbs[i].pastPrac1;
+					this.verbPastParticiple2 = this.allVerbs[i].pastPrac2;
+					this.verbPLAdditional = this.allVerbs[i].plAdditional;
+					this.verbPronunciation = this.allVerbs[i].pronunciation;
+					this.showAllVerbs = false;
+					this.showEditVerb = true;
+				}
+			}
+		},
+
+		editVerbSend() {
+			let data = this.dataToSend();
+			console.log(data);
+
+			axios({
+				method: 'post',
+				url: 'verbs/editVerb',
+				data: data,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.allVerbs = resp.allVerbs;
+					this.endVerbEdit();
+				}
+			}, (error) => {
+				console.log(error);
+			});
+		},
+
+		endVerbEdit() {
+			this.showAllVerbs = true;
+			this.showEditVerb = false;
+			this.clearForm();
+		},
 		clearForm() {
+        	this.id = '';
 			this.verbPL = '';
 			this.verbInf = '';
 			this.verbPastSimple1 = '';
@@ -78,6 +131,7 @@ var app = new Vue({
 			this.verbPastParticiple1 = '';
 			this.verbPastParticiple2 = '';
 			this.verbPLAdditional = '';
+			this.verbPronunciation = '';
 		}
     },
     mounted() {

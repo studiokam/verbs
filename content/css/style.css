@@ -157,20 +157,27 @@ body, html {
 	position: absolute;
 	top: -39px;
 	right: 100px;
-	 /*display: none;*/
+	cursor: pointer;
 }
-.add-word-menu {
-	background: #70ceb3;
+.add-verb-menu:hover {
+	background: #6abfa7;
+}
+.edit-verb-menu {
+	background: #f57a7a;
 	padding: 8px 0px 7px;
 	display: block;
-	width: 150px;
+	width: 170px;
 	text-align: center;
 	color: #fff;
 	position: absolute;
 	top: -39px;
 	right: 100px;
-	 display: none;
+	cursor: pointer;
 }
+.edit-verb-menu:hover {
+	background: #e67373;
+}
+
 .add-menu a:hover {
 	text-decoration: none;
 	font-weight: bold;

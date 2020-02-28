@@ -9,6 +9,10 @@ class Verb_model extends CI_Model
 	{
 		$verb = new Verb();
 
+		if (!empty($uiDataArray['id'])) {
+			$verb->setId($uiDataArray['id']);
+		}
+
 		if (!empty($uiDataArray['verbPL'])) {
 			$verb->setVerbPL($uiDataArray['verbPL']);
 		}

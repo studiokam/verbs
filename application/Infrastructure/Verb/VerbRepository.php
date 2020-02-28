@@ -39,4 +39,23 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		$params[] = $id;
 		return $this->db->execute($sql, $params);
 	}
+
+	public function updateVerb(Verb $verb)
+	{
+		$sql = 'UPDATE verb SET pl = ?, plAdditional = ?, inf = ?, pastSimp1 = ?, pastSimp2 = ?, pastPrac1 = ?, pastPrac2 = ?, pronunciation = ?
+				WHERE id = ?';
+
+		$params = [];
+		$params[] = $verb->getVerbPL();
+		$params[] = $verb->getVerbPLAdditional();
+		$params[] = $verb->getVerbInf();
+		$params[] = $verb->getVerbPastSimple1();
+		$params[] = $verb->getVerbPastSimple2();
+		$params[] = $verb->getVerbPastParticiple1();
+		$params[] = $verb->getVerbPastParticiple2();
+		$params[] = $verb->getVerbPronunciation();
+		$params[] = $verb->getId();
+
+		return $this->db->execute($sql, $params);
+	}
 }
