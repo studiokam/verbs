@@ -1,6 +1,13 @@
 <?php
 
+use application\Application\Service\AddVerbToGroupService;
+use application\Application\Service\CreateVerbService;
+use application\Application\Service\DeleteGroupService;
 use application\Application\Service\Exceptions\ValidationException;
+use application\Application\Service\GetGroupsForVerbsService;
+use application\Application\Service\GetGroupsListService;
+use application\Application\Service\GetVerbsListService;
+use application\Application\Service\UpdateGroupService;
 
 class Verbs extends CI_Controller {
 
@@ -45,7 +52,7 @@ class Verbs extends CI_Controller {
 
 		try {
 			$createVerb = app_helper::getContainer()->get('create_verb_service');
-			/** @var application\Application\Service\CreateVerbService $createVerb */
+			/** @var CreateVerbService $createVerb */
 			$response = $createVerb->execute($verb);
 			if ($response != true) {
 				echo json_encode(['status' => 0, 'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.']);
@@ -76,7 +83,7 @@ class Verbs extends CI_Controller {
 
 		try {
 			$deleteVerb = app_helper::getContainer()->get('delete_verb_service');
-			/** @var application\Application\Service\DeleteGroupService $deleteVerb */
+			/** @var DeleteGroupService $deleteVerb */
 			$response = $deleteVerb->execute($id);
 			if ($response != true) {
 				echo json_encode([
@@ -111,7 +118,7 @@ class Verbs extends CI_Controller {
 
 		try {
 			$updateVerb = app_helper::getContainer()->get('update_verb_service');
-			/** @var application\Application\Service\UpdateGroupService $updateVerb */
+			/** @var UpdateGroupService $updateVerb */
 			$response = $updateVerb->execute($verb);
 			if ($response != true) {
 				echo json_encode([
@@ -142,17 +149,90 @@ class Verbs extends CI_Controller {
 		]);
 	}
 
+	public function addVerbToGroup()
+	{
+		// todo
+		// czy nie ma juz takiego układu verb / group
+
+		$data = file_get_contents("php://input");
+		$data = json_decode($data, true);
+
+		try {
+			$addVerbToGroup = app_helper::getContainer()->get('add_verb_to_group_service');
+			/** @var AddVerbToGroupService $addVerbToGroup */
+			$response = $addVerbToGroup->execute($data);
+			if ($response != true) {
+				return $this->jsonErrorReturn();
+			}
+			$verbGroupData = $this->getGroupsForVerb($data['verbId']);
+		} catch (\Exception $e) {
+			return $this->jsonErrorReturn();
+		}
+
+		return $this->jsonSuccessData($verbGroupData);
+	}
+
+	public function deleteVerbFromGroup()
+	{
+		$data = file_get_contents("php://input");
+		$data = json_decode($data, true);
+
+		try {
+			$service = app_helper::getContainer()->get('delete_verb_from_group_service');
+			/** @var AddVerbToGroupService $service */
+			$response = $service->execute($data['relationId']);
+			if ($response != true) {
+				return $this->jsonErrorReturn();
+			}
+			$verbGroupData = $this->getGroupsForVerb($data['verbId']);
+		} catch (\Exception $e) {
+			return $this->jsonErrorReturn();
+		}
+
+		return $this->jsonSuccessData($verbGroupData);
+	}
+
+	public function getVerbGroups()
+	{
+		$id = file_get_contents("php://input");
+		$data = $this->getGroupsForVerb($id);
+		return $this->jsonSuccessData($data);
+	}
+
+	private function jsonSuccessData($data)
+	{
+		echo json_encode([
+			'status' => 1,
+			'data' => $data
+		]);
+	}
+
+	private function jsonErrorReturn()
+	{
+		echo json_encode([
+			'status' => 0,
+			'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
+		]);
+	}
+
 	private function getAllVerbs()
 	{
-		/** @var application\Application\Service\GetVerbsListService $allVerbs */
-		$allVerbs = app_helper::getContainer()->get('get_verbs_list');
+		/** @var GetVerbsListService $allVerbs */
+		$allVerbs = app_helper::getContainer()->get('get_verbs_list_service');
 		return $allVerbs->execute();
 	}
 
 	private function getAllGroups()
 	{
-		/** @var application\Application\Service\GetGroupsListService $allGroups */
-		$allGroups = app_helper::getContainer()->get('get_groups_list');
+		/** @var GetGroupsListService $allGroups */
+		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
 		return $allGroups->execute();
+	}
+
+	private function getGroupsForVerb($verbId)
+	{
+		/** @var GetGroupsForVerbsService $service */
+		$service = app_helper::getContainer()->get('get_groups_for_verb_service');
+		return $service->execute($verbId);
 	}
 }
