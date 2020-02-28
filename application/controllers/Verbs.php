@@ -99,6 +99,48 @@ class Verbs extends CI_Controller {
 		]);
 	}
 
+	public function editVerb()
+	{
+		// todo
+		// sprawdzić czy jest juz czasownik o takiej nazwie
+		// dodać walidacje na pola
+
+		$data = file_get_contents("php://input");
+		$verb = $this->verbModel->createVerbFromPost(json_decode($data, true));
+
+		try {
+			$updateVerb = app_helper::getContainer()->get('update_verb_service');
+			/** @var application\Application\Service\UpdateGroupService $updateVerb */
+			$response = $updateVerb->execute($verb);
+			if ($response != true) {
+				echo json_encode([
+					'status' => 0,
+					'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.'
+				]);
+			}
+			$allVerbs = $this->getAllVerbs();
+		} catch (ValidationException $e) {
+			echo json_encode([
+				'status' => 0,
+				'validationErrors' => 1,
+				'errors' => $e->getErrorsMessages()
+			]);
+			return;
+		} catch (\Exception $e) {
+			echo json_encode([
+				'status' => 0,
+				'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
+			]);
+			return;
+		}
+
+		echo json_encode([
+			'status' => 1,
+			'allVerbs' => $allVerbs,
+			'message' => 'Zaktualizowanio'
+		]);
+	}
+
 	/**
 	 * @return mixed all verbs
 	 * @throws Exception

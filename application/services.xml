@@ -60,9 +60,14 @@
 		</service>
 
 
-		<!--Delete data-->
+		<!--Update data-->
 		<service id="update_group_service"
 				 class="application\Application\Service\UpdateGroupService">
+			<argument type="service" id="database"/>
+		</service>
+
+		<service id="update_verb_service"
+				 class="application\Application\Service\UpdateVerbService">
 			<argument type="service" id="database"/>
 		</service>
 
