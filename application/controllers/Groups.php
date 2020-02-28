@@ -74,7 +74,6 @@ class Groups extends CI_Controller {
 
 	private function getAllGroups()
 	{
-		// Get all groups
 		/** @var application\Application\Service\GetGroupsListService $allGroups */
 		$allGroups = app_helper::getContainer()->get('get_groups_list');
 		return $allGroups->execute();

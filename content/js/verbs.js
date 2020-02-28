@@ -14,7 +14,11 @@ var app = new Vue({
         verbExistsError: false,
         insertOK: false,
         baseUrl: '',
+
 		allVerbs: '',
+		allGroups: '',
+
+		verbsListSelect: 4,
 
 		showAllVerbs: true,
 		showEditVerb: false
@@ -141,6 +145,7 @@ var app = new Vue({
             console.log(resp);
             this.baseUrl = resp.baseUrl;
             this.allVerbs = resp.allVerbs;
+            this.allGroups = resp.allGroups;
 		});
 
     },

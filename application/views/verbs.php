@@ -1,7 +1,7 @@
 <div id="app">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-6 zi-100">
 				<div class="add-new-verb">
 					<a class="add-menu" :href="baseUrl">Home</a>
 <!--					<a class="add-word-menu" :href="baseUrl">Nowe słowo EN</a>-->
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 
-			<div class="col-sm-6" v-if="showAllVerbs">
+			<div class="col-sm-6 ml--40" v-if="showAllVerbs">
 				<div class="add-new-verb">
 					<div class="form-row">
 						<div class="col verb-pl-name">Wszystkie czasowniki</div>
@@ -82,13 +82,18 @@
 				</div>
 			</div>
 
-			<div class="col-sm-6" v-if="showEditVerb">
+			<div class="col-sm-6 ml--40" v-if="showEditVerb">
 				<div class="add-new-verb">
 					<div class="form-row">
 						<div class="col verb-pl-name">Dodaj czasownik do grupy</div>
 					</div>
 					<hr>
 					<div class="verb-about">
+						<select class="custom-select" v-model="verbsListSelect">
+							<option v-for="group in allGroups" v-bind:value="group.id">
+								{{ group.groupName }}
+							</option>
+						</select>
 						Wybierz grupę <br>
 						<button class="btn btn-sm btn-success mt-15">Dodaj</button>
 					</div>

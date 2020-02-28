@@ -26,7 +26,8 @@ class Verbs extends CI_Controller {
 	{
 		$data = array(
 			'baseUrl' => base_url(),
-			'allVerbs' => $this->getAllVerbs()
+			'allVerbs' => $this->getAllVerbs(),
+			'allGroups' => $this->getAllGroups()
 		);
 		echo json_encode($data);
 	}
@@ -141,22 +142,17 @@ class Verbs extends CI_Controller {
 		]);
 	}
 
-	/**
-	 * @return mixed all verbs
-	 * @throws Exception
-	 */
 	private function getAllVerbs()
 	{
-		try {
-			/** @var application\Application\Service\GetVerbsListService $allVerbs */
-			$allVerbs = app_helper::getContainer()->get('get_verbs_list');
-		} catch (\Exception $e) {
-			echo json_encode([
-				'status' => 0,
-				'error' => 'Przepraszamy, wystąpił błąd pobieranai czasowników. Spróbuj później.'
-			]);
-			return null;
-		}
+		/** @var application\Application\Service\GetVerbsListService $allVerbs */
+		$allVerbs = app_helper::getContainer()->get('get_verbs_list');
 		return $allVerbs->execute();
+	}
+
+	private function getAllGroups()
+	{
+		/** @var application\Application\Service\GetGroupsListService $allGroups */
+		$allGroups = app_helper::getContainer()->get('get_groups_list');
+		return $allGroups->execute();
 	}
 }
