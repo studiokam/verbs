@@ -1,5 +1,5 @@
 <div id="app">
-	<div class="container">
+	<div class="container mt-100">
 		<div class="row">
 			<div class="col-sm-6 zi-100">
 				<div class="add-new-verb">
