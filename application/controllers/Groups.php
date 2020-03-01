@@ -28,7 +28,6 @@ class Groups extends CI_Controller {
 	public function startData()
 	{
 		$allGroups = $this->getAllGroups();
-//		v($allGroups);
 		echo json_encode([
 			'baseUrl' => base_url(),
 			'allGroups' => $allGroups
@@ -77,7 +76,13 @@ class Groups extends CI_Controller {
 	{
 		/** @var GetGroupsListService $allGroups */
 		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
-		return $allGroups->execute();
+		$response = $allGroups->execute();
+		foreach ($response as $key => $value) {
+			$verbsInGroup = $this->getAllVerbsForGroup($value->id);
+			$response[$key]->verbsInGroup = count($verbsInGroup);
+		}
+
+		return $response;
 	}
 
 	public function deleteGroup()

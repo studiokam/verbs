@@ -25,12 +25,6 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	public function getAllGroups()
 	{
 		$sql = 'SELECT * FROM groups ORDER BY groupName';
-//		$sql = 'SELECT *, count(tt) as ile FROM groups g
-//				JOIN verb_group_relation vgr on g.id = vgr.group_id as tt
-//				ORDER BY groupName';
-//		$sql = 'SELECT *, count(tt) as ile FROM groups g
-//				JOIN (SELECT count(id) as ile FROM verb_group_relation vgr on g.id = vgr.group_id
-//				ORDER BY groupName';
 		return $this->db->selectAll($sql);
 	}
 

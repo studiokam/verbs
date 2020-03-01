@@ -112,7 +112,15 @@ var app = new Vue({
 				console.log(error);
 			});
 		},
-
+		endVerbEdit() {
+			this.showEditGroup = false;
+			this.groupName = '';
+			this.groupAdditional = '';
+			this.id = '';
+			this.allVerbsForGroup = '';
+			this.baseData();
+			this.clearForm();
+		},
 		editGroupSend() {
 			let data = this.dataToSend();
 			console.log(data);
@@ -134,6 +142,14 @@ var app = new Vue({
 				console.log(error);
 			});
 		},
+		baseData() {
+			axios.get('groups/startData')
+			.then((response) => {
+				let resp = response.data;
+				this.allGroups = resp.allGroups;
+				this.baseUrl = resp.baseUrl;
+			});
+		},
 
 		clearForm() {
         	this.id = '';
@@ -142,14 +158,7 @@ var app = new Vue({
 		}
     },
     mounted() {
-		axios.get('groups/startData')
-		.then((response) => {
-			let resp = response.data;
-			this.allGroups = resp.allGroups;
-            console.log(resp);
-            this.baseUrl = resp.baseUrl;
-		});
-
+    	this.baseData();
     },
 
 })

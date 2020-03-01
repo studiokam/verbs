@@ -265,6 +265,7 @@ var app = new Vue({
         verbPastParticiple: '',
         random: 0,
 		data: '',
+		active: false,
 
         correctAnswers: false,
         emptyFieldsError: false,
@@ -661,7 +662,13 @@ var app = new Vue({
                 this.verbsListTemp = this.verbsList.slice();
             }
             this.verbsListKnown = [];
-        }
+        },
+
+
+
+		homeLearnChooseMouseOver() {
+			this.active = !this.active;
+		}
     },
     mounted() {
 		axios.get('home/start_data')

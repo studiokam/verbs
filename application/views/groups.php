@@ -5,7 +5,7 @@
 				<div class="add-new-verb">
 					<a class="add-menu" :href="baseUrl">Home</a>
 					<div class="edit-verb-menu" v-if="showEditGroup"
-						 @click="showEditGroup = false; groupName = ''; groupAdditional = ''; id ='', allVerbsForGroup = ''">
+						 @click="endVerbEdit">
 						Wyjdź z edycji
 					</div>
 					<div class="form-row">
@@ -49,7 +49,7 @@
 						<div class="row">
 							<div class="col-sm-10">
 								<strong>{{group.groupName}}</strong><br>
-								<small style="color: #bbb;">Liczba czasowników przypisana do grupy: {{allVerbsForGroup.length}}</small>
+								<small style="color: #bbb;">Liczba czasowników przypisana do grupy: {{group.verbsInGroup}}</small>
 							</div>
 							<div class="col-sm-2 text-right">
 								<i class="verbs-list-edit fa fa-cog" @click="editGroup(group.id)"></i>
