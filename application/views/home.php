@@ -111,7 +111,7 @@
 		</div>
 	</div>
 
-	<div class="container mt-50 mb-50">
+	<div class="container mt-100">
 		<div class="row">
 			<div class="col-sm-12">
 
@@ -184,31 +184,41 @@
 	</div>
 	<!-- verbsListTemp: {{verbsListTemp}} <br> -->
 
-	<div class="container mt-50 mb-50" v-if="repeatVerbs">
-		<div class="already-known">
-			<div class="row">
-				<div class="col-md-2 col-sm-6">
-					<div class="already-known-discription">Pozostało</div>
-					<div class="big-number">{{numberOfVerbssss()}}</div>
-				</div>
-				<div class="col-md-2 col-sm-6">
-					<div class="already-known-discription">Umiesz już</div>
-					<div class="big-number">{{verbsListKnown.length}}</div>
-				</div>
-				<div class="col-md-8 col-sm-12">
-					<div class="already-known-discription">Lista poznanych czasowników</div>
-					<hr>
-					<div class="alerady-known-list">
-						<div v-for="verb in verbsListKnown">
-							<strong>{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}</strong>
+	<div class="container mb-50 mt-100" v-if="repeatVerbs || true">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="home-container">
+
+					<div class="row">
+						<div class="col-md-2 col-sm-6">
+							<div class="already-known-discription">Pozostało</div>
+							<div class="big-number">{{numberOfVerbssss()}}</div>
+						</div>
+						<div class="col-md-2 col-sm-6">
+							<div class="already-known-discription">Umiesz już</div>
+							<div class="big-number">{{verbsListKnown.length}}</div>
+						</div>
+						<div class="col-md-8 col-sm-12">
+							<div>
+								<div class="float-left">Lista poznanych czasowników</div>
+								<div class="float-right">
+									Ilość pomyłek: {{numberOfmistakes}}
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<hr>
+							<div class="alerady-known-list">
+								<div v-for="verb in verbsListKnown">
+									<strong>{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}</strong>
+								</div>
+							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
-		<div class="float-right mt-2">
-			Ilość pomyłek: {{numberOfmistakes}} <br>
-		</div>
+
 	</div>
 
 	<transition name="fade">
