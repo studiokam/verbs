@@ -1,8 +1,8 @@
 <?php
 
-use application\Application\Service\AddVerbToGroupService;
 use application\Application\Service\CreateVerbService;
 use application\Application\Service\DeleteGroupService;
+use application\Application\Service\DeleteVerbFromGroupService;
 use application\Application\Service\Exceptions\ValidationException;
 use application\Application\Service\GetGroupsForVerbsService;
 use application\Application\Service\GetGroupsListService;
@@ -55,15 +55,14 @@ class Verbs extends CI_Controller {
 			/** @var CreateVerbService $createVerb */
 			$response = $createVerb->execute($verb);
 			if ($response != true) {
-				echo json_encode(['status' => 0, 'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.']);
+				return $this->jsonErrorReturn();
 			}
 			$allVerbs = $this->getAllVerbs();
 		} catch (ValidationException $e) {
 			echo json_encode(['status' => 0, 'validationErrors' => 1, 'errors' => $e->getErrorsMessages()]);
 			return;
 		} catch (\Exception $e) {
-			echo json_encode(['status' => 0, 'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.']);
-			return;
+			return $this->jsonErrorReturn();
 		}
 
 		echo json_encode([
@@ -86,18 +85,11 @@ class Verbs extends CI_Controller {
 			/** @var DeleteGroupService $deleteVerb */
 			$response = $deleteVerb->execute($id);
 			if ($response != true) {
-				echo json_encode([
-					'status' => 0,
-					'error' => 'Przepraszamy, wystąpił błąd usunięcia po stronie serwisu. Spróbuj później.'
-				]);
+				return $this->jsonErrorReturn();
 			}
 			$allVerbs = $this->getAllVerbs();
 		} catch (\Exception $e) {
-			echo json_encode([
-				'status' => 0,
-				'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
-			]);
-			return;
+			return $this->jsonErrorReturn();
 		}
 
 		echo json_encode([
@@ -121,10 +113,7 @@ class Verbs extends CI_Controller {
 			/** @var UpdateGroupService $updateVerb */
 			$response = $updateVerb->execute($verb);
 			if ($response != true) {
-				echo json_encode([
-					'status' => 0,
-					'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.'
-				]);
+				return $this->jsonErrorReturn();
 			}
 			$allVerbs = $this->getAllVerbs();
 		} catch (ValidationException $e) {
@@ -135,11 +124,7 @@ class Verbs extends CI_Controller {
 			]);
 			return;
 		} catch (\Exception $e) {
-			echo json_encode([
-				'status' => 0,
-				'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
-			]);
-			return;
+			return $this->jsonErrorReturn();
 		}
 
 		echo json_encode([
@@ -153,13 +138,12 @@ class Verbs extends CI_Controller {
 	{
 		// todo
 		// czy nie ma juz takiego układu verb / group
-
 		$data = file_get_contents("php://input");
 		$data = json_decode($data, true);
 
 		try {
 			$addVerbToGroup = app_helper::getContainer()->get('add_verb_to_group_service');
-			/** @var AddVerbToGroupService $addVerbToGroup */
+			/** @var DeleteVerbFromGroupService $addVerbToGroup */
 			$response = $addVerbToGroup->execute($data);
 			if ($response != true) {
 				return $this->jsonErrorReturn();
@@ -179,7 +163,7 @@ class Verbs extends CI_Controller {
 
 		try {
 			$service = app_helper::getContainer()->get('delete_verb_from_group_service');
-			/** @var AddVerbToGroupService $service */
+			/** @var DeleteVerbFromGroupService $service */
 			$response = $service->execute($data['relationId']);
 			if ($response != true) {
 				return $this->jsonErrorReturn();

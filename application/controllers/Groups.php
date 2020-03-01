@@ -1,6 +1,13 @@
 <?php
 
 
+use application\Application\Service\CreateGroupService;
+use application\Application\Service\DeleteGroupService;
+use application\Application\Service\DeleteVerbFromGroupService;
+use application\Application\Service\GetGroupsListService;
+use application\Application\Service\GetVerbsForGroupService;
+use application\Application\Service\UpdateGroupService;
+
 class Groups extends CI_Controller {
 
 	public function __construct()
@@ -21,6 +28,7 @@ class Groups extends CI_Controller {
 	public function startData()
 	{
 		$allGroups = $this->getAllGroups();
+//		v($allGroups);
 		echo json_encode([
 			'baseUrl' => base_url(),
 			'allGroups' => $allGroups
@@ -40,13 +48,10 @@ class Groups extends CI_Controller {
 
 		try {
 			$createGroup = app_helper::getContainer()->get('create_group_service');
-			/** @var application\Application\Service\CreateGroupService $createGroup */
+			/** @var CreateGroupService $createGroup */
 			$response = $createGroup->execute($group);
 			if ($response != true) {
-				echo json_encode([
-					'status' => 0,
-					'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.'
-				]);
+				return $this->jsonErrorReturn();
 			}
 			$allGroups = $this->getAllGroups();
 		} catch (ValidationException $e) {
@@ -57,11 +62,7 @@ class Groups extends CI_Controller {
 			]);
 			return;
 		} catch (\Exception $e) {
-			echo json_encode([
-				'status' => 0,
-				'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
-			]);
-			return;
+			return $this->jsonErrorReturn();
 		}
 
 
@@ -74,7 +75,7 @@ class Groups extends CI_Controller {
 
 	private function getAllGroups()
 	{
-		/** @var application\Application\Service\GetGroupsListService $allGroups */
+		/** @var GetGroupsListService $allGroups */
 		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
 		return $allGroups->execute();
 	}
@@ -89,21 +90,14 @@ class Groups extends CI_Controller {
 
 		try {
 			$deleteGroup = app_helper::getContainer()->get('delete_group_service');
-			/** @var application\Application\Service\DeleteGroupService $deleteGroup */
+			/** @var DeleteGroupService $deleteGroup */
 			$response = $deleteGroup->execute($id);
 			if ($response != true) {
-				echo json_encode([
-					'status' => 0,
-					'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.'
-				]);
+				return $this->jsonErrorReturn();
 			}
 			$allGroups = $this->getAllGroups();
 		} catch (\Exception $e) {
-			echo json_encode([
-				'status' => 0,
-				'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
-			]);
-			return;
+			return $this->jsonErrorReturn();
 		}
 
 		echo json_encode([
@@ -116,19 +110,17 @@ class Groups extends CI_Controller {
 	public function editGroup() {
 		// todo
 		// sprawdzić czy jest juz grupa o takiej nazwie
+		$test = $this->input->post;
 
 		$data = file_get_contents("php://input");
 		$group = $this->groupModel->createGroupFromPost(json_decode($data, true));
 
 		try {
 			$updateGroup = app_helper::getContainer()->get('update_group_service');
-			/** @var application\Application\Service\UpdateGroupService $updateGroup */
+			/** @var UpdateGroupService $updateGroup */
 			$response = $updateGroup->execute($group);
 			if ($response != true) {
-				echo json_encode([
-					'status' => 0,
-					'error' => 'Przepraszamy, wystąpił błąd zapisu po stronie serwisu. Spróbuj później.'
-				]);
+				return $this->jsonErrorReturn();
 			}
 			$allGroups = $this->getAllGroups();
 		} catch (ValidationException $e) {
@@ -139,11 +131,7 @@ class Groups extends CI_Controller {
 			]);
 			return;
 		} catch (\Exception $e) {
-			echo json_encode([
-				'status' => 0,
-				'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
-			]);
-			return;
+			return $this->jsonErrorReturn();
 		}
 
 		echo json_encode([
@@ -152,6 +140,56 @@ class Groups extends CI_Controller {
 			'message' => 'Zaktualizowanio'
 		]);
 
+	}
+
+	public function deleteVerbFromGroup()
+	{
+		$data = file_get_contents("php://input");
+		$data = json_decode($data, true);
+
+		try {
+			$service = app_helper::getContainer()->get('delete_verb_from_group_service');
+			/** @var DeleteVerbFromGroupService $service */
+			$response = $service->execute($data['relationId']);
+			if ($response != true) {
+				return $this->jsonErrorReturn();
+			}
+			$verbGroupData = $this->getAllVerbsForGroup($data['verbId']);
+		} catch (\Exception $e) {
+			return $this->jsonErrorReturn();
+		}
+
+		return $this->jsonSuccessData($verbGroupData);
+	}
+
+	public function getVerbGroups()
+	{
+		$id = file_get_contents("php://input");
+		$data = $this->getAllVerbsForGroup($id);
+		return $this->jsonSuccessData($data);
+	}
+
+	private function getAllVerbsForGroup($groupId)
+	{
+		/** @var GetVerbsForGroupService $service */
+		$service = app_helper::getContainer()->get('get_verbs_for_groups_service');
+		return $service->execute($groupId);
+	}
+
+	private function jsonSuccessData($data)
+	{
+		echo json_encode([
+			'status' => 1,
+			'data' => $data
+		]);
+	}
+
+	private function jsonErrorReturn()
+	{
+		echo json_encode([
+			'status' => 0,
+			'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
+		]);
 	}
 
 }

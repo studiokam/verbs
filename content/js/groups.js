@@ -9,7 +9,8 @@ var app = new Vue({
         verbExistsError: false,
         insertOK: false,
         baseUrl: '',
-		editVerb: false
+		showEditGroup: false,
+		allVerbsForGroup: ''
     },
     methods: {
 
@@ -73,9 +74,43 @@ var app = new Vue({
 					this.groupName = this.allGroups[i].groupName;
 					this.groupAdditional = this.allGroups[i].groupAdditional;
 					this.id = this.allGroups[i].id;
-					this.editVerb = true;
+					this.showEditGroup = true;
 				}
 			}
+
+			axios({
+				method: 'post',
+				url: 'groups/getVerbGroups',
+				data: id,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.allVerbsForGroup = resp.data;
+					console.log(resp.data);
+				}
+			}, (error) => {
+				console.log(error);
+			});
+		},
+
+		deleteVerbFromGroup(relationId) {
+			axios({
+				method: 'post',
+				url: 'groups/deleteVerbFromGroup',
+				data: {verbId: this.id, relationId: relationId},
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.allVerbsForGroup = resp.data;
+					console.log(resp.data);
+				}
+			}, (error) => {
+				console.log(error);
+			});
 		},
 
 		editGroupSend() {
@@ -93,7 +128,7 @@ var app = new Vue({
 				if (resp.status === 1) {
 					this.allGroups = resp.allGroups;
 					this.clearForm();
-					this.editVerb = false;
+					this.showEditGroup = false;
 				}
 			}, (error) => {
 				console.log(error);

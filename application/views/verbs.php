@@ -4,8 +4,6 @@
 			<div class="col-sm-6 zi-100">
 				<div class="add-new-verb">
 					<a class="add-menu" :href="baseUrl">Home</a>
-<!--					<a class="add-word-menu" :href="baseUrl">Nowe słowo EN</a>-->
-<!--					<a class="add-verb-menu" :href="baseUrl">Nowy czasownik EN</a>-->
 					<div class="add-verb-menu" v-if="showAllVerbs" @click="goto('words')">Nowe słowo EN</div>
 					<div class="edit-verb-menu" v-if="showEditVerb" @click="endVerbEdit">Wyjdź z edycji</div>
 					<form>
