@@ -1,65 +1,88 @@
 <div id="app">
-
-	<div class="add-new-verb">
-		<a class="add-menu" :href="baseUrl">Home</a>
-		<a class="add-word-menu" :href="baseUrl">Nowe słowo EN</a>
-		<a class="add-verb-menu" :href="baseUrl">Nowy czasownik EN</a>
-		<div>
-			<div class="form-row">
-				<div class="col verb-pl-name">Grupy <span v-if="editVerb">- edycja grupy</span></div>
-			</div>
-			<hr class="mb-0">
-			<div class="form-row verbs-form">
-				<div class="col-md-12 pb-1">
-					<label class="my-label-in-form">Nazwa grupy *</label>
-					<input type="text" class="form-control" v-model="groupName">
-				</div>
-				<div class="col-md-12 pb-1">
-					<label class="my-label-in-form">Dodatkowy opis</label>
-					<textarea name="groupAdditional" rows="2" class="form-control" v-model="groupAdditional"></textarea>
-				</div>
-			</div>
-			<button type="button" class="btn btn-success btn-block mt-20" @click="addGroup" v-if="!editVerb">Dodaj</button>
-			<div>
-				<div class="row">
-					<div class="col-sm-8">
-						<button type="button" class="btn btn-success btn-block mt-20" @click="editGroupSend()" v-if="editVerb">Zapisz</button>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-6 zi-100">
+				<div class="add-new-verb">
+					<a class="add-menu" :href="baseUrl">Home</a>
+					<div class="edit-verb-menu" v-if="showEditGroup"
+						 @click="showEditGroup = false; groupName = ''; groupAdditional = ''; id ='', allVerbsForGroup = ''">
+						Wyjdź z edycji
 					</div>
-					<div class="col-sm-4">
-						<button type="button" class="btn btn-info btn-block mt-20"
-								@click="editVerb = false; groupName = ''; groupAdditional = ''; id =''"
-								v-if="editVerb">Wróć
-						</button>
+					<div class="form-row">
+						<div class="col verb-pl-name" v-if="!showEditGroup">Nowa grupa</div>
+						<div class="col verb-pl-name" v-if="showEditGroup">Edycja grupy</div>
+					</div>
+					<hr class="mb-0">
+					<div class="form-row verbs-form">
+						<div class="col-md-12 pb-1">
+							<label class="my-label-in-form">Nazwa grupy *</label>
+							<input type="text" class="form-control" v-model="groupName">
+						</div>
+						<div class="col-md-12 pb-1">
+							<label class="my-label-in-form">Dodatkowy opis</label>
+							<textarea
+								name="groupAdditional" rows="2" class="form-control"
+								v-model="groupAdditional">
+							</textarea>
+						</div>
+					</div>
+					<button type="button" class="btn btn-success btn-block mt-20" @click="addGroup"
+							v-if="!showEditGroup">Dodaj</button>
+					<div>
+						<div class="row">
+							<div class="col-sm-12">
+								<button type="button" class="btn btn-info btn-block mt-20"
+										@click="editGroupSend()" v-if="showEditGroup">Zapisz</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<hr>
-			<div class="form-row">
-				<div class="col verb-pl-name">Dodane</div>
-			</div>
-			<hr>
-
-			<div class="group" v-for="group in allGroups">
-				<div class="group-name">
-					<strong>{{group.groupName}}</strong><br>
-<!--					<small>Liczba czasowników przypisana do grupy: 12</small>-->
+			<div class="col-sm-6 ml--40" v-if="!showEditGroup">
+				<div class="add-new-verb">
+					<div class="form-row">
+						<div class="col verb-pl-name">Wszystkie grupy</div>
+					</div>
+					<div class="verb" v-for="group in allGroups">
+						<hr>
+						<div class="row">
+							<div class="col-sm-10">
+								<strong>{{group.groupName}}</strong><br>
+								<small style="color: #bbb;">Liczba czasowników przypisana do grupy: {{allVerbsForGroup.length}}</small>
+							</div>
+							<div class="col-sm-2 text-right">
+								<i class="verbs-list-edit fa fa-cog" @click="editGroup(group.id)"></i>
+								<i class="verbs-list-delete fa fa-times" @click="deleteGroup(group.id)"></i>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="group-options">
-					<button class="btn btn-sm btn-danger" @click="editGroup(group.id)">Edytuj</button> /
-					<button class="btn btn-sm btn-danger" @click="deleteGroup(group.id)">Usuń</button>
-				</div>
-				<div class="clearfix"></div>
 			</div>
 
+			<div class="col-sm-6 ml--40" v-if="showEditGroup">
+				<div class="add-new-verb">
+					<div class="form-row">
+						<div class="verb-pl-name">
+							<span style="font-size: 28px;">Czasowniki przynależne do grupy</span>
+						</div>
+						<small style="color: #bbb;">Można je usunąć, aby dodać nowe przejdź do czasowników</small>
+					</div>
+					<div class="verb" v-for="verb in allVerbsForGroup">
+						<hr>
+						<div class="row">
+							<div class="col-sm-10">
+								{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} -> {{verb.pl}}
+							</div>
+							<div class="col-sm-2 text-right">
+								<i class="verbs-list-delete fa fa-times" @click="deleteVerbFromGroup(verb.relationId)"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
 		</div>
-
-
-
-		<div class="alert alert-warning field-info" role="alert" v-if="emptyFieldsError">Wypełnij wszytkie pola</div>
-		<div class="alert alert-danger field-info"  role="alert" v-if="verbExistsError">Nope - jest już czasownik gdzie PL i Infinitive jest dokładnie taka sama :/</div>
-		<div class="alert alert-success field-info" role="alert" v-if="insertOK">OK! Dodano do listy</div>
 	</div>
 
 </div>
