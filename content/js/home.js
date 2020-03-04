@@ -30,8 +30,6 @@ var app = new Vue({
         allBtnDisabled: false,
         verbsListSelect: 1,
         pickAnyVerbError: false,
-        noMistakes: false,
-        noMistakesError: false,
         linkShow: false,
         shareLink: '',
         linkCopyOk2: false,
@@ -140,9 +138,6 @@ var app = new Vue({
                     this.repeatVerbs = true;
                     this.numberOfRepeatVerbs = urlSearch.repeat;
                 }
-                if ("noMistakes" in urlSearch) {
-                    this.noMistakes = true;
-                }
                 if ("verbShowType" in urlSearch) {
                     this.verbQuestionSetting = urlSearch.verbShowType;
                 }
@@ -160,9 +155,6 @@ var app = new Vue({
             }
             if (this.repeatVerbs) {
                 url += '&repeat=' + this.numberOfRepeatVerbs;
-            }
-            if (this.noMistakes) {
-                url += '&noMistakes=1';
             }
 
             let state = {};
@@ -189,8 +181,8 @@ var app = new Vue({
         },
         checkIfIsChecked(name) {
 
-            for (let i = 0; i < this.verbsListTemp.length; i++) {
-                const element = this.verbsListTemp[i];
+            for (let i = 0; i < this.verbs.length; i++) {
+                const element = this.verbs[i];
                 if (element.inf == name) {
                     return true;
                 }
@@ -199,7 +191,7 @@ var app = new Vue({
         },
         closeSettings() {
 
-            if (this.verbsListTemp.length < 1) {
+            if (this.verbs.length < 1) {
                 this.pickAnyVerbError = true;
                 return;
             }
@@ -212,10 +204,10 @@ var app = new Vue({
             this.pickAnyVerbError = false;
             let isVerbChecked = document.getElementById(name).checked;
             // usunięcie z listy
-            for (let i = 0; i < this.verbsListTemp.length; i++) {
-                const element = this.verbsListTemp[i];
+            for (let i = 0; i < this.verbs.length; i++) {
+                const element = this.verbs[i];
                 if (element.inf == name) {
-                    this.verbsListTemp.splice(i, 1);
+                    this.verbs.splice(i, 1);
                 }
             }
 
@@ -229,13 +221,13 @@ var app = new Vue({
             }
 
             if (isVerbChecked) {
-                this.verbsListTemp.push(this.verbsList[operationIndex]);
+                this.verbs.push(this.verbsList[operationIndex]);
             }
 
         },
         setUseFullListChange() {
             if (!this.useFullVerbsList) {
-                this.verbsListTemp = this.verbsList;
+                this.verbs = this.verbsList;
                 this.pickAnyVerbError = false;
             } else {
                 this.setVerbsListChange();
@@ -243,7 +235,7 @@ var app = new Vue({
         },
         setVerbsListChange() {
             this.pickAnyVerbError = false;
-            this.verbsListTemp = [];
+            this.verbs = [];
             let listOfVerbs = [];
 
             for (let i = 0; i < this.verbsGroups.length; i++) {
@@ -259,16 +251,12 @@ var app = new Vue({
                 for (let index = 0; index < this.verbsList.length; index++) {
                     const verbFromFullList = this.verbsList[index].inf;
                     if (verbFromSelect == verbFromFullList) {
-                        this.verbsListTemp.push(this.verbsList[index]);
+                        this.verbs.push(this.verbsList[index]);
                     }
                 }
             }
         },
         randomNumber() {
-            // this.correctAnswers = false;
-            // this.cleanForm();
-            // this.cleanAlertsInfo();
-            // this.$refs.fieldInfVerb.select();
             let random = Math.floor(Math.random() * this.verbs.length );
 
             if (this.random == random) {
@@ -278,7 +266,9 @@ var app = new Vue({
 			this.random = random;
         },
         newVerb() {
-            // this.chechBtnDisabled = false;
+			this.cleanForm();
+			this.chechBtnDisabled = false;
+			this.correctAnswers = false;
             // this.knownAllVerbs = false;
             this.randomNumber();
             this.presentVerb = this.verbs[this.random];
@@ -286,7 +276,7 @@ var app = new Vue({
             this.$refs.fieldInfVerb.select();
         },
         choosenVerbsList() {
-            this.verbsListTemp = this.verbsList.slice();
+            this.verbs = this.verbsList.slice();
         },
         showHints() {
             this.$refs.fieldInfVerb.select();
@@ -301,15 +291,14 @@ var app = new Vue({
                 return;
             }
 
-            if (this.verbInf.toLowerCase() == this.verbs[this.random].inf &&
-                this.verbPastSimple.toLowerCase() == this.verbs[this.random].pastSimp1 &&
-                this.verbPastParticiple.toLowerCase() == this.verbs[this.random].pastPrac1) {
+            if (this.verbInf.toLowerCase() === this.verbs[this.random].inf &&
+                this.verbPastSimple.toLowerCase() === this.verbs[this.random].pastSimp1 &&
+                this.verbPastParticiple.toLowerCase() === this.verbs[this.random].pastPrac1) {
                 this.allVerbsCorrect = true;
                 this.chechBtnDisabled = true;
                 this.$refs.newVerbBtn.focus();
-				console.log('poprawnie');
-                // delete from list and add to known list
 
+                // delete from list and add to known list
 				this.verbsListKnown.push(this.verbs[this.random]);
 				this.verbs.splice(this.random, 1);
 				if (this.verbs.length < 1) {
@@ -320,21 +309,18 @@ var app = new Vue({
                 return;
             }
 
-            if (this.verbInf.toLowerCase() != this.verbsListTemp[this.random].inf ||
-                this.verbPastSimple.toLowerCase() != this.verbsListTemp[this.random].pastSimp ||
-                this.verbPastParticiple.toLowerCase() != this.verbsListTemp[this.random].pastPrac) {
+            if (this.verbInf.toLowerCase() !== this.verbs[this.random].inf ||
+                this.verbPastSimple.toLowerCase() !== this.verbs[this.random].pastSimp ||
+                this.verbPastParticiple.toLowerCase() !== this.verbs[this.random].pastPrac) {
                 this.isSomeError = true;
                 this.numberOfmistakes++;
-                if (this.noMistakes) {
-                    this.noMistakesError = true;
-                }
-                return;
             }
         },
         cleanForm() {
             this.verbInf = '';
             this.verbPastSimple = '';
             this.verbPastParticiple = '';
+            this.cleanAlertsInfo();
         },
         cleanAlertsInfo() {
             this.emptyFieldsError = false;
@@ -344,8 +330,8 @@ var app = new Vue({
         repeatVerbsClick() {
 
             if (this.repeatVerbs) {
-                this.verbsListTemp = [];
-                this.verbsListTemp = this.verbsList.slice();
+                this.verbs = [];
+                this.verbs = this.verbsList.slice();
             }
             this.verbsListKnown = [];
         },
@@ -372,11 +358,6 @@ var app = new Vue({
 			this.setGroupToAllVerbs();
 			this.newVerb();
 		});
-
-        // this.verbsListTemp = this.verbsList.slice();
-        // this.getFromUrl();
-        // // this.random = this.randomNumber();
-        // this.shareLinkUrl();
     },
 
-})
+});

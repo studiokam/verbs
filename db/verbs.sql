@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 04 Mar 2020, 21:33
+-- Czas generowania: 04 Mar 2020, 22:11
 -- Wersja serwera: 10.4.6-MariaDB
 -- Wersja PHP: 7.3.9
 
@@ -39,10 +39,8 @@ CREATE TABLE `groups` (
 --
 
 INSERT INTO `groups` (`id`, `groupName`, `groupAdditional`) VALUES
-(33, 'Umiem na 100%', NULL),
-(36, 'gruuup2', NULL),
-(44, 'sad', NULL),
-(45, 'xcc', NULL);
+(46, 'Umiem na 100%', NULL),
+(47, 'Trudne', NULL);
 
 -- --------------------------------------------------------
 
@@ -214,7 +212,10 @@ INSERT INTO `verb_group_relation` (`id`, `verb_id`, `group_id`) VALUES
 (38, 2, 36),
 (39, 10, 36),
 (41, 6, 33),
-(43, 7, 45);
+(43, 7, 45),
+(44, 18, 46),
+(45, 20, 46),
+(46, 28, 46);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -252,7 +253,7 @@ ALTER TABLE `verb_group_relation`
 -- AUTO_INCREMENT dla tabeli `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT dla tabeli `statusy`
@@ -270,7 +271,7 @@ ALTER TABLE `verb`
 -- AUTO_INCREMENT dla tabeli `verb_group_relation`
 --
 ALTER TABLE `verb_group_relation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

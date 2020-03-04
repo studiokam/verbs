@@ -79,13 +79,13 @@
 						<div class="custom-control custom-checkbox">
 							<input type="checkbox" class="custom-control-input" :id="verb.inf"
 								   v-on:click="pickAnyVerbs(verb.inf, index)" :checked="checkIfIsChecked(verb.inf)">
-							<label class="custom-control-label" :for="verb.inf">{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}</label>
+							<label class="custom-control-label" :for="verb.inf">{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}</label>
 						</div>
 					</div>
 				</div>
 				<div v-if="verbsListSelect < 10" class="full-verbs-list-select">
 					<div v-for="verb in verbsListTemp">
-						{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}
+						{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}
 					</div>
 				</div>
 			</div>
@@ -132,7 +132,7 @@
 							<div class="col verb-pl-name">{{verbShowTypeSetting}}</div>
 							<div v-if="correctAnswers" class="correct-answers-top">
 								<div class="correct-answers">
-									{{presentVerb.inf}} - {{presentVerb.pastSimp}} - {{presentVerb.pastPrac}}
+									{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
 								</div>
 							</div>
 							<div id="settings" class="ml-20"><i class="fa fa-link" v-on:click="linkShow = true"></i></div>
@@ -159,9 +159,9 @@
 						<button type="button" class="btn btn-sm btn-success small-right" @click="checkVerbs" :disabled="chechBtnDisabled">Sprawdź</button>
 						<button type="button" class="btn btn-sm btn-info small-right" @click="showHints">Nauka</button>
 						<button type="button" class="btn btn-sm btn-secondary small-right" @click="newVerb" ref="newVerbBtn">Nowy</button>
+						<button type="button" class="btn btn-sm btn-success small-right" @click="test()">test</button>
 					</div>
 					<button type="button" class="btn btn-sm btn-success small-right" @click="goTo('refresh')" v-if="allBtnDisabled">Rozpocznij od nowa</button>
-					 <button type="button" class="btn btn-sm btn-success small-right" @click="test()">test</button>
 					<div class="clearfix"></div>
 
 					<div v-if="correctAnswers">
@@ -169,7 +169,7 @@
 						Poprawne odpowiedzi: <br>
 						<strong>{{presentVerb.pl}}</strong>
 						<div class="correct-answers">
-							{{presentVerb.inf}} - {{presentVerb.pastSimp}} - {{presentVerb.pastPrac}}
+							{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
 						</div>
 					</div>
 
@@ -209,7 +209,7 @@
 							<hr>
 							<div class="alerady-known-list">
 								<div v-for="verb in verbsListKnown">
-									<strong>{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}</strong>
+									<strong>{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}</strong>
 								</div>
 							</div>
 						</div>
@@ -246,10 +246,6 @@
 			<button type="button" class="btn btn-sm btn-secondary float-right ml-1" v-on:click="copyLink()">Kopiuj link</button>
 		</div>
 	</transition>
-	{{presentVerb}} <br>
-	{{random}} <br>
-	{{verbs}} <br>
-	{{group}}
 </div>
 </body>
 	<script type="text/javascript" src="content/js/home.js"></script>
