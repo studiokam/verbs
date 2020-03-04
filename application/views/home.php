@@ -161,7 +161,7 @@
 						<button type="button" class="btn btn-sm btn-secondary small-right" @click="newVerb" ref="newVerbBtn">Nowy</button>
 					</div>
 					<button type="button" class="btn btn-sm btn-success small-right" @click="goTo('refresh')" v-if="allBtnDisabled">Rozpocznij od nowa</button>
-					<!-- <button type="button" class="btn btn-sm btn-success small-right" @click="test()">test</button> -->
+					 <button type="button" class="btn btn-sm btn-success small-right" @click="test()">test</button>
 					<div class="clearfix"></div>
 
 					<div v-if="correctAnswers">
@@ -192,7 +192,7 @@
 					<div class="row">
 						<div class="col-md-2 col-sm-6">
 							<div class="already-known-discription">Pozostało</div>
-							<div class="big-number">{{numberOfVerbssss()}}</div>
+							<div class="big-number">{{verbs.length}}</div>
 						</div>
 						<div class="col-md-2 col-sm-6">
 							<div class="already-known-discription">Umiesz już</div>
@@ -246,6 +246,10 @@
 			<button type="button" class="btn btn-sm btn-secondary float-right ml-1" v-on:click="copyLink()">Kopiuj link</button>
 		</div>
 	</transition>
+	{{presentVerb}} <br>
+	{{random}} <br>
+	{{verbs}} <br>
+	{{group}}
 </div>
 </body>
 	<script type="text/javascript" src="content/js/home.js"></script>
