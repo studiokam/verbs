@@ -27,7 +27,7 @@ class Groups extends CI_Controller {
 
 	public function startData()
 	{
-		$allGroups = $this->getAllGroups();
+		$allGroups = $this->getAllGroupsFromDB();
 		echo json_encode([
 			'baseUrl' => base_url(),
 			'allGroups' => $allGroups
@@ -52,7 +52,7 @@ class Groups extends CI_Controller {
 			if ($response != true) {
 				return $this->jsonErrorReturn();
 			}
-			$allGroups = $this->getAllGroups();
+			$allGroups = $this->getAllGroupsFromDB();
 		} catch (ValidationException $e) {
 			echo json_encode([
 				'status' => 0,
@@ -72,7 +72,7 @@ class Groups extends CI_Controller {
 		]);
 	}
 
-	private function getAllGroups()
+	private function getAllGroupsFromDB()
 	{
 		/** @var GetGroupsListService $allGroups */
 		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
@@ -83,6 +83,11 @@ class Groups extends CI_Controller {
 		}
 
 		return $response;
+	}
+
+	public function getAllGroups()
+	{
+		echo json_encode([ 'allGroups' => $this->getAllGroupsFromDB()]);
 	}
 
 	public function deleteGroup()
@@ -100,7 +105,7 @@ class Groups extends CI_Controller {
 			if ($response != true) {
 				return $this->jsonErrorReturn();
 			}
-			$allGroups = $this->getAllGroups();
+			$allGroups = $this->getAllGroupsFromDB();
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
@@ -127,7 +132,7 @@ class Groups extends CI_Controller {
 			if ($response != true) {
 				return $this->jsonErrorReturn();
 			}
-			$allGroups = $this->getAllGroups();
+			$allGroups = $this->getAllGroupsFromDB();
 		} catch (ValidationException $e) {
 			echo json_encode([
 				'status' => 0,

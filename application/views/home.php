@@ -51,49 +51,34 @@
 				<div class="my-modal-title float-left">Używać pełnej listy czasowników?</div>
 				<div class="custom-control custom-switch float-right">
 					<input type="checkbox" class="custom-control-input" id="useFullVerbsList" v-model="useFullVerbsList">
-					<label class="custom-control-label" for="useFullVerbsList" @click="setUseFullListChange()"></label>
+					<label class="custom-control-label" for="useFullVerbsList"></label>
 				</div>
 				<div class="clearfix"></div>
 			</div>
 			<div v-if="!useFullVerbsList">
 				<div class="mt-20 mb-20" style="max-width: 300px;">
-					<select class="custom-select" @change="setVerbsListChange()" v-model="verbsListSelect">
-						<option value="1" selected>1 grupa czasowników</option>
-						<option value="2">2 grupa czasowników</option>
-						<option value="3">3 grupa czasowników</option>
-						<option value="4">4 grupa czasowników</option>
-						<option value="5">5 grupa czasowników</option>
-						<option value="6">6 grupa czasowników</option>
-						<option value="7">7 grupa czasowników</option>
-						<option value="8">8 grupa czasowników</option>
-						<option value="9">9 grupa czasowników</option>
-						<option value="11">trudne</option>
-						<option value="10">Wybierz dowolne z całej listy</option>
+					<select class="custom-select" @change="setVerbsListChange()" v-model="verbsListSelected">
+						<option value="" disabled>Wybierz grupę</option>
+						<option v-for="group in allGroups" :value="group.id" :key="group.id">
+							{{ group.groupName }}
+						</option>
 					</select>
 				</div>
-				<div v-if="pickAnyVerbError" class="pick-any-verb-error">
-					Wybierz przynajmniej jeden czasownik!
+				<div v-if="pickAnyGroupError" class="pick-any-verb-error">
+					Wybierz grupę lub użyj pełnej listy.
 				</div>
-				<div v-if="verbsListSelect == 10" class="full-verbs-list-select">
-					<div v-for="(verb, index) in verbsList">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" :id="verb.inf"
-								   v-on:click="pickAnyVerbs(verb.inf, index)" :checked="checkIfIsChecked(verb.inf)">
-							<label class="custom-control-label" :for="verb.inf">{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}</label>
-						</div>
-					</div>
-				</div>
-				<div v-if="verbsListSelect < 10" class="full-verbs-list-select">
-					<div v-for="verb in verbsListTemp">
+				<div class="full-verbs-list-select">
+					<div v-for="verb in verbs">
 						{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}
 					</div>
 				</div>
 			</div>
 			<hr>
-			<button type="button" class="btn btn-sm btn-danger float-right" v-on:click="closeSettings()">Zamknij</button>
+			<button type="button" class="btn btn-sm btn-danger float-right" v-on:click="saveSettings()">Zapisz i przeładuj</button>
 		</div>
 	</div>
-
+{{useFullVerbsList}}
+{{verbsListSelected}}
 	<div v-if="noMistakesError">
 		<div class="modal-dark-bg">
 		</div>
@@ -246,6 +231,7 @@
 			<button type="button" class="btn btn-sm btn-secondary float-right ml-1" v-on:click="copyLink()">Kopiuj link</button>
 		</div>
 	</transition>
+	allGroups {{allGroups}}
 </div>
 </body>
 	<script type="text/javascript" src="content/js/home.js"></script>

@@ -4,43 +4,42 @@ var app = new Vue({
 		verbs: [],
 		group: {},
 		random: 0,
-		presentVerb: {},
+        presentVerb: {},
+        allGroups: null,
 
 		verbShowTypeSetting: null,
 		verbQuestionSetting: 1,
-
+        verbsListSelected: '',
 		verbsListKnown: [],
+        useFullVerbsList: true,
+        settingsShow: false,
+        pickAnyGroupError: false,
+
 		verbInf: '',
 		verbPastSimple: '',
-		verbPastParticiple: '',
+        verbPastParticiple: '',
+        
+
 		data: '',
 		active: false,
-
         correctAnswers: false,
         emptyFieldsError: false,
         allVerbsCorrect: false,
         isSomeError: false,
-        settingsShow: false,
         repeatVerbs: false,
         numberOfRepeatVerbs: 1,
         countKnownVerbsIfMoreRepeats: [],
-        useFullVerbsList: true,
         chechBtnDisabled: false,
         knownAllVerbs: false,
         allBtnDisabled: false,
-        verbsListSelect: 1,
-        pickAnyVerbError: false,
         linkShow: false,
         shareLink: '',
         linkCopyOk2: false,
-
-
-
         numberOfmistakes: 0,
     },
     methods: {
         test() {
-			this.randomNumber();
+			this.getAllGroups();
         },
         verbQuestionChange() {
             this.newVerb();
@@ -74,95 +73,6 @@ var app = new Vue({
             var rand = myArray[Math.floor(Math.random() * myArray.length)];
             return rand;
         },
-        copyLink() {
-
-            node = document.getElementById('sharedlink');
-
-            if (document.body.createTextRange) {
-                const range = document.body.createTextRange();
-                range.moveToElementText(node);
-                range.select();
-            } else if (window.getSelection) {
-                const selection = window.getSelection();
-                const range = document.createRange();
-                range.selectNodeContents(node);
-                selection.removeAllRanges();
-                selection.addRange(range);
-            } else {
-                console.warn("Could not select text in node: Unsupported browser.");
-            }
-
-            try {
-                var successful = document.execCommand('copy');
-                var msg = successful ? 'successful' : 'unsuccessful';
-                let v = this;
-
-                // pokazanie potwierdzenia
-                setTimeout(function() {
-                    v.linkCopyOk2 = true;
-                }, 100);
-                setTimeout(function() {
-                    v.linkCopyOk2 = false;
-                }, 2000);
-
-                console.log('Copying text command was ' + msg);
-            } catch (err) {
-                console.log('Oops, unable to copy');
-                console.log(err);
-            }
-        },
-        shareLinkUrl() {
-            let share = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            if (location.search.length > 0) {
-                share = share + location.search;
-            }
-            this.shareLink = share;
-        },
-        getFromUrl() {
-            if (location.search.substring(1).length < 1 ) {
-                return;
-            }
-
-            var urlSearch = JSON.parse('{"' + decodeURI(location.search.substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
-
-            if (Object.keys(urlSearch).length > 0 ) {
-                if ("group" in urlSearch) {
-                    let set = 1;
-                    if (urlSearch.group > 0 && urlSearch.group < 11) {
-                        set = urlSearch.group;
-                    }
-                    this.verbsListSelect = set;
-                    this.useFullVerbsList = false;
-                }
-                if ("repeat" in urlSearch) {
-                    this.repeatVerbs = true;
-                    this.numberOfRepeatVerbs = urlSearch.repeat;
-                }
-                if ("verbShowType" in urlSearch) {
-                    this.verbQuestionSetting = urlSearch.verbShowType;
-                }
-                this.setVerbsListChange();
-            }
-        },
-        setToUrl() {
-
-            let getUrl = window.location;
-            let baseUrl = getUrl .protocol + "//" + getUrl.host + getUrl.pathname;
-            let url = '?verbShowType=' + this.verbQuestionSetting;
-
-            if (!this.useFullVerbsList) {
-                url += '&group=' + this.verbsListSelect;
-            }
-            if (this.repeatVerbs) {
-                url += '&repeat=' + this.numberOfRepeatVerbs;
-            }
-
-            let state = {};
-            let title = '';
-            history.pushState(state, title, baseUrl + url);
-            this.shareLink = baseUrl + url;
-
-        },
         goTo(set) {
 
             let getUrl = window.location;
@@ -189,49 +99,15 @@ var app = new Vue({
             }
 
         },
-        closeSettings() {
+        saveSettings() {
 
-            if (this.verbs.length < 1) {
-                this.pickAnyVerbError = true;
+            if (!this.useFullVerbsList && this.verbsListSelected == '') {
+                this.pickAnyGroupError = true;
                 return;
             }
             this.newVerb();
             this.settingsShow = false;
-            this.setToUrl();
 
-        },
-        pickAnyVerbs(name, id) {
-            this.pickAnyVerbError = false;
-            let isVerbChecked = document.getElementById(name).checked;
-            // usunięcie z listy
-            for (let i = 0; i < this.verbs.length; i++) {
-                const element = this.verbs[i];
-                if (element.inf == name) {
-                    this.verbs.splice(i, 1);
-                }
-            }
-
-            // sprawdzenie indexu czasownika do operacji
-            let operationIndex = 0;
-            for (let index = 0; index < this.verbsList.length; index++) {
-                const elementVerbsList = this.verbsList[index];
-                if (Object.values(elementVerbsList).indexOf(name) > -1) {
-                    operationIndex = index;
-                }
-            }
-
-            if (isVerbChecked) {
-                this.verbs.push(this.verbsList[operationIndex]);
-            }
-
-        },
-        setUseFullListChange() {
-            if (!this.useFullVerbsList) {
-                this.verbs = this.verbsList;
-                this.pickAnyVerbError = false;
-            } else {
-                this.setVerbsListChange();
-            }
         },
         setVerbsListChange() {
             this.pickAnyVerbError = false;
@@ -345,7 +221,30 @@ var app = new Vue({
 				'groupName': 'Wszystkie czasowniki',
 				'groupAdditional': 'Lista wszystkich czasowników'
 			};
-		}
+        },
+        getAllGroups() {
+            axios.get('groups/getAllGroups')
+			.then((response) => {
+                this.allGroups = response.data.allGroups;
+			}, (error) => {
+				console.log(error);
+			});
+        },
+        // getVerbsListFromDB(listId) {
+        //     axios({
+		// 		method: 'post',
+		// 		url: 'home/getVerbsListFromDB',
+		// 		data: data,
+		// 		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		// 	})
+        //     .then((response) => {
+        //         let resp = response.data;
+        //         console.log(resp);
+        //         this.verbs = resp.allVerbs;
+        //         this.setGroupToAllVerbs();
+        //         this.newVerb();
+        //     });
+        // }
 
     },
     mounted() {
@@ -357,7 +256,8 @@ var app = new Vue({
 			this.verbs = resp.allVerbs;
 			this.setGroupToAllVerbs();
 			this.newVerb();
-		});
+        });
+        this.getAllGroups();
     },
 
 });
