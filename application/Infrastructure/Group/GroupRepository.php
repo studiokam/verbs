@@ -50,7 +50,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 
 	public function getVerbsForGroup($groupId)
 	{
-		$sql = 'SELECT vgr.id as relationId, v.pl, v.inf, v.pastSimp1, v.pastPrac1 FROM verb_group_relation vgr
+		$sql = 'SELECT vgr.id as relationId, v.* FROM verb_group_relation vgr
 				JOIN verb v on v.id = vgr.verb_id
 				WHERE group_id = ? ORDER BY v.inf';
 

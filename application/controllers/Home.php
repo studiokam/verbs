@@ -41,7 +41,7 @@ class Home extends CI_Controller {
 			// Get 
 		} else {
 			$data = array(
-				'groupId'=> 0,
+				'id'=> 0,
 				'groupName'=> 'Wszystkie czasowniki',
 				'groupAdditional'=> 'Lista wszystkich czasowników'
 			);

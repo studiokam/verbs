@@ -14,21 +14,21 @@ var app = new Vue({
         useFullVerbsList: true,
         settingsShow: false,
         pickAnyGroupError: false,
-
+		verbsInGroup: '',
 		verbInf: '',
 		verbPastSimple: '',
         verbPastParticiple: '',
-        
+		repeatVerbs: false,
+		numberOfRepeatVerbs: 1,
+		countKnownVerbsIfMoreRepeats: [],
+
 
 		data: '',
 		active: false,
-        correctAnswers: false,
-        emptyFieldsError: false,
-        allVerbsCorrect: false,
-        isSomeError: false,
-        repeatVerbs: false,
-        numberOfRepeatVerbs: 1,
-        countKnownVerbsIfMoreRepeats: [],
+		correctAnswers: false,
+		emptyFieldsError: false,
+		allVerbsCorrect: false,
+		isSomeError: false,
         chechBtnDisabled: false,
         knownAllVerbs: false,
         allBtnDisabled: false,
@@ -37,9 +37,10 @@ var app = new Vue({
         linkCopyOk2: false,
         numberOfmistakes: 0,
     },
+	computed: {
+	},
     methods: {
         test() {
-			this.getAllGroups();
         },
         verbQuestionChange() {
             this.newVerb();
@@ -56,11 +57,11 @@ var app = new Vue({
                     break;
 
                 case 3:
-                    return this.presentVerb.pastSimp;
+                    return this.presentVerb.pastSimp1;
                     break;
 
                 case 4:
-                    return this.presentVerb.pastPrac;
+                    return this.presentVerb.pastPrac1;
                     break;
 
                 case 5:
@@ -69,7 +70,7 @@ var app = new Vue({
             }
         },
         randomVerbQuestion() {
-            var myArray = [this.presentVerb.pl, this.presentVerb.inf, this.presentVerb.pastSimp, this.presentVerb.pastPrac];
+            var myArray = [this.presentVerb.pl, this.presentVerb.inf, this.presentVerb.pastSimp1, this.presentVerb.pastPrac1];
             var rand = myArray[Math.floor(Math.random() * myArray.length)];
             return rand;
         },
@@ -107,30 +108,26 @@ var app = new Vue({
             }
             this.newVerb();
             this.settingsShow = false;
+            this.verbsListKnown = [];
+			this.countKnownVerbsIfMoreRepeats = [];
+		},
+		setVerbsListChange() {
+			// Get verbs for chosen group
+			axios({
+				method: 'post',
+				url: 'groups/allVerbsForGroup',
+				data: this.verbsListSelected,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				console.log(response);
+				this.verbs = resp.data;
+				this.setGroup(this.verbsListSelected);
+			}, (error) => {
+				console.log(error);
+			});
 
-        },
-        setVerbsListChange() {
-            this.pickAnyVerbError = false;
-            this.verbs = [];
-            let listOfVerbs = [];
-
-            for (let i = 0; i < this.verbsGroups.length; i++) {
-                const element = this.verbsGroups[i].number;
-                if (element == this.verbsListSelect) {
-                    listOfVerbs = this.verbsGroups[i].list.replace(/\s+/g, '').split(',');
-                }
-            }
-
-            for (let i = 0; i < listOfVerbs.length; i++) {
-                const verbFromSelect = listOfVerbs[i];
-
-                for (let index = 0; index < this.verbsList.length; index++) {
-                    const verbFromFullList = this.verbsList[index].inf;
-                    if (verbFromSelect == verbFromFullList) {
-                        this.verbs.push(this.verbsList[index]);
-                    }
-                }
-            }
         },
         randomNumber() {
             let random = Math.floor(Math.random() * this.verbs.length );
@@ -151,6 +148,21 @@ var app = new Vue({
             this.verbShowTypeSetting = this.verbQuestion();
             this.$refs.fieldInfVerb.select();
         },
+		settingsSetAllVerbsUse() {
+			if (!this.useFullVerbsList) {
+				this.setGroupToAllVerbs();
+				this.verbsListSelected = '';
+				this.getAllVerbs();
+			}
+		},
+		setGroup(id) {
+        	for (let i = 0; this.allGroups.length; i++) {
+        		if (id == this.allGroups[i].id) {
+        			this.group = this.allGroups[i];
+        			return;
+				}
+			}
+		},
         choosenVerbsList() {
             this.verbs = this.verbsList.slice();
         },
@@ -174,13 +186,33 @@ var app = new Vue({
                 this.chechBtnDisabled = true;
                 this.$refs.newVerbBtn.focus();
 
-                // delete from list and add to known list
-				this.verbsListKnown.push(this.verbs[this.random]);
-				this.verbs.splice(this.random, 1);
-				if (this.verbs.length < 1) {
-					this.knownAllVerbs = true;
-					this.allBtnDisabled = true;
+                if (this.repeatVerbs) {
+
+                	for (let i = 0; i < this.verbs.length; i++) {
+                		if (this.verbs[i].id == this.presentVerb.id) {
+                			if (this.verbs[i].count == null ) {
+								this.verbs[i].count = 1;
+								return;
+							} else if (this.verbs[i].count >= parseInt(this.numberOfRepeatVerbs) - 1) {
+								//delete from list and add to known list
+								this.verbsListKnown.push(this.verbs[this.random]);
+								this.verbs.splice(this.random, 1);
+								if (this.verbs.length < 1) {
+									this.knownAllVerbs = true;
+									this.allBtnDisabled = true;
+								}
+								return;
+							}
+
+							this.verbs[i].count++;
+							return;
+						}
+					}
+
+
 				}
+
+
 
                 return;
             }
@@ -203,21 +235,12 @@ var app = new Vue({
             this.allVerbsCorrect = false;
             this.isSomeError = false;
         },
-        repeatVerbsClick() {
-
-            if (this.repeatVerbs) {
-                this.verbs = [];
-                this.verbs = this.verbsList.slice();
-            }
-            this.verbsListKnown = [];
-        },
 		homeLearnChooseMouseOver() {
 			this.active = !this.active;
 		},
-
 		setGroupToAllVerbs() {
 			this.group = {
-				'groupId': 0,
+				'id': 0,
 				'groupName': 'Wszystkie czasowniki',
 				'groupAdditional': 'Lista wszystkich czasowników'
 			};
@@ -230,21 +253,15 @@ var app = new Vue({
 				console.log(error);
 			});
         },
-        // getVerbsListFromDB(listId) {
-        //     axios({
-		// 		method: 'post',
-		// 		url: 'home/getVerbsListFromDB',
-		// 		data: data,
-		// 		headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-		// 	})
-        //     .then((response) => {
-        //         let resp = response.data;
-        //         console.log(resp);
-        //         this.verbs = resp.allVerbs;
-        //         this.setGroupToAllVerbs();
-        //         this.newVerb();
-        //     });
-        // }
+		getAllVerbs() {
+			axios.get('home/start_data')
+			.then((response) => {
+				let resp = response.data;
+				this.verbs = resp.allVerbs;
+			}, (error) => {
+				console.log(error);
+			});
+		}
 
     },
     mounted() {
@@ -252,12 +269,11 @@ var app = new Vue({
 		axios.get('home/start_data')
 		.then((response) => {
 			let resp = response.data;
-			console.log(resp);
 			this.verbs = resp.allVerbs;
 			this.setGroupToAllVerbs();
 			this.newVerb();
         });
         this.getAllGroups();
-    },
+    }
 
 });

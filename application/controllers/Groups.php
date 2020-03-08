@@ -179,6 +179,13 @@ class Groups extends CI_Controller {
 		return $this->jsonSuccessData($data);
 	}
 
+	public function allVerbsForGroup()
+	{
+		$id = file_get_contents("php://input");
+		$data = $this->getAllVerbsForGroup($id);
+		return $this->jsonSuccessData($data);
+	}
+
 	private function getAllVerbsForGroup($groupId)
 	{
 		/** @var GetVerbsForGroupService $service */

@@ -1,6 +1,8 @@
 <div id="app" xmlns:v-on="http://www.w3.org/1999/xhtml">
 
 	<div v-if="settingsShow">
+<!--	<div >-->
+
 		<div class="modal-dark-bg">
 		</div>
 		<div class="my-modal-content mb-50">
@@ -24,7 +26,7 @@
 				<div class="my-modal-title float-left">Nie wyświetlaj tych które już umiem</div>
 				<div class="custom-control custom-switch float-right">
 					<input type="checkbox" class="custom-control-input" id="repeatVerbs" v-model="repeatVerbs">
-					<label class="custom-control-label" for="repeatVerbs" v-on:click="repeatVerbsClick"></label>
+					<label class="custom-control-label" for="repeatVerbs"></label>
 				</div>
 				<div class="clearfix"></div>
 			</div>
@@ -37,20 +39,11 @@
 			</div>
 			<hr>
 			<div class="my-modal-group">
-				<div class="my-modal-title custom-checkbox mb-0 float-left">Zaliczy tylko bez pomyłki</div>
-				<div class="custom-control custom-switch float-right">
-					<input type="checkbox" class="custom-control-input" id="noMistakes" v-model="noMistakes">
-					<label class="custom-control-label" for="noMistakes" v-on:click="repeatVerbs = true"></label>
-				</div>
-				<div class="clearfix"></div>
-				<small class="form-text text-muted mt-0 mb-1">- jeśli popełnisz bąd podczas podawania odpowiedzi, proces
-					zostanie zrestartowany - dodatkowa motywacja</small>
-			</div>
-			<hr>
-			<div class="my-modal-group">
 				<div class="my-modal-title float-left">Używać pełnej listy czasowników?</div>
 				<div class="custom-control custom-switch float-right">
-					<input type="checkbox" class="custom-control-input" id="useFullVerbsList" v-model="useFullVerbsList">
+					<input type="checkbox" class="custom-control-input" id="useFullVerbsList"
+						   v-model="useFullVerbsList"
+						   @click="settingsSetAllVerbsUse()">
 					<label class="custom-control-label" for="useFullVerbsList"></label>
 				</div>
 				<div class="clearfix"></div>
@@ -62,37 +55,20 @@
 						<option v-for="group in allGroups" :value="group.id" :key="group.id">
 							{{ group.groupName }}
 						</option>
+<!--						<option value="1">Wszystkie bez tych które umiem na 100%</option>-->
 					</select>
 				</div>
 				<div v-if="pickAnyGroupError" class="pick-any-verb-error">
 					Wybierz grupę lub użyj pełnej listy.
 				</div>
-				<div class="full-verbs-list-select">
-					<div v-for="verb in verbs">
+				<div :class="{'full-verbs-list-select': group.id != 0}">
+					<div v-for="verb in verbs" v-if="group.id != 0">
 						{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}
 					</div>
 				</div>
 			</div>
 			<hr>
-			<button type="button" class="btn btn-sm btn-danger float-right" v-on:click="saveSettings()">Zapisz i przeładuj</button>
-		</div>
-	</div>
-{{useFullVerbsList}}
-{{verbsListSelected}}
-	<div v-if="noMistakesError">
-		<div class="modal-dark-bg">
-		</div>
-		<div class="my-modal-content mb-50">
-
-			<div class="my-modal-group">
-				<div class="my-modal-title">Niestety, nie udało się tym razem <i class="fa fa-frown-o"></i></div>
-				<hr>
-				<div>Popełniony został błąd a jesteś w trybie gdzie każdy błąd przerywa ćwiczenie</div>
-			</div>
-
-			<hr>
-			<button type="button" class="btn btn-sm btn-danger float-right ml-1" v-on:click="goTo('')">Wyjdź</button>
-			<button type="button" class="btn btn-sm btn-success float-right" v-on:click="goTo('refresh')">Rozpocznij od nowa</button>
+			<button type="button" class="btn btn-sm btn-danger float-right" v-on:click="saveSettings()">Zastosuj</button>
 		</div>
 	</div>
 
@@ -120,6 +96,7 @@
 									{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
 								</div>
 							</div>
+							<div id="settings" class="ml-20"><i class="fa fa-paper-plane" v-on:click="linkShow = true"></i></div>
 							<div id="settings" class="ml-20"><i class="fa fa-link" v-on:click="linkShow = true"></i></div>
 							<div id="settings" class="ml-20"><i class="fa fa-cogs" v-on:click="settingsShow = true"></i></div>
 						</div>
@@ -141,18 +118,23 @@
 					</form>
 					<hr>
 					<div v-if="!allBtnDisabled">
-						<button type="button" class="btn btn-sm btn-success small-right" @click="checkVerbs" :disabled="chechBtnDisabled">Sprawdź</button>
-						<button type="button" class="btn btn-sm btn-info small-right" @click="showHints">Nauka</button>
-						<button type="button" class="btn btn-sm btn-secondary small-right" @click="newVerb" ref="newVerbBtn">Nowy</button>
-						<button type="button" class="btn btn-sm btn-success small-right" @click="test()">test</button>
+						<button type="button" class="verb-btn verb-btn-success" @click="checkVerbs" :disabled="chechBtnDisabled">
+							<i class="fa fa-check"></i> Sprawdź</button>
+						<button type="button" class="verb-btn verb-btn-info" @click="showHints">
+							<i class="fa fa-graduation-cap"></i> Nauka</button>
+						<button type="button" class="verb-btn verb-btn-info" @click="newVerb" ref="newVerbBtn">
+							<i class="fa fa-forward"></i> Nowy</button>
+<!--						<button type="button" class="verb-btn verb-btn-default" @click="test()">test</button>-->
 					</div>
-					<button type="button" class="btn btn-sm btn-success small-right" @click="goTo('refresh')" v-if="allBtnDisabled">Rozpocznij od nowa</button>
+					<button type="button" class="verb-btn verb-btn-default" @click="goTo('refresh')" v-if="allBtnDisabled">Rozpocznij od nowa</button>
 					<div class="clearfix"></div>
 
 					<div v-if="correctAnswers">
 						<hr>
-						Poprawne odpowiedzi: <br>
-						<strong>{{presentVerb.pl}}</strong>
+						<div class="mb-10">Poprawne odpowiedzi: </div>
+						<div class="correct-answers">
+							{{presentVerb.pl}}
+						</div>
 						<div class="correct-answers">
 							{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
 						</div>
@@ -167,9 +149,8 @@
 			</div>
 		</div>
 	</div>
-	<!-- verbsListTemp: {{verbsListTemp}} <br> -->
 
-	<div class="container mb-50 mt-100" v-if="repeatVerbs || true">
+	<div class="container mb-50 mt-100" v-if="repeatVerbs">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="home-container">
@@ -205,7 +186,6 @@
 		</div>
 
 	</div>
-
 	<transition name="fade">
 		<div class="modal-dark-bg" v-if="linkShow"></div>
 	</transition>
@@ -231,7 +211,6 @@
 			<button type="button" class="btn btn-sm btn-secondary float-right ml-1" v-on:click="copyLink()">Kopiuj link</button>
 		</div>
 	</transition>
-	allGroups {{allGroups}}
 </div>
 </body>
 	<script type="text/javascript" src="content/js/home.js"></script>
