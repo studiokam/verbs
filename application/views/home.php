@@ -96,9 +96,11 @@
 									{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
 								</div>
 							</div>
-							<div id="settings" class="ml-20"><i class="fa fa-paper-plane" v-on:click="linkShow = true"></i></div>
 							<div id="settings" class="ml-20"><i class="fa fa-link" v-on:click="linkShow = true"></i></div>
 							<div id="settings" class="ml-20"><i class="fa fa-cogs" v-on:click="settingsShow = true"></i></div>
+						</div>
+						<div class="form-row">
+							<div class="context">{{presentVerb.plAdditional}}</div>
 						</div>
 						<hr class="mb-0">
 						<div class="form-row verbs-form">
@@ -124,6 +126,8 @@
 							<i class="fa fa-graduation-cap"></i> Nauka</button>
 						<button type="button" class="verb-btn verb-btn-info" @click="newVerb" ref="newVerbBtn">
 							<i class="fa fa-forward"></i> Nowy</button>
+						<button type="button" class="verb-btn verb-btn-info float-right" @click="addVerbToGroup()" ref="newVerbBtn">
+							<i class="fa fa-plus"></i> Dodaj do grupy</button>
 <!--						<button type="button" class="verb-btn verb-btn-default" @click="test()">test</button>-->
 					</div>
 					<button type="button" class="verb-btn verb-btn-default" @click="goTo('refresh')" v-if="allBtnDisabled">Rozpocznij od nowa</button>
@@ -149,7 +153,7 @@
 			</div>
 		</div>
 	</div>
-
+	groupsInWitchVerbIs: {{groupsInWitchVerbIs}}
 	<div class="container mb-50 mt-100" v-if="repeatVerbs">
 		<div class="row">
 			<div class="col-sm-12">
@@ -187,7 +191,7 @@
 
 	</div>
 	<transition name="fade">
-		<div class="modal-dark-bg" v-if="linkShow"></div>
+		<div class="modal-dark-bg" v-if="linkShow || addToGroupShow"></div>
 	</transition>
 	<transition name="fade2">
 		<div class="my-modal-content mb-50" v-if="linkShow">
@@ -209,6 +213,54 @@
 			</transition>
 			<button type="button" class="btn btn-sm btn-danger float-right ml-1" v-on:click="linkShow = false">Zamknij</button>
 			<button type="button" class="btn btn-sm btn-secondary float-right ml-1" v-on:click="copyLink()">Kopiuj link</button>
+		</div>
+	</transition>
+	{{addVerbToGroupGroupChosen}}
+	<transition name="fade3">
+		<div class="my-modal-main-content mb-50" v-if="addToGroupShow">
+
+			<div class="form-row">
+				<div class="col"><h4>Dodaj do grupy</h4></div>
+			</div>
+			<hr>
+			<div class="verb-about">
+				<div class="row">
+					<div class="col-sm-8">
+						<select class="custom-select" v-model="addVerbToGroupGroupChosen">
+							<option value="" disabled>Wybierz grupę</option>
+							<option v-for="group in allGroups" :value="group.id">
+								{{ group.groupName }}
+							</option>
+						</select>
+					</div>
+					<div class="col-sm-4 text-right">
+						<button class="verb-btn verb-btn-info" @click="addVerbToGroupSave"
+								v-if="addVerbToGroupGroupChosen != ''">Dodaj</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-row mt-30">
+				<div class="col"><h4>Czasownik przynależy do grup</h4></div>
+			</div>
+			<hr>
+			<div class="verb-about">
+				- Wszystkie czasowniki
+				<div v-for="group in groupsInWitchVerbIs" v-if="group.groupName != 'Wszystkie czasowniki'">
+					<hr class="mt-10 mb-10">
+
+					<div class="row">
+						<div class="col-sm-10">
+							- {{group.groupName}}
+						</div>
+						<div class="col-sm-2 text-right">
+							<i class="verbs-list-delete fa fa-times" @click="deleteVerbFromGroup(group.relationId)"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+
+			<button type="button" class="verb-btn verb-btn-success float-right ml-1" v-on:click="addToGroupClose()">Zamknij</button>
 		</div>
 	</transition>
 </div>

@@ -51,6 +51,21 @@ body, html {
     -moz-box-shadow: 0px 0px 12px 4px rgba(0,0,0,0.15);
     box-shadow: 0px 0px 12px 4px rgba(0,0,0,0.15);
 }
+.my-modal-main-content {
+	width: 500px;
+	background: #fff;
+	padding: 30px;
+	margin: 0 auto;
+	z-index: 101;
+	position: absolute;
+	left: 0;
+	right: 0;
+	border-radius: .3rem;
+	top: 150px;
+	-webkit-box-shadow: 0px 0px 12px 4px rgba(0,0,0,0.15);
+	-moz-box-shadow: 0px 0px 12px 4px rgba(0,0,0,0.15);
+	box-shadow: 0px 0px 12px 4px rgba(0,0,0,0.15);
+}
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
     border-color: #28a745;
@@ -113,10 +128,27 @@ body, html {
     opacity: 0;
 }
 
+.fade3-enter-active {
+	animation-name: example2;
+	animation-duration: 0.3s;
+}
+.fade3-leave-active {
+	transition: opacity .2s, top .2s;
+	top: 0px;
+}
+.fade3-enter, .fade3-leave-to {
+	opacity: 0;
+}
+
 @keyframes example {
     0%   {top: 30px;}
     100% {top: 50px;}
   }
+
+@keyframes example2 {
+	0%   {top: 30px;}
+	100% {top: 150px;}
+}
 
 @media only screen and (max-width: 767px) {
     .mt-50 {
@@ -264,6 +296,11 @@ body, html {
 }
 .uk-active2 {
 	bottom: -54px !important;
+}
+.context {
+	margin-left: 5px;
+	font-size: 13px;
+	min-height: 20px;
 }
 
 

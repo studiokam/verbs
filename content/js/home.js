@@ -21,6 +21,9 @@ var app = new Vue({
 		repeatVerbs: false,
 		numberOfRepeatVerbs: 1,
 		countKnownVerbsIfMoreRepeats: [],
+		addToGroupShow: false,
+		addVerbToGroupGroupChosen: '',
+		groupsInWitchVerbIs: [],
 
 
 		data: '',
@@ -90,6 +93,31 @@ var app = new Vue({
             window.location.href = url;
 
         },
+		addVerbToGroup() {
+			axios({
+				method: 'post',
+				url: 'verbs/getVerbGroups',
+				data: this.presentVerb.id,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				console.log(resp);
+				if (resp.status === 1) {
+					this.groupsInWitchVerbIs = resp.data;
+				}
+			}, (error) => {
+				console.log(error);
+			});
+        	this.addToGroupShow = true;
+		},
+		addVerbToGroupSave() {
+			console.log(this.addVerbToGroupGroupChosen);
+		},
+		addToGroupClose() {
+        	this.addToGroupShow = false;
+        	this.addVerbToGroupGroupChosen = '';
+		},
         checkIfIsChecked(name) {
 
             for (let i = 0; i < this.verbs.length; i++) {
@@ -190,10 +218,11 @@ var app = new Vue({
 
                 	for (let i = 0; i < this.verbs.length; i++) {
                 		if (this.verbs[i].id == this.presentVerb.id) {
-                			if (this.verbs[i].count == null ) {
+                			if (this.verbs[i].count == null && parseInt(this.numberOfRepeatVerbs) !== 1) {
 								this.verbs[i].count = 1;
 								return;
-							} else if (this.verbs[i].count >= parseInt(this.numberOfRepeatVerbs) - 1) {
+							} else if (this.verbs[i].count >= parseInt(this.numberOfRepeatVerbs) - 1
+										|| parseInt(this.numberOfRepeatVerbs) === 1) {
 								//delete from list and add to known list
 								this.verbsListKnown.push(this.verbs[this.random]);
 								this.verbs.splice(this.random, 1);
