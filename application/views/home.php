@@ -249,11 +249,8 @@
 					<hr class="mt-10 mb-10">
 
 					<div class="row">
-						<div class="col-sm-10">
+						<div class="col-sm-12">
 							- {{group.groupName}}
-						</div>
-						<div class="col-sm-2 text-right">
-							<i class="verbs-list-delete fa fa-times" @click="deleteVerbFromGroup(group.relationId)"></i>
 						</div>
 					</div>
 				</div>

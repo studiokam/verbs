@@ -112,11 +112,28 @@ var app = new Vue({
         	this.addToGroupShow = true;
 		},
 		addVerbToGroupSave() {
-			console.log(this.addVerbToGroupGroupChosen);
+			axios({
+				method: 'post',
+				url: 'verbs/addVerbToGroup',
+				data: {verbId: this.presentVerb.id, groupId: this.addVerbToGroupGroupChosen},
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				if (resp.status === 1) {
+					this.groupsInWitchVerbIs = resp.data;
+				} else if (resp.status === 0) {
+					console.log(resp.data);
+					alert(resp.data);
+				}
+			}, (error) => {
+				console.log(error);
+			});
 		},
 		addToGroupClose() {
         	this.addToGroupShow = false;
         	this.addVerbToGroupGroupChosen = '';
+        	this.groupsInWitchVerbIs = [];
 		},
         checkIfIsChecked(name) {
 

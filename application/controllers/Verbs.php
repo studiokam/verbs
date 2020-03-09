@@ -136,10 +136,16 @@ class Verbs extends CI_Controller {
 
 	public function addVerbToGroup()
 	{
-		// todo
-		// czy nie ma juz takiego układu verb / group
 		$data = file_get_contents("php://input");
 		$data = json_decode($data, true);
+
+		// check if the verb is alredy in the group
+		$verbInGroups = $this->getGroupsForVerb($data['verbId']);
+		foreach ($verbInGroups as $group) {
+			if ($group->id == $data['groupId']) {
+				return $this->jsonErrorReturn('Czasownik jest już w tej grupie.');
+			}
+		}
 
 		try {
 			$addVerbToGroup = app_helper::getContainer()->get('add_verb_to_group_service');
@@ -191,11 +197,12 @@ class Verbs extends CI_Controller {
 		]);
 	}
 
-	private function jsonErrorReturn()
+	private function jsonErrorReturn($data = null)
 	{
 		echo json_encode([
 			'status' => 0,
-			'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
+			'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.',
+			'data' => $data
 		]);
 	}
 
