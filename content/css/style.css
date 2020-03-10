@@ -68,8 +68,8 @@ body, html {
 }
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
-    border-color: #28a745;
-    background-color: #28a745;
+    border-color: #70ceb3;
+    background-color: #70ceb3;
 }
 .max-100 {
     max-width: 100px;

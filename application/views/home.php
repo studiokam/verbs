@@ -68,7 +68,7 @@
 				</div>
 			</div>
 			<hr>
-			<button type="button" class="btn btn-sm btn-danger float-right" v-on:click="saveSettings()">Zastosuj</button>
+			<button type="button" class="verb-btn verb-btn-info float-right" v-on:click="saveSettings()">Zastosuj</button>
 		</div>
 	</div>
 
@@ -126,7 +126,7 @@
 							<i class="fa fa-graduation-cap"></i> Nauka</button>
 						<button type="button" class="verb-btn verb-btn-info" @click="newVerb" ref="newVerbBtn">
 							<i class="fa fa-forward"></i> Nowy</button>
-						<button type="button" class="verb-btn verb-btn-info float-right" @click="addVerbToGroup()" ref="newVerbBtn">
+						<button type="button" class="verb-btn verb-btn-info float-right" @click="addVerbToGroup()">
 							<i class="fa fa-plus"></i> Dodaj do grupy</button>
 <!--						<button type="button" class="verb-btn verb-btn-default" @click="test()">test</button>-->
 					</div>
@@ -153,7 +153,7 @@
 			</div>
 		</div>
 	</div>
-	groupsInWitchVerbIs: {{groupsInWitchVerbIs}}
+	
 	<div class="container mb-50 mt-100" v-if="repeatVerbs">
 		<div class="row">
 			<div class="col-sm-12">
@@ -221,6 +221,7 @@
 
 			<div class="form-row">
 				<div class="col"><h4>Dodaj do grupy</h4></div>
+				<button type="button" class="verb-btn verb-btn-success float-right ml-1" v-on:click="addToGroupClose()">x</button>
 			</div>
 			<hr>
 			<div class="verb-about">
@@ -256,8 +257,6 @@
 				</div>
 			</div>
 			<hr>
-
-			<button type="button" class="verb-btn verb-btn-success float-right ml-1" v-on:click="addToGroupClose()">Zamknij</button>
 		</div>
 	</transition>
 </div>
