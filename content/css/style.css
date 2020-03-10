@@ -10,12 +10,10 @@ body, html {
     text-transform: capitalize;
 }
 .correct-answers {
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: bold;
-	color: #ffffff;
-	background: #70a7ce;
-	display: inline-block;
-	padding: 5px 20px;
+	color: #737373;
+	padding-right: 10px;
 }
 .field-info {
     margin-top: 30px;
@@ -347,6 +345,13 @@ body, html {
 .edit-verb-menu:hover {
 	background: #e67373;
 }
+.verb {
+	max-width: 368px;
+}
+.verbs-all-verbs-field {
+	height:455px;
+	overflow-y: scroll;
+}
 
 .add-menu a:hover {
 	text-decoration: none;
@@ -367,7 +372,7 @@ body, html {
 }
 .verbs-list-delete {
 	color: #f57a7a;
-	margin-left: 7px;
+	margin-left: 4px;
 	font-size: 18px;
 }
 .verbs-list-edit:hover {

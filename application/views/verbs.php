@@ -73,17 +73,26 @@
 						<div class="col verb-pl-name">Wszystkie czasowniki</div>
 					</div>
 					<hr>
-					<div class="verb" v-for="verb in allVerbs">
-						<div class="row">
-							<div class="col-sm-10">
-								{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} -> {{verb.pl}}
-							</div>
-							<div class="col-sm-2 text-right">
-								<i class="verbs-list-edit fa fa-cog" @click="editVerb(verb.id)"></i>
-								<i class="verbs-list-delete fa fa-times" @click="deleteVerb(verb.id)"></i>
+					<input type="text" class="form-control" v-model="searchQuery" placeholder="czego szukamy?"/>
+
+					<div class="row mt-30">
+						<div class="col-sm-12">
+
+							<div class="verbs-all-verbs-field">
+								<div class="verb" v-for="verb in filteredVerbs">
+									<div class="row">
+										<div class="col-sm-10">
+											<strong>{{verb.inf}}</strong> - {{verb.pastSimp1}} - {{verb.pastPrac1}} -> {{verb.pl}}
+										</div>
+										<div class="col-sm-2 text-right">
+											<i class="verbs-list-edit fa fa-cog" @click="editVerb(verb.id)"></i>
+											<i class="verbs-list-delete fa fa-times" @click="deleteVerb(verb.id)"></i>
+										</div>
+									</div>
+									<hr>
+								</div>
 							</div>
 						</div>
-						<hr>
 					</div>
 				</div>
 			</div>

@@ -135,12 +135,12 @@
 
 					<div v-if="correctAnswers">
 						<hr>
-						<div class="mb-10">Poprawne odpowiedzi: </div>
-						<div class="correct-answers">
-							{{presentVerb.pl}}
-						</div>
+						<div>Poprawne odpowiedzi: </div>
 						<div class="correct-answers">
 							{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
+						</div>
+						<div class="correct-answers">
+							{{presentVerb.pl}}
 						</div>
 					</div>
 

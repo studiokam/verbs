@@ -14,6 +14,7 @@ var app = new Vue({
         verbExistsError: false,
         insertOK: false,
         baseUrl: '',
+		searchQuery: null,
 
 		allVerbs: '',
 		allGroups: '',
@@ -24,6 +25,17 @@ var app = new Vue({
 		showAllVerbs: true,
 		showEditVerb: false
     },
+	computed: {
+		filteredVerbs() {
+			if (this.searchQuery) {
+				return this.allVerbs.filter((verb) => {
+					return this.searchQuery.toLowerCase().split(' ').every(v => verb.inf.toLowerCase().includes(v))
+				})
+			} else {
+				return this.allVerbs;
+			}
+		}
+	},
     methods: {
 
         dataToSend() {

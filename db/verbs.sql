@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 04 Mar 2020, 22:11
--- Wersja serwera: 10.4.6-MariaDB
--- Wersja PHP: 7.3.9
+-- Czas generowania: 10 Mar 2020, 10:47
+-- Wersja serwera: 10.1.38-MariaDB
+-- Wersja PHP: 7.2.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
   `groupName` varchar(100) NOT NULL,
-  `groupAdditional` text DEFAULT NULL
+  `groupAdditional` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -39,8 +39,8 @@ CREATE TABLE `groups` (
 --
 
 INSERT INTO `groups` (`id`, `groupName`, `groupAdditional`) VALUES
-(46, 'Umiem na 100%', NULL),
-(47, 'Trudne', NULL);
+(49, 'Trudne', NULL),
+(50, 'Umiem na 100%', NULL);
 
 -- --------------------------------------------------------
 
@@ -77,7 +77,7 @@ CREATE TABLE `verb` (
 --
 
 INSERT INTO `verb` (`id`, `pl`, `plAdditional`, `inf`, `pastSimp1`, `pastSimp2`, `pastPrac1`, `pastPrac2`, `pronunciation`, `status`) VALUES
-(13, 'być', NULL, 'be', 'was', 'were', 'been', NULL, NULL, NULL),
+(13, 'być', 'dodatkowy opis do czasownika', 'be', 'was', 'were', 'been', NULL, NULL, NULL),
 (14, 'bić', NULL, 'beat', 'beat', NULL, 'beaten', NULL, NULL, NULL),
 (15, 'stawać się', NULL, 'become', 'became', NULL, 'become', NULL, NULL, NULL),
 (16, 'zaczynać', NULL, 'begin', 'began', NULL, 'begun', NULL, NULL, NULL),
@@ -112,7 +112,7 @@ INSERT INTO `verb` (`id`, `pl`, `plAdditional`, `inf`, `pastSimp1`, `pastSimp2`,
 (45, 'dawać', NULL, 'give', 'gave', NULL, 'given', NULL, NULL, NULL),
 (46, 'iść / jechać', NULL, 'go', 'went', NULL, 'gone/been', NULL, NULL, NULL),
 (47, 'rosnąć', NULL, 'grow', 'grew', NULL, 'grown', NULL, NULL, NULL),
-(48, 'wieszać / się (kogoś / coś)', NULL, 'hang', 'hanged/hung', NULL, 'hanged/hung', NULL, NULL, NULL),
+(48, 'wieszać / się (kogoś / coś)', NULL, 'hang', 'hung', 'hanged', 'hung', 'hanged', NULL, NULL),
 (49, 'mieć', NULL, 'have', 'had', NULL, 'had', NULL, NULL, NULL),
 (50, 'słyszeć', NULL, 'hear', 'heard', NULL, 'heard', NULL, NULL, NULL),
 (51, 'ukrywać / się', NULL, 'hide', 'hid', NULL, 'hid', NULL, NULL, NULL),
@@ -122,7 +122,7 @@ INSERT INTO `verb` (`id`, `pl`, `plAdditional`, `inf`, `pastSimp1`, `pastSimp2`,
 (55, 'trzymać', NULL, 'keep', 'kept', NULL, 'kept', NULL, NULL, NULL),
 (56, 'znać / wiedzieć', NULL, 'know', 'knew', NULL, 'known', NULL, NULL, NULL),
 (57, 'prowadzić', NULL, 'lead', 'led', NULL, 'led', NULL, NULL, NULL),
-(58, 'uczyc / się', NULL, 'learned', 'learned/learnt', NULL, 'learned / learnt', NULL, NULL, NULL),
+(58, 'uczyc / się', NULL, 'learn', 'learnt', 'learned', 'learnt', 'learned', NULL, NULL),
 (59, 'opuszczać/wyjeżdżać', NULL, 'leave', 'left', NULL, 'left', NULL, NULL, NULL),
 (60, 'pożyczać / komuś', NULL, 'lend', 'lent', NULL, 'lent', NULL, NULL, NULL),
 (61, 'pozwalać', NULL, 'let', 'let', NULL, 'let', NULL, NULL, NULL),
@@ -187,35 +187,57 @@ CREATE TABLE `verb_group_relation` (
 --
 
 INSERT INTO `verb_group_relation` (`id`, `verb_id`, `group_id`) VALUES
-(1, 0, 0),
-(2, 0, 0),
-(3, 3, 32),
-(4, 9, 0),
-(6, 9, 32),
-(8, 9, 31),
-(10, 9, 22),
-(11, 9, 0),
-(17, 5, 33),
-(18, 5, 31),
-(19, 5, 32),
-(20, 4, 32),
-(21, 4, 33),
-(22, 4, 29),
-(23, 6, 22),
-(28, 9, 29),
-(29, 7, 33),
-(31, 7, 29),
-(33, 2, 31),
-(34, 2, 29),
-(35, 2, 33),
-(37, 10, 29),
-(38, 2, 36),
-(39, 10, 36),
-(41, 6, 33),
-(43, 7, 45),
-(44, 18, 46),
-(45, 20, 46),
-(46, 28, 46);
+(51, 54, 50),
+(52, 76, 50),
+(53, 56, 50),
+(54, 28, 50),
+(55, 88, 50),
+(56, 91, 50),
+(57, 64, 50),
+(58, 49, 50),
+(59, 59, 50),
+(60, 83, 50),
+(61, 43, 50),
+(62, 95, 49),
+(63, 79, 49),
+(64, 33, 49),
+(65, 60, 50),
+(66, 23, 49),
+(67, 84, 50),
+(68, 87, 49),
+(69, 21, 50),
+(70, 19, 50),
+(71, 68, 49),
+(72, 42, 50),
+(73, 15, 50),
+(74, 93, 50),
+(75, 71, 50),
+(76, 63, 49),
+(77, 37, 50),
+(78, 52, 50),
+(79, 20, 50),
+(80, 26, 50),
+(81, 22, 50),
+(82, 96, 49),
+(83, 40, 50),
+(84, 13, 50),
+(85, 100, 50),
+(86, 47, 50),
+(87, 77, 50),
+(88, 35, 50),
+(89, 27, 50),
+(90, 89, 50),
+(91, 31, 50),
+(92, 74, 50),
+(93, 66, 49),
+(94, 69, 50),
+(95, 80, 49),
+(96, 62, 49),
+(97, 78, 50),
+(98, 73, 50),
+(99, 30, 50),
+(100, 99, 50),
+(101, 70, 50);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -253,7 +275,7 @@ ALTER TABLE `verb_group_relation`
 -- AUTO_INCREMENT dla tabeli `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT dla tabeli `statusy`
@@ -271,7 +293,7 @@ ALTER TABLE `verb`
 -- AUTO_INCREMENT dla tabeli `verb_group_relation`
 --
 ALTER TABLE `verb_group_relation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
