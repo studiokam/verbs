@@ -27,8 +27,7 @@ class Groups extends CI_Controller {
 
 	public function startData()
 	{
-		$allGroups = $this->getAllGroups();
-//		v($allGroups);
+		$allGroups = $this->getAllGroupsFromDB();
 		echo json_encode([
 			'baseUrl' => base_url(),
 			'allGroups' => $allGroups
@@ -53,7 +52,7 @@ class Groups extends CI_Controller {
 			if ($response != true) {
 				return $this->jsonErrorReturn();
 			}
-			$allGroups = $this->getAllGroups();
+			$allGroups = $this->getAllGroupsFromDB();
 		} catch (ValidationException $e) {
 			echo json_encode([
 				'status' => 0,
@@ -73,11 +72,22 @@ class Groups extends CI_Controller {
 		]);
 	}
 
-	private function getAllGroups()
+	private function getAllGroupsFromDB()
 	{
 		/** @var GetGroupsListService $allGroups */
 		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
-		return $allGroups->execute();
+		$response = $allGroups->execute();
+		foreach ($response as $key => $value) {
+			$verbsInGroup = $this->getAllVerbsForGroup($value->id);
+			$response[$key]->verbsInGroup = count($verbsInGroup);
+		}
+
+		return $response;
+	}
+
+	public function getAllGroups()
+	{
+		echo json_encode([ 'allGroups' => $this->getAllGroupsFromDB()]);
 	}
 
 	public function deleteGroup()
@@ -95,7 +105,7 @@ class Groups extends CI_Controller {
 			if ($response != true) {
 				return $this->jsonErrorReturn();
 			}
-			$allGroups = $this->getAllGroups();
+			$allGroups = $this->getAllGroupsFromDB();
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
@@ -122,7 +132,7 @@ class Groups extends CI_Controller {
 			if ($response != true) {
 				return $this->jsonErrorReturn();
 			}
-			$allGroups = $this->getAllGroups();
+			$allGroups = $this->getAllGroupsFromDB();
 		} catch (ValidationException $e) {
 			echo json_encode([
 				'status' => 0,
@@ -163,6 +173,13 @@ class Groups extends CI_Controller {
 	}
 
 	public function getVerbGroups()
+	{
+		$id = file_get_contents("php://input");
+		$data = $this->getAllVerbsForGroup($id);
+		return $this->jsonSuccessData($data);
+	}
+
+	public function allVerbsForGroup()
 	{
 		$id = file_get_contents("php://input");
 		$data = $this->getAllVerbsForGroup($id);

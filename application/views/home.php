@@ -1,6 +1,8 @@
 <div id="app" xmlns:v-on="http://www.w3.org/1999/xhtml">
 
 	<div v-if="settingsShow">
+<!--	<div >-->
+
 		<div class="modal-dark-bg">
 		</div>
 		<div class="my-modal-content mb-50">
@@ -24,7 +26,7 @@
 				<div class="my-modal-title float-left">Nie wyświetlaj tych które już umiem</div>
 				<div class="custom-control custom-switch float-right">
 					<input type="checkbox" class="custom-control-input" id="repeatVerbs" v-model="repeatVerbs">
-					<label class="custom-control-label" for="repeatVerbs" v-on:click="repeatVerbsClick"></label>
+					<label class="custom-control-label" for="repeatVerbs"></label>
 				</div>
 				<div class="clearfix"></div>
 			</div>
@@ -37,168 +39,159 @@
 			</div>
 			<hr>
 			<div class="my-modal-group">
-				<div class="my-modal-title custom-checkbox mb-0 float-left">Zaliczy tylko bez pomyłki</div>
-				<div class="custom-control custom-switch float-right">
-					<input type="checkbox" class="custom-control-input" id="noMistakes" v-model="noMistakes">
-					<label class="custom-control-label" for="noMistakes" v-on:click="repeatVerbs = true"></label>
-				</div>
-				<div class="clearfix"></div>
-				<small class="form-text text-muted mt-0 mb-1">- jeśli popełnisz bąd podczas podawania odpowiedzi, proces
-					zostanie zrestartowany - dodatkowa motywacja</small>
-			</div>
-			<hr>
-			<div class="my-modal-group">
 				<div class="my-modal-title float-left">Używać pełnej listy czasowników?</div>
 				<div class="custom-control custom-switch float-right">
-					<input type="checkbox" class="custom-control-input" id="useFullVerbsList" v-model="useFullVerbsList">
-					<label class="custom-control-label" for="useFullVerbsList" @click="setUseFullListChange()"></label>
+					<input type="checkbox" class="custom-control-input" id="useFullVerbsList"
+						   v-model="useFullVerbsList"
+						   @click="settingsSetAllVerbsUse()">
+					<label class="custom-control-label" for="useFullVerbsList"></label>
 				</div>
 				<div class="clearfix"></div>
 			</div>
 			<div v-if="!useFullVerbsList">
 				<div class="mt-20 mb-20" style="max-width: 300px;">
-					<select class="custom-select" @change="setVerbsListChange()" v-model="verbsListSelect">
-						<option value="1" selected>1 grupa czasowników</option>
-						<option value="2">2 grupa czasowników</option>
-						<option value="3">3 grupa czasowników</option>
-						<option value="4">4 grupa czasowników</option>
-						<option value="5">5 grupa czasowników</option>
-						<option value="6">6 grupa czasowników</option>
-						<option value="7">7 grupa czasowników</option>
-						<option value="8">8 grupa czasowników</option>
-						<option value="9">9 grupa czasowników</option>
-						<option value="11">trudne</option>
-						<option value="10">Wybierz dowolne z całej listy</option>
+					<select class="custom-select" @change="setVerbsListChange()" v-model="verbsListSelected">
+						<option value="" disabled>Wybierz grupę</option>
+						<option v-for="group in allGroups" :value="group.id" :key="group.id">
+							{{ group.groupName }}
+						</option>
+<!--						<option value="1">Wszystkie bez tych które umiem na 100%</option>-->
 					</select>
 				</div>
-				<div v-if="pickAnyVerbError" class="pick-any-verb-error">
-					Wybierz przynajmniej jeden czasownik!
+				<div v-if="pickAnyGroupError" class="pick-any-verb-error">
+					Wybierz grupę lub użyj pełnej listy.
 				</div>
-				<div v-if="verbsListSelect == 10" class="full-verbs-list-select">
-					<div v-for="(verb, index) in verbsList">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" :id="verb.inf"
-								   v-on:click="pickAnyVerbs(verb.inf, index)" :checked="checkIfIsChecked(verb.inf)">
-							<label class="custom-control-label" :for="verb.inf">{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}</label>
+				<div :class="{'full-verbs-list-select': group.id != 0}">
+					<div v-for="verb in verbs" v-if="group.id != 0">
+						{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}
+					</div>
+				</div>
+			</div>
+			<hr>
+			<button type="button" class="verb-btn verb-btn-info float-right" v-on:click="saveSettings()">Zastosuj</button>
+		</div>
+	</div>
+
+	<div class="container mt-100">
+		<div class="row">
+			<div class="col-sm-12">
+
+				<div class="home-container">
+					<div class="home-home-menu" @click="goTo('')">Home</div>
+					<div class="home-verbs-options-menu" @click="goTo('verbs')">Czasowniki</div>
+					<div class="home-words-options-menu" @click="goTo('addWord')">Słowa</div>
+					<div class="home-groups-options-menu" @click="goTo('groups')">Grupy</div>
+
+					<div class="learch-button" :class="{ 'uk-active2' : active == true}"
+						 @mouseover="active = true" @mouseleave="active = false">
+						Nauka czasowników <i class="fa fa-chevron-down learn-icon"></i><br>
+						<span :class="{ 'uk-active' : active == true}" style="display: none">Nauka słów EN</span>
+					</div>
+					<form>
+
+						<div class="form-row">
+							<div class="col verb-pl-name">{{verbShowTypeSetting}}</div>
+							<div v-if="correctAnswers" class="correct-answers-top">
+								<div class="correct-answers">
+									{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
+								</div>
+							</div>
+							<div id="settings" class="ml-20"><i class="fa fa-link" v-on:click="linkShow = true"></i></div>
+							<div id="settings" class="ml-20"><i class="fa fa-cogs" v-on:click="settingsShow = true"></i></div>
 						</div>
-					</div>
-				</div>
-				<div v-if="verbsListSelect < 10" class="full-verbs-list-select">
-					<div v-for="verb in verbsListTemp">
-						{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}
-					</div>
-				</div>
-			</div>
-			<hr>
-			<button type="button" class="btn btn-sm btn-danger float-right" v-on:click="closeSettings()">Zamknij</button>
-		</div>
-	</div>
-
-	<div v-if="noMistakesError">
-		<div class="modal-dark-bg">
-		</div>
-		<div class="my-modal-content mb-50">
-
-			<div class="my-modal-group">
-				<div class="my-modal-title">Niestety, nie udało się tym razem <i class="fa fa-frown-o"></i></div>
-				<hr>
-				<div>Popełniony został błąd a jesteś w trybie gdzie każdy błąd przerywa ćwiczenie</div>
-			</div>
-
-			<hr>
-			<button type="button" class="btn btn-sm btn-danger float-right ml-1" v-on:click="goTo('')">Wyjdź</button>
-			<button type="button" class="btn btn-sm btn-success float-right" v-on:click="goTo('refresh')">Rozpocznij od nowa</button>
-		</div>
-	</div>
-
-	<div class="container mt-50 mb-50">
-		<form>
-			<div class="form-row">
-				<div class="col verb-pl-name">{{verbShowTypeSetting}}</div>
-				<div v-if="correctAnswers" class="correct-answers-top">
-					<div class="correct-answers">
-						{{presentVerb.inf}} - {{presentVerb.pastSimp}} - {{presentVerb.pastPrac}}
-					</div>
-				</div>
-				<div id="settings" class="ml-20" v-on:click="goTo('verbs')">+ czasownik</div>
-				<div id="settings" class="ml-20" v-on:click="goTo('addWord')">+ słowo</div>
-				<div id="settings" class="ml-20" v-on:click="goTo('groups')">grupy</div>
-				<div id="settings" class="ml-20"><i class="fa fa-home fa-lg" v-on:click="goTo('')"></i></div>
-				<div id="settings" class="ml-20"><i class="fa fa-paperclip" v-on:click="goTo('?verbShowType=5&group=9&repeat=2')"></i></div>
-				<div id="settings" class="ml-20"><i class="fa fa-link" v-on:click="linkShow = true"></i></div>
-				<div id="settings" class="ml-20"><i class="fa fa-cogs" v-on:click="settingsShow = true"></i></div>
-			</div>
-			<hr class="mb-0">
-			<div class="form-row verbs-form">
-				<div class="col-md-4 col-sm-12 pb-1">
-					<label class="my-label-in-form">infinitive</label>
-					<input type="text" class="form-control" ref="fieldInfVerb" v-model="verbInf">
-				</div>
-				<div class="col-md-4 col-sm-12 pb-1">
-					<label class="my-label-in-form">past simple</label>
-					<input type="text" class="form-control" v-model="verbPastSimple">
-				</div>
-				<div class="col-md-4 col-sm-12 pb-1">
-					<label class="my-label-in-form">past practiciple</label>
-					<input type="text" class="form-control" v-model="verbPastParticiple">
-				</div>
-			</div>
-		</form>
-		<hr>
-		<div v-if="!allBtnDisabled">
-			<button type="button" class="btn btn-sm btn-success small-right" @click="checkVerbs" :disabled="chechBtnDisabled">Sprawdź</button>
-			<button type="button" class="btn btn-sm btn-info small-right" @click="showHints">Nauka</button>
-			<button type="button" class="btn btn-sm btn-secondary small-right" @click="newVerb" ref="newVerbBtn">Nowy</button>
-		</div>
-		<button type="button" class="btn btn-sm btn-success small-right" @click="goTo('refresh')" v-if="allBtnDisabled">Rozpocznij od nowa</button>
-		<!-- <button type="button" class="btn btn-sm btn-success small-right" @click="test()">test</button> -->
-		<div class="clearfix"></div>
-
-		<div v-if="correctAnswers">
-			<hr>
-			Poprawne odpowiedzi: <br>
-			<strong>{{presentVerb.pl}}</strong>
-			<div class="correct-answers">
-				{{presentVerb.inf}} - {{presentVerb.pastSimp}} - {{presentVerb.pastPrac}}
-			</div>
-		</div>
-
-		<div class="alert alert-warning field-info" role="alert" v-if="emptyFieldsError">Wypełnij wszytkie pola</div>
-		<div class="alert alert-success field-info" role="alert" v-if="allVerbsCorrect && !allBtnDisabled">Brawo Ty!</div>
-		<div class="alert alert-success field-info" role="alert" v-if="allBtnDisabled">Brawo! Poprawnie podano wszytkie czasowniki z listy!</div>
-		<div class="alert alert-danger field-info" role="alert" v-if="isSomeError">Nope - mamy błędy :/</div>
-	</div>
-	<!-- verbsListTemp: {{verbsListTemp}} <br> -->
-
-	<div class="container mt-50 mb-50" v-if="repeatVerbs">
-		<div class="already-known">
-			<div class="row">
-				<div class="col-md-2 col-sm-6">
-					<div class="already-known-discription">Pozostało</div>
-					<div class="big-number">{{numberOfVerbssss()}}</div>
-				</div>
-				<div class="col-md-2 col-sm-6">
-					<div class="already-known-discription">Umiesz już</div>
-					<div class="big-number">{{verbsListKnown.length}}</div>
-				</div>
-				<div class="col-md-8 col-sm-12">
-					<div class="already-known-discription">Lista poznanych czasowników</div>
+						<div class="form-row">
+							<div class="context">{{presentVerb.plAdditional}}</div>
+						</div>
+						<hr class="mb-0">
+						<div class="form-row verbs-form">
+							<div class="col-md-4 col-sm-12 pb-1">
+								<label class="my-label-in-form">infinitive</label>
+								<input type="text" class="form-control" ref="fieldInfVerb" v-model="verbInf">
+							</div>
+							<div class="col-md-4 col-sm-12 pb-1">
+								<label class="my-label-in-form">past simple</label>
+								<input type="text" class="form-control" v-model="verbPastSimple">
+							</div>
+							<div class="col-md-4 col-sm-12 pb-1">
+								<label class="my-label-in-form">past practiciple</label>
+								<input type="text" class="form-control" v-model="verbPastParticiple">
+							</div>
+						</div>
+					</form>
 					<hr>
-					<div class="alerady-known-list">
-						<div v-for="verb in verbsListKnown">
-							<strong>{{verb.inf}} - {{verb.pastSimp}} - {{verb.pastPrac}} &rarr; {{verb.pl}}</strong>
+					<div v-if="!allBtnDisabled">
+						<button type="button" class="verb-btn verb-btn-success" @click="checkVerbs" :disabled="chechBtnDisabled">
+							<i class="fa fa-check"></i> Sprawdź</button>
+						<button type="button" class="verb-btn verb-btn-info" @click="showHints">
+							<i class="fa fa-graduation-cap"></i> Nauka</button>
+						<button type="button" class="verb-btn verb-btn-info" @click="newVerb" ref="newVerbBtn">
+							<i class="fa fa-forward"></i> Nowy</button>
+						<button type="button" class="verb-btn verb-btn-info float-right" @click="addVerbToGroup()">
+							<i class="fa fa-plus"></i> Dodaj do grupy</button>
+<!--						<button type="button" class="verb-btn verb-btn-default" @click="test()">test</button>-->
+					</div>
+					<button type="button" class="verb-btn verb-btn-default" @click="goTo('refresh')" v-if="allBtnDisabled">Rozpocznij od nowa</button>
+					<div class="clearfix"></div>
+
+					<div v-if="correctAnswers">
+						<hr>
+						<div class="mb-10">Poprawne odpowiedzi: </div>
+						<div class="correct-answers">
+							{{presentVerb.pl}}
+						</div>
+						<div class="correct-answers">
+							{{presentVerb.inf}} - {{presentVerb.pastSimp1}} - {{presentVerb.pastPrac1}}
 						</div>
 					</div>
+
+					<div class="alert alert-warning field-info" role="alert" v-if="emptyFieldsError">Wypełnij wszytkie pola</div>
+					<div class="alert alert-success field-info" role="alert" v-if="allVerbsCorrect && !allBtnDisabled">Brawo Ty!</div>
+					<div class="alert alert-success field-info" role="alert" v-if="allBtnDisabled">Brawo! Poprawnie podano wszytkie czasowniki z listy!</div>
+					<div class="alert alert-danger field-info" role="alert" v-if="isSomeError">Nope - mamy błędy :/</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="container mb-50 mt-100" v-if="repeatVerbs">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="home-container">
+
+					<div class="row">
+						<div class="col-md-2 col-sm-6">
+							<div class="already-known-discription">Pozostało</div>
+							<div class="big-number">{{verbs.length}}</div>
+						</div>
+						<div class="col-md-2 col-sm-6">
+							<div class="already-known-discription">Umiesz już</div>
+							<div class="big-number">{{verbsListKnown.length}}</div>
+						</div>
+						<div class="col-md-8 col-sm-12">
+							<div>
+								<div class="float-left">Lista poznanych czasowników</div>
+								<div class="float-right">
+									Ilość pomyłek: {{numberOfmistakes}}
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<hr>
+							<div class="alerady-known-list">
+								<div v-for="verb in verbsListKnown">
+									<strong>{{verb.inf}} - {{verb.pastSimp1}} - {{verb.pastPrac1}} &rarr; {{verb.pl}}</strong>
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
-		<div class="float-right mt-2">
-			Ilość pomyłek: {{numberOfmistakes}} <br>
-		</div>
-	</div>
 
+	</div>
 	<transition name="fade">
-		<div class="modal-dark-bg" v-if="linkShow"></div>
+		<div class="modal-dark-bg" v-if="linkShow || addToGroupShow"></div>
 	</transition>
 	<transition name="fade2">
 		<div class="my-modal-content mb-50" v-if="linkShow">
@@ -222,12 +215,50 @@
 			<button type="button" class="btn btn-sm btn-secondary float-right ml-1" v-on:click="copyLink()">Kopiuj link</button>
 		</div>
 	</transition>
-	<div class="container mt-50 mb-50">
-		Lista czasowników: <br>
-		<div v-for="verb in data">
-			{{verb.id}} / {{verb.pl}} / {{verb.inf}} / {{verb.pastSimp1}} / {{verb.pastPrac1}} <br>
+	{{addVerbToGroupGroupChosen}}
+	<transition name="fade3">
+		<div class="my-modal-main-content mb-50" v-if="addToGroupShow">
+
+			<div class="form-row">
+				<div class="col"><h4>Dodaj do grupy</h4></div>
+				<button type="button" class="verb-btn verb-btn-success float-right ml-1" v-on:click="addToGroupClose()">x</button>
+			</div>
+			<hr>
+			<div class="verb-about">
+				<div class="row">
+					<div class="col-sm-8">
+						<select class="custom-select" v-model="addVerbToGroupGroupChosen">
+							<option value="" disabled>Wybierz grupę</option>
+							<option v-for="group in allGroups" :value="group.id">
+								{{ group.groupName }}
+							</option>
+						</select>
+					</div>
+					<div class="col-sm-4 text-right">
+						<button class="verb-btn verb-btn-info" @click="addVerbToGroupSave"
+								v-if="addVerbToGroupGroupChosen != ''">Dodaj</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-row mt-30">
+				<div class="col"><h4>Czasownik przynależy do grup</h4></div>
+			</div>
+			<hr>
+			<div class="verb-about">
+				- Wszystkie czasowniki
+				<div v-for="group in groupsInWitchVerbIs" v-if="group.groupName != 'Wszystkie czasowniki'">
+					<hr class="mt-10 mb-10">
+
+					<div class="row">
+						<div class="col-sm-12">
+							- {{group.groupName}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
 		</div>
-	</div>
+	</transition>
 </div>
 </body>
 	<script type="text/javascript" src="content/js/home.js"></script>
