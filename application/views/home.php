@@ -55,7 +55,9 @@
 						<option v-for="group in allGroups" :value="group.id" :key="group.id">
 							{{ group.groupName }}
 						</option>
-<!--						<option value="1">Wszystkie bez tych które umiem na 100%</option>-->
+						<option value="allWithoutKnown">Wszystkie bez tych które umiem na 100%</option>
+						<option value="isNotInAnyOfGroups">Takie które nie są w żadnej grupie</option>
+						<option value="recentlyMadeMistakesInThem">W tych ostatnio popełniałem błąd</option>
 					</select>
 				</div>
 				<div v-if="pickAnyGroupError" class="pick-any-verb-error">
