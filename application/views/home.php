@@ -218,6 +218,7 @@
 		</div>
 	</transition>
 	{{addVerbToGroupGroupChosen}}
+	<!-- test -->
 	<transition name="fade3">
 		<div class="my-modal-main-content mb-50" v-if="addToGroupShow">
 
