@@ -50,9 +50,37 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 
 	public function getVerbsForGroup($groupId)
 	{
-		$sql = 'SELECT vgr.id as relationId, v.* FROM verb_group_relation vgr
+		if ($groupId === 'allWithoutKnown') {
+			$sql = 'SELECT * FROM verb;';
+			$allVerbs = $this->db->select($sql, [$groupId]);
+			$needed = [];
+
+			// id dla grupy "Umiem wszystkie na 100%" aby je wykluczyc z wyszukiwania
+
+			foreach ($allVerbs as $verb) {
+				$sql = 'SELECT count(*) count, g FROM verb_group_relation 
+						JOIN groups g 
+						WHERE verb_id = ? AND verb_id != ';
+				$result = $this->db->select($sql, [$verb->id]);
+				v()
+
+				if (!$result[0]->count) {
+					$needed[] = $verb;
+				}
+			}
+			v(count($needed));
+			v($needed);
+
+			exit();
+		} else if ($groupId === 'isNotInAnyOfGroups') {
+
+		} else if ($groupId === 'recentlyMadeMistakesInThem') {
+
+		} else {
+			$sql = 'SELECT vgr.id as relationId, v.* FROM verb_group_relation vgr
 				JOIN verb v on v.id = vgr.verb_id
 				WHERE group_id = ? ORDER BY v.inf';
+		}
 
 		$params = [];
 		$params[] = $groupId;
