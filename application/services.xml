@@ -22,6 +22,11 @@
 			<argument type="service" id="database"/>
 		</service>
 
+		<service id="mistakes_repository"
+				 class="application\Infrastructure\Common\MistakesRepository">
+			<argument type="service" id="database"/>
+		</service>
+
 
 		<!--Services-->
 
@@ -84,6 +89,7 @@
 		<service id="update_verb_service"
 				 class="application\Application\Service\UpdateVerbService">
 			<argument type="service" id="database"/>
+			<argument type="service" id="database"/>
 		</service>
 
 
@@ -91,6 +97,10 @@
 		<service id="add_verb_to_group_service"
 				 class="application\Application\Service\AddVerbToGroupService">
 			<argument type="service" id="database"/>
+		</service>
+		<service id="set_mistakes_service"
+					class="application\Application\Service\SetMistakesService">
+			<argument type="service" id="mistakes_repository"/>
 		</service>
 
 

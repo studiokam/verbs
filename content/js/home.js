@@ -230,6 +230,7 @@ var app = new Vue({
                 this.allVerbsCorrect = true;
                 this.chechBtnDisabled = true;
                 this.$refs.newVerbBtn.focus();
+				this.setMistakes('good');
 
                 if (this.repeatVerbs) {
 
@@ -255,11 +256,7 @@ var app = new Vue({
 						}
 					}
 
-
 				}
-
-
-
                 return;
             }
 
@@ -268,8 +265,25 @@ var app = new Vue({
                 this.verbPastParticiple.toLowerCase() !== this.verbs[this.random].pastPrac) {
                 this.isSomeError = true;
                 this.numberOfmistakes++;
+                this.setMistakes('bad');
             }
         },
+		setMistakes(status) {
+			axios({
+				method: 'post',
+				url: 'home/setMistake',
+				data: {'verbId': this.presentVerb.id, 'status': status},
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+			})
+			.then((response) => {
+				let resp = response.data;
+				console.log('response----------------');
+				console.log(resp);
+				console.log('response');
+			}, (error) => {
+				console.log(error);
+			});
+		},
         cleanForm() {
             this.verbInf = '';
             this.verbPastSimple = '';

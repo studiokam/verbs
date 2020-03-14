@@ -49,7 +49,7 @@
 				<div class="clearfix"></div>
 			</div>
 			<div v-if="!useFullVerbsList">
-				<div class="mt-20 mb-20" style="max-width: 300px;">
+				<div class="mt-20 mb-20" style="max-width: 400px;">
 					<select class="custom-select" @change="setVerbsListChange()" v-model="verbsListSelected">
 						<option value="" disabled>Wybierz grupę</option>
 						<option v-for="group in allGroups" :value="group.id" :key="group.id">
