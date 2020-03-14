@@ -49,4 +49,14 @@ class Home extends CI_Controller {
 
 		echo json_encode($data);
 	}
+	public function setMistake()
+	{
+		$data = file_get_contents("php://input");
+		$data = json_decode($data, true);
+
+		/** @var  application\Application\Service\SetMistakesService $mistakesService */
+		$mistakesService = app_helper::getContainer()->get('set_mistakes_service');
+		$response = $mistakesService->execute($data['verbId'], $data['status']);
+		echo json_encode(['status' => $response]);
+	}
 }

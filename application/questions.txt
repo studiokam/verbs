@@ -19,3 +19,7 @@
    Powinienem tworzyćz tego wczesniej obiekt czy podawać w takiej formie? W obiekcie wtedy będzie tylko id
 
 // VerbRepository w metodach daję zawsze $params = []; może powinno się tworzyć pole private $params = [] i używać this->params ?
+
+// czy w serwisach potrzebuję DB? np. UpdateVerbService. Chyba nie bo nie używam go tam a w repo.
+
+// groupRepo - getVerbsForGroup - w new RelationVerbGroupRepository() podaję new CIDatabase() - czy w tym miejscu mogę użyć $this->db?
