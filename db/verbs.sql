@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 10 Mar 2020, 10:47
--- Wersja serwera: 10.1.38-MariaDB
--- Wersja PHP: 7.2.16
+-- Czas generowania: 15 Mar 2020, 20:24
+-- Wersja serwera: 10.4.6-MariaDB
+-- Wersja PHP: 7.3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
   `groupName` varchar(100) NOT NULL,
-  `groupAdditional` text
+  `groupAdditional` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -41,6 +41,26 @@ CREATE TABLE `groups` (
 INSERT INTO `groups` (`id`, `groupName`, `groupAdditional`) VALUES
 (49, 'Trudne', NULL),
 (50, 'Umiem na 100%', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `mistakes`
+--
+
+CREATE TABLE `mistakes` (
+  `id` int(11) NOT NULL,
+  `verb_id` int(11) NOT NULL,
+  `count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `mistakes`
+--
+
+INSERT INTO `mistakes` (`id`, `verb_id`, `count`) VALUES
+(33, 97, 15),
+(34, 82, 9);
 
 -- --------------------------------------------------------
 
@@ -250,6 +270,12 @@ ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeksy dla tabeli `mistakes`
+--
+ALTER TABLE `mistakes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeksy dla tabeli `statusy`
 --
 ALTER TABLE `statusy`
@@ -278,6 +304,12 @@ ALTER TABLE `groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
+-- AUTO_INCREMENT dla tabeli `mistakes`
+--
+ALTER TABLE `mistakes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
 -- AUTO_INCREMENT dla tabeli `statusy`
 --
 ALTER TABLE `statusy`
@@ -293,7 +325,7 @@ ALTER TABLE `verb`
 -- AUTO_INCREMENT dla tabeli `verb_group_relation`
 --
 ALTER TABLE `verb_group_relation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

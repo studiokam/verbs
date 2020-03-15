@@ -26,7 +26,7 @@ class MistakesRepository extends AbstractRepository implements MistakesRepositor
 			} else {
 				$params[] = $mistakeForId[0]->count > 0 ? $mistakeForId[0]->count - 1 : 0;
 			}
-		} else {
+		} else if (count($mistakeForId) < 1 && $status == 'bad') {
 			$sql = 'INSERT INTO mistakes (count, verb_id) VALUES (?, ?)';
 			$params[] = 10;
 		}
