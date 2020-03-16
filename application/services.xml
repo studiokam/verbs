@@ -31,7 +31,7 @@
 		<!--Services-->
 
 		<service id="create_verb_service"
-				 class="application\Application\Service\CreateVerbService">
+				 class="application\Application\Service\Verbs\CreateVerbService">
 			<argument type="service" id="database"/>
 		</service>
 
@@ -88,7 +88,6 @@
 
 		<service id="update_verb_service"
 				 class="application\Application\Service\UpdateVerbService">
-			<argument type="service" id="database"/>
 			<argument type="service" id="database"/>
 		</service>
 

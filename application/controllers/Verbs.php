@@ -1,6 +1,6 @@
 <?php
 
-use application\Application\Service\CreateVerbService;
+use application\Application\Service\Verbs\CreateVerbService;
 use application\Application\Service\DeleteGroupService;
 use application\Application\Service\DeleteVerbFromGroupService;
 use application\Application\Service\Exceptions\ValidationException;

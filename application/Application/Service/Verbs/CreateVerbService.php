@@ -1,7 +1,7 @@
 <?php
 
 
-namespace application\Application\Service;
+namespace application\Application\Service\Verbs;
 
 
 use application\Application\Service\Exceptions\ValidationException;
