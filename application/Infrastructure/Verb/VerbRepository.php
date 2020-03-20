@@ -8,7 +8,11 @@ use application\Domain\Model\Verbs\VerbRepositoryInterface;
 
 class VerbRepository extends AbstractRepository implements VerbRepositoryInterface
 {
-	public function addNewVerb(Verb $verb)
+	/**
+	 * @param Verb $verb
+	 * @return bool
+	 */
+	public function addNewVerb(Verb $verb): bool
 	{
 		$sql = 'INSERT INTO verb (pl, plAdditional, inf, pastSimp1, pastSimp2, pastPrac1, pastPrac2, pronunciation) 
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
@@ -26,13 +30,20 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		return $this->db->execute($sql, $params);
 	}
 
-	public function getAllVerbs()
+	/**
+	 * @return array
+	 */
+	public function getAllVerbs(): array
 	{
 		$sql = 'SELECT * FROM verb';
 		return $this->db->selectAll($sql);
 	}
 
-	public function deleteVerb($id)
+	/**
+	 * @param int $id
+	 * @return bool
+	 */
+	public function deleteVerb(int $id): bool
 	{
 		$sql = 'DELETE FROM verb WHERE id = ?';
 		$params = [];
@@ -40,7 +51,11 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		return $this->db->execute($sql, $params);
 	}
 
-	public function updateVerb(Verb $verb)
+	/**
+	 * @param Verb $verb
+	 * @return bool
+	 */
+	public function updateVerb(Verb $verb): bool
 	{
 		$sql = 'UPDATE verb SET pl = ?, plAdditional = ?, inf = ?, pastSimp1 = ?, pastSimp2 = ?, pastPrac1 = ?, pastPrac2 = ?, pronunciation = ?
 				WHERE id = ?';
@@ -59,7 +74,11 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		return $this->db->execute($sql, $params);
 	}
 
-	public function addVerbToGroup($data)
+	/**
+	 * @param array $data
+	 * @return bool
+	 */
+	public function addVerbToGroup(array $data): bool
 	{
 		$sql = 'INSERT INTO verb_group_relation (verb_id, group_id)
 					VALUES (?, ?)';
@@ -70,7 +89,11 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		return $this->db->execute($sql, $params);
 	}
 
-	public function getGroupsForVerbs($verbId)
+	/**
+	 * @param int $verbId
+	 * @return array
+	 */
+	public function getGroupsForVerbs(int $verbId): array
 	{
 		$sql = 'SELECT vgr.id as relationId, g.id, g.groupName, g.groupAdditional FROM verb_group_relation vgr
 				JOIN groups g on g.id = vgr.group_id
@@ -82,7 +105,11 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		return $this->db->select($sql, $params);
 	}
 
-	public function deleteVerbFromGroup($id)
+	/**
+	 * @param int $id
+	 * @return bool
+	 */
+	public function deleteVerbFromGroup(int $id): bool
 	{
 		$sql = 'DELETE FROM verb_group_relation WHERE id = ?';
 		$params = [];

@@ -6,20 +6,9 @@
 - trzeba jeszcze zrobić sprawdzenie czy dodawanego czasownika nie ma już w DB - gdzie to zrobić?
 
 
-// pliki composer.lock i composer.json są w 2 lokalizacjach - jak powinno być i dlaczego?
-// katalog vendor jest w application a nie na zewnątrz - dalczego? (tak ma być? po instalacji CI jest inaczej)
+// groupRepo - getVerbsForGroup - w new RelationVerbGroupRepository() podaję new CIDatabase() - czy w tym miejscu
+	mogę użyć $this->db?
 
-// dlaczego Policy_model jest w models a nie w Onion?
-
-// kiedy tworzymy namespacze a kiedy nie - tzn. w models nie ma namespace, czy dlatego, że są one "ładowane" przez $this->load-model(..)?
-
-// nazewnictwo - w models używamy podkreślenie zamiast camel, why?
-
-// konstruktor Verbs / addVerbToGroup() tutaj do execute() podaję $data i jest to tablica z ID czasownika i grupy.
-   Powinienem tworzyćz tego wczesniej obiekt czy podawać w takiej formie? W obiekcie wtedy będzie tylko id
-
-// VerbRepository w metodach daję zawsze $params = []; może powinno się tworzyć pole private $params = [] i używać this->params ?
-
-// czy w serwisach potrzebuję DB? np. UpdateVerbService. Chyba nie bo nie używam go tam a w repo.
-
-// groupRepo - getVerbsForGroup - w new RelationVerbGroupRepository() podaję new CIDatabase() - czy w tym miejscu mogę użyć $this->db?
+// application/Application/Service/Groups/GetForVerbService.php - interpretacja jest w zasadzie dowolna ale to powinno
+	być w application/Application/Service/Groups czy może application/Application/Service/Verbs (jest w Groups, używam
+	verb repo)

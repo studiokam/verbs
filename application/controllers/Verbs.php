@@ -1,13 +1,13 @@
 <?php
 
-use application\Application\Service\CreateVerbService;
-use application\Application\Service\DeleteGroupService;
-use application\Application\Service\DeleteVerbFromGroupService;
+use application\Application\Service\Groups\DeleteVerbFromGroupService;
+use application\Application\Service\Groups\GetListService as GetGroupsListService;
+use application\Application\Service\Verbs\GetGroupsForVerbService;
+use application\Application\Service\Verbs\GetListService as GetVerbsListService;
+use application\Application\Service\Verbs\CreateService;
 use application\Application\Service\Exceptions\ValidationException;
-use application\Application\Service\GetGroupsForVerbsService;
-use application\Application\Service\GetGroupsListService;
-use application\Application\Service\GetVerbsListService;
-use application\Application\Service\UpdateGroupService;
+use application\Application\Service\Verbs\DeleteService;
+use application\Application\Service\Verbs\UpdateService;
 
 class Verbs extends CI_Controller {
 
@@ -52,7 +52,7 @@ class Verbs extends CI_Controller {
 
 		try {
 			$createVerb = app_helper::getContainer()->get('create_verb_service');
-			/** @var CreateVerbService $createVerb */
+			/** @var CreateService $createVerb */
 			$response = $createVerb->execute($verb);
 			if ($response != true) {
 				return $this->jsonErrorReturn();
@@ -82,7 +82,7 @@ class Verbs extends CI_Controller {
 
 		try {
 			$deleteVerb = app_helper::getContainer()->get('delete_verb_service');
-			/** @var DeleteGroupService $deleteVerb */
+			/** @var DeleteService $deleteVerb */
 			$response = $deleteVerb->execute($id);
 			if ($response != true) {
 				return $this->jsonErrorReturn();
@@ -110,7 +110,7 @@ class Verbs extends CI_Controller {
 
 		try {
 			$updateVerb = app_helper::getContainer()->get('update_verb_service');
-			/** @var UpdateGroupService $updateVerb */
+			/** @var UpdateService $updateVerb */
 			$response = $updateVerb->execute($verb);
 			if ($response != true) {
 				return $this->jsonErrorReturn();
@@ -222,7 +222,7 @@ class Verbs extends CI_Controller {
 
 	private function getGroupsForVerb($verbId)
 	{
-		/** @var GetGroupsForVerbsService $service */
+		/** @var GetGroupsForVerbService $service */
 		$service = app_helper::getContainer()->get('get_groups_for_verb_service');
 		return $service->execute($verbId);
 	}

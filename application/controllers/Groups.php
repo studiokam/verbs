@@ -1,12 +1,12 @@
 <?php
 
 
-use application\Application\Service\CreateGroupService;
-use application\Application\Service\DeleteGroupService;
-use application\Application\Service\DeleteVerbFromGroupService;
-use application\Application\Service\GetGroupsListService;
-use application\Application\Service\GetVerbsForGroupService;
-use application\Application\Service\UpdateGroupService;
+use application\Application\Service\Groups\CreateService;
+use application\Application\Service\Groups\DeleteService;
+use application\Application\Service\Groups\DeleteVerbFromGroupService;
+use application\Application\Service\Groups\GetListService;
+use application\Application\Service\Groups\GetVerbsForGroupService;
+use application\Application\Service\Groups\UpdateService;
 
 class Groups extends CI_Controller {
 
@@ -47,7 +47,7 @@ class Groups extends CI_Controller {
 
 		try {
 			$createGroup = app_helper::getContainer()->get('create_group_service');
-			/** @var CreateGroupService $createGroup */
+			/** @var CreateService $createGroup */
 			$response = $createGroup->execute($group);
 			if ($response != true) {
 				return $this->jsonErrorReturn();
@@ -74,7 +74,7 @@ class Groups extends CI_Controller {
 
 	private function getAllGroupsFromDB()
 	{
-		/** @var GetGroupsListService $allGroups */
+		/** @var GetListService $allGroups */
 		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
 		$response = $allGroups->execute();
 		foreach ($response as $key => $value) {
@@ -100,7 +100,7 @@ class Groups extends CI_Controller {
 
 		try {
 			$deleteGroup = app_helper::getContainer()->get('delete_group_service');
-			/** @var DeleteGroupService $deleteGroup */
+			/** @var DeleteService $deleteGroup */
 			$response = $deleteGroup->execute($id);
 			if ($response != true) {
 				return $this->jsonErrorReturn();
@@ -127,7 +127,7 @@ class Groups extends CI_Controller {
 
 		try {
 			$updateGroup = app_helper::getContainer()->get('update_group_service');
-			/** @var UpdateGroupService $updateGroup */
+			/** @var UpdateService $updateGroup */
 			$response = $updateGroup->execute($group);
 			if ($response != true) {
 				return $this->jsonErrorReturn();

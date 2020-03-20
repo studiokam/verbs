@@ -1,4 +1,8 @@
 <?php
+
+use application\Application\Service\Verbs\GetListService;
+use application\Application\Service\Verbs\SetMistakesService;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends CI_Controller {
@@ -27,8 +31,7 @@ class Home extends CI_Controller {
 
 	public function getAllVerbs()
 	{
-		// Get all verbs
-		/** @var application\Application\Service\GetVerbsListService $allVerbs */
+		/** @var GetListService $allVerbs */
 		$allVerbs = app_helper::getContainer()->get('get_verbs_list_service');
 		return $allVerbs->execute();
 	}
@@ -54,7 +57,7 @@ class Home extends CI_Controller {
 		$data = file_get_contents("php://input");
 		$data = json_decode($data, true);
 
-		/** @var  application\Application\Service\SetMistakesService $mistakesService */
+		/** @var  SetMistakesService $mistakesService */
 		$mistakesService = app_helper::getContainer()->get('set_mistakes_service');
 		$response = $mistakesService->execute($data['verbId'], $data['status']);
 		echo json_encode(['status' => $response]);

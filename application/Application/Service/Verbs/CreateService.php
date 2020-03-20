@@ -1,26 +1,25 @@
 <?php
 
 
-namespace application\Application\Service;
+namespace application\Application\Service\Verbs;
 
 
 use application\Application\Service\Exceptions\ValidationException;
 use application\Application\Service\Validations\ValidationErrorHandler;
 use application\Application\Service\Validations\VerbValidator;
-use application\Domain\Model\Interfaces\DatabaseInterface;
 use application\Domain\Model\Verbs\Verb;
-use application\Infrastructure\Verb\VerbRepository;
+use application\Domain\Model\Verbs\VerbRepositoryInterface;
 
-class CreateVerbService
+class CreateService
 {
 	/**
-	 * @var DatabaseInterface
+	 * @var VerbRepositoryInterface
 	 */
-	private $database;
+	private $verbRepo;
 
-	public function __construct(DatabaseInterface $database)
+	public function __construct(VerbRepositoryInterface $verbRepo)
 	{
-		$this->database = $database;
+		$this->verbRepo = $verbRepo;
 	}
 
 	/**
@@ -36,8 +35,6 @@ class CreateVerbService
 		if ($validateHandler->hassErrors()) {
 			throw new ValidationException($validateHandler);
 		}
-		$verbRepo = \app_helper::getContainer()->get('verb_repository');
-		/** @var VerbRepository $verbRepo */
-		return $verbRepo->addNewVerb($verb);
+		return $this->verbRepo->addNewVerb($verb);
 	}
 }
