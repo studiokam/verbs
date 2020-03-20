@@ -12,3 +12,41 @@
 // application/Application/Service/Groups/GetForVerbService.php - interpretacja jest w zasadzie dowolna ale to powinno
 	być w application/Application/Service/Groups czy może application/Application/Service/Verbs (jest w Groups, używam
 	verb repo)
+
+// co sądzisz o tym aby dawać w konstruktorze:
+	$this->createVerbService = app_helper::getContainer()->get('create_verb_service'); i
+	/**
+	 * @var CreateService
+	 */
+	private $createVerbService;
+	- jest to w kontrolerze verbs.php
+	- dla mnie tak wydaje się czytelniej i ewent można użyć ponownie zależności ale nie wiem czy to nie obciąża za bardzo
+	i czy faktycznie można użyć tego ponownie (czy nie będzie w tym błędów w ponowym użyciu)
+
+
+// $response = $this->createVerbService->execute($uiDataArray);
+   if ($response != true) {...}
+
+   czy mogę też jako
+   $response = $this->createVerbService->execute($uiDataArray);
+   if (!$response) {...}
+
+   a nawet tak:
+   if (!$this->createVerbService->execute($uiDataArray)) {...}
+
+// co sądzisz o tym:
+	public function setId(int $id): Verb
+	{
+		$this->id = $id;
+		return $this;
+	}
+
+	poprzednio miałem:
+
+	public function setId(int $id): void
+	{
+		$this->id = $id;
+	}
+
+// VerbValidator - zabrałem sprawdzanie czy w verbie są 4 podstawowe pola bo sprawdzam to teraz w konstruktorze a tu
+	sprawzdam czy taki verb jest już w DB, mniej więcej tak?

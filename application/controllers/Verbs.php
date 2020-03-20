@@ -9,19 +9,60 @@ use application\Application\Service\Exceptions\ValidationException;
 use application\Application\Service\Verbs\DeleteService;
 use application\Application\Service\Verbs\UpdateService;
 
-class Verbs extends CI_Controller {
+class Verbs extends CI_Controller
+{
+
+	/**
+	 * @var CreateService
+	 */
+	private $createVerbService;
+	/**
+	 * @var DeleteService
+	 */
+	private $deleteVerbService;
+	/**
+	 * @var UpdateService
+	 */
+	private $updateVerbService;
+	/**
+	 * @var DeleteVerbFromGroupService
+	 */
+	private $addVerbToGroupService;
+	/**
+	 * @var DeleteVerbFromGroupService
+	 */
+	private $deleteVerbFromGroupService;
+	/**
+	 * @var GetVerbsListService
+	 */
+	private $allVerbsService;
+	/**
+	 * @var GetGroupsListService
+	 */
+	private $allGroupsService;
+	/**
+	 * @var GetGroupsForVerbService
+	 */
+	private $getGroupsForVerbService;
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Verb_model', 'verbModel');
+
+		$this->createVerbService = app_helper::getContainer()->get('create_verb_service');
+		$this->deleteVerbService = app_helper::getContainer()->get('delete_verb_service');
+		$this->updateVerbService = app_helper::getContainer()->get('update_verb_service');
+		$this->addVerbToGroupService = app_helper::getContainer()->get('add_verb_to_group_service');
+		$this->deleteVerbFromGroupService = app_helper::getContainer()->get('add_verb_to_group_service');
+		$this->allVerbsService = app_helper::getContainer()->get('get_verbs_list_service');
+		$this->allGroupsService = app_helper::getContainer()->get('get_groups_list_service');
+		$this->getGroupsForVerbService = app_helper::getContainer()->get('get_groups_for_verb_service');
+
 	}
 
 	public function index()
 	{
-		$data = [
-			'title' => 'Verbs'
-		];
+		$data = ['title' => 'Verbs'];
 		$this->load->view('themes/header', $data);
 		$this->load->view('verbs');
 	}
@@ -41,19 +82,11 @@ class Verbs extends CI_Controller {
 
 	public function addNew()
 	{
-		// todo
-		// - sprawdzenie czy dodawany verb jest już w db
-		// - czy podawana nazwa PL jest podana, jesli tak to zasugerowanie
-		//   podania innej lub dodatkowego opisu do kontekstu
-
-//		$data = $this->input->post(null, false);
-		$data = file_get_contents("php://input");
-		$verb = $this->verbModel->createVerbFromPost(json_decode($data, true));
+		$uiDataArray = file_get_contents("php://input");
+		$uiDataArray = json_decode($uiDataArray, true);
 
 		try {
-			$createVerb = app_helper::getContainer()->get('create_verb_service');
-			/** @var CreateService $createVerb */
-			$response = $createVerb->execute($verb);
+			$response = $this->createVerbService->execute($uiDataArray);
 			if ($response != true) {
 				return $this->jsonErrorReturn();
 			}
@@ -81,20 +114,16 @@ class Verbs extends CI_Controller {
 		$id = file_get_contents("php://input");
 
 		try {
-			$deleteVerb = app_helper::getContainer()->get('delete_verb_service');
-			/** @var DeleteService $deleteVerb */
-			$response = $deleteVerb->execute($id);
-			if ($response != true) {
+			if (!$this->deleteVerbService->execute($id)) {
 				return $this->jsonErrorReturn();
 			}
-			$allVerbs = $this->getAllVerbs();
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
 
 		echo json_encode([
 			'status' => 1,
-			'allVerbs' => $allVerbs,
+			'allVerbs' => $this->getAllVerbs(),
 			'message' => 'Usunięto czasownik'
 		]);
 	}
@@ -109,13 +138,9 @@ class Verbs extends CI_Controller {
 		$verb = $this->verbModel->createVerbFromPost(json_decode($data, true));
 
 		try {
-			$updateVerb = app_helper::getContainer()->get('update_verb_service');
-			/** @var UpdateService $updateVerb */
-			$response = $updateVerb->execute($verb);
-			if ($response != true) {
+			if (!$this->updateVerbService->execute($verb)) {
 				return $this->jsonErrorReturn();
 			}
-			$allVerbs = $this->getAllVerbs();
 		} catch (ValidationException $e) {
 			echo json_encode([
 				'status' => 0,
@@ -129,7 +154,7 @@ class Verbs extends CI_Controller {
 
 		echo json_encode([
 			'status' => 1,
-			'allVerbs' => $allVerbs,
+			'allVerbs' => $this->getAllVerbs(),
 			'message' => 'Zaktualizowanio'
 		]);
 	}
@@ -148,18 +173,14 @@ class Verbs extends CI_Controller {
 		}
 
 		try {
-			$addVerbToGroup = app_helper::getContainer()->get('add_verb_to_group_service');
-			/** @var DeleteVerbFromGroupService $addVerbToGroup */
-			$response = $addVerbToGroup->execute($data);
-			if ($response != true) {
+			if (!$this->addVerbToGroupService->execute($data)) {
 				return $this->jsonErrorReturn();
 			}
-			$verbGroupData = $this->getGroupsForVerb($data['verbId']);
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($verbGroupData);
+		return $this->jsonSuccessData($this->getGroupsForVerb($data['verbId']));
 	}
 
 	public function deleteVerbFromGroup()
@@ -168,18 +189,14 @@ class Verbs extends CI_Controller {
 		$data = json_decode($data, true);
 
 		try {
-			$service = app_helper::getContainer()->get('delete_verb_from_group_service');
-			/** @var DeleteVerbFromGroupService $service */
-			$response = $service->execute($data['relationId']);
-			if ($response != true) {
+			if (!$this->deleteVerbFromGroupService->execute($data['relationId'])) {
 				return $this->jsonErrorReturn();
 			}
-			$verbGroupData = $this->getGroupsForVerb($data['verbId']);
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($verbGroupData);
+		return $this->jsonSuccessData($this->getGroupsForVerb($data['verbId']));
 	}
 
 	public function getVerbGroups()
@@ -208,22 +225,16 @@ class Verbs extends CI_Controller {
 
 	private function getAllVerbs()
 	{
-		/** @var GetVerbsListService $allVerbs */
-		$allVerbs = app_helper::getContainer()->get('get_verbs_list_service');
-		return $allVerbs->execute();
+		return $this->allVerbsService->execute();
 	}
 
 	private function getAllGroups()
 	{
-		/** @var GetGroupsListService $allGroups */
-		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
-		return $allGroups->execute();
+		return $this->allGroupsService->execute();
 	}
 
 	private function getGroupsForVerb($verbId)
 	{
-		/** @var GetGroupsForVerbService $service */
-		$service = app_helper::getContainer()->get('get_groups_for_verb_service');
-		return $service->execute($verbId);
+		return $this->getGroupsForVerbService->execute($verbId);
 	}
 }

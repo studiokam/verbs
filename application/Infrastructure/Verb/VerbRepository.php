@@ -35,8 +35,22 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 	 */
 	public function getAllVerbs(): array
 	{
-		$sql = 'SELECT * FROM verb';
+		$sql = 'SELECT * FROM verb ORDER BY inf';
 		return $this->db->selectAll($sql);
+	}
+
+	public function getVerbByData(Verb $verb): bool
+	{
+		$sql = 'SELECT * FROM verb WHERE (inf = ? AND pastSimp1 = ? AND pastPrac1 = ?) OR pl = ?';
+
+		$params = [];
+		$params[] = $verb->getVerbInf();
+		$params[] = $verb->getVerbPastSimple1();
+		$params[] = $verb->getVerbPastParticiple1();
+		$params[] = $verb->getVerbPL();
+
+		$result = $this->db->select($sql, $params);
+		return count($result) > 0;
 	}
 
 	/**

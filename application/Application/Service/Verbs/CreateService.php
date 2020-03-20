@@ -23,18 +23,29 @@ class CreateService
 	}
 
 	/**
-	 * @param Verb $verb
+	 * @param array $uiDataArray
 	 * @return bool
 	 * @throws ValidationException
 	 */
-	public function execute(Verb $verb)
+	public function execute(array $uiDataArray)
 	{
+		$verb = new Verb($uiDataArray['verbPL'], $uiDataArray['verbInf'], $uiDataArray['verbPastSimple1'],
+			$uiDataArray['verbPastParticiple1']);
+
+		$verb
+			->setVerbPastSimple2($uiDataArray['verbPastSimple2'])
+			->setVerbPastParticiple2($uiDataArray['verbPastParticiple2'])
+			->setVerbPLAdditional($uiDataArray['verbPLAdditional'])
+			->setVerbPronunciation($uiDataArray['verbPronunciation']);
+
 		$validateHandler = new ValidationErrorHandler();
-		$validator = new VerbValidator();
+		$validator = new VerbValidator($this->verbRepo);
 		$validator->validate($verb, $validateHandler);
+
 		if ($validateHandler->hassErrors()) {
 			throw new ValidationException($validateHandler);
 		}
+
 		return $this->verbRepo->addNewVerb($verb);
 	}
 }
