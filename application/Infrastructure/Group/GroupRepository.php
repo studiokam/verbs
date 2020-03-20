@@ -14,7 +14,11 @@ use application\Infrastructure\Verb\VerbRepository;
 
 class GroupRepository extends AbstractRepository implements GroupRepositoryInterface
 {
-	public function addNewGroup(Group $group)
+	/**
+	 * @param Group $group
+	 * @return bool
+	 */
+	public function addNewGroup(Group $group): bool
 	{
 		$sql = 'INSERT INTO groups (groupName, groupAdditional) 
 				VALUES (?, ?)';
@@ -26,13 +30,20 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 		return $this->db->execute($sql, $params);
 	}
 
-	public function getAllGroups()
+	/**
+	 * @return array
+	 */
+	public function getAllGroups(): array
 	{
 		$sql = 'SELECT * FROM groups ORDER BY groupName';
 		return $this->db->selectAll($sql);
 	}
 
-	public function deleteGroup($id)
+	/**
+	 * @param $id
+	 * @return bool
+	 */
+	public function deleteGroup($id): bool
 	{
 		$sql = 'DELETE FROM groups WHERE id = ?';
 		$params = [];
@@ -40,7 +51,11 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 		return $this->db->execute($sql, $params);
 	}
 
-	public function updateGroup(Group $group)
+	/**
+	 * @param Group $group
+	 * @return bool
+	 */
+	public function updateGroup(Group $group): bool
 	{
 		$sql = 'UPDATE groups SET groupName = ?, groupAdditional = ? WHERE id = ?';
 
@@ -52,13 +67,21 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 		return $this->db->execute($sql, $params);
 	}
 
-	public function getGroupByName($name)
+	/**
+	 * @param $name
+	 * @return array
+	 */
+	public function getGroupByName($name): array
 	{
 		$sql = 'SELECT * FROM groups WHERE groupName = ?';
 		return $this->db->select($sql, [$name]);
 	}
 
-	public function getVerbsForGroup($groupId)
+	/**
+	 * @param $groupId
+	 * @return array
+	 */
+	public function getVerbsForGroup($groupId): array
 	{
 		if (in_array($groupId, ['allWithoutKnown', 'isNotInAnyOfGroups', 'recentlyMadeMistakesInThem'])) {
 			$verbRepo = new VerbRepository(new CIDatabase());

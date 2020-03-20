@@ -31,74 +31,74 @@
 		<!--Services-->
 
 		<service id="create_verb_service"
-				 class="application\Application\Service\Verbs\CreateVerbService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Verbs\CreateService">
+			<argument type="service" id="verb_repository"/>
 		</service>
 
 		<service id="create_group_service"
-				 class="application\Application\Service\CreateGroupService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Groups\CreateService">
+			<argument type="service" id="group_repository"/>
 		</service>
 
 
 		<!--Get data-->
 		<service id="get_verbs_list_service"
-				 class="application\Application\Service\GetVerbsListService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Verbs\GetListService">
+			<argument type="service" id="verb_repository"/>
 		</service>
 
 		<service id="get_groups_list_service"
-				 class="application\Application\Service\GetGroupsListService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Groups\GetListService">
+			<argument type="service" id="group_repository"/>
 		</service>
 
 		<service id="get_groups_for_verb_service"
-				 class="application\Application\Service\GetGroupsForVerbsService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Verbs\GetGroupsForVerbService">
+			<argument type="service" id="verb_repository"/>
 		</service>
 
 		<service id="get_verbs_for_groups_service"
-				 class="application\Application\Service\GetVerbsForGroupService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Groups\GetVerbsForGroupService">
+			<argument type="service" id="group_repository"/>
 		</service>
 
 
 		<!--Delete data-->
 		<service id="delete_group_service"
-				 class="application\Application\Service\DeleteGroupService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Groups\DeleteService">
+			<argument type="service" id="group_repository"/>
 		</service>
 
 		<service id="delete_verb_service"
-				 class="application\Application\Service\DeleteVerbService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Verbs\DeleteService">
+			<argument type="service" id="verb_repository"/>
 		</service>
 
 		<service id="delete_verb_from_group_service"
-				 class="application\Application\Service\DeleteVerbFromGroupService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Groups\DeleteVerbFromGroupService">
+			<argument type="service" id="verb_repository"/>
 		</service>
 
 
 		<!--Update data-->
 		<service id="update_group_service"
-				 class="application\Application\Service\UpdateGroupService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Groups\UpdateService">
+			<argument type="service" id="group_repository"/>
 		</service>
 
 		<service id="update_verb_service"
-				 class="application\Application\Service\UpdateVerbService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Verbs\UpdateService">
+			<argument type="service" id="verb_repository"/>
 		</service>
 
 
 		<!--Other-->
 		<service id="add_verb_to_group_service"
-				 class="application\Application\Service\AddVerbToGroupService">
-			<argument type="service" id="database"/>
+				 class="application\Application\Service\Verbs\AddToGroupService">
+			<argument type="service" id="verb_repository"/>
 		</service>
 		<service id="set_mistakes_service"
-					class="application\Application\Service\SetMistakesService">
+					class="application\Application\Service\Verbs\SetMistakesService">
 			<argument type="service" id="mistakes_repository"/>
 		</service>
 

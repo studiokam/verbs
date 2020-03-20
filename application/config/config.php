@@ -24,8 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 // $config['base_url'] = 'http://localhost/verbs';
-//$config['base_url'] = 'http://localhost/test/verbs';
-$config['base_url'] = 'https://studiokam.pl/verbs';
+$config['base_url'] = 'http://localhost/test/verbs';
+//$config['base_url'] = 'https://studiokam.pl/verbs';
 
 
 /*
