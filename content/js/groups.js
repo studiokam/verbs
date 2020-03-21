@@ -33,7 +33,7 @@ var app = new Vue({
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allGroups = resp.allGroups;
+					this.allGroups = resp.data;
 					this.clearForm();
 					// alert('dodano. ' + resp.message);
 				} else {
@@ -59,7 +59,7 @@ var app = new Vue({
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allGroups = resp.allGroups;
+					this.allGroups = resp.data;
 				}
 			}, (error) => {
 				console.log(error);
@@ -134,7 +134,7 @@ var app = new Vue({
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allGroups = resp.allGroups;
+					this.allGroups = resp.data;
 					this.clearForm();
 					this.showEditGroup = false;
 				}

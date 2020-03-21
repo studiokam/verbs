@@ -1,9 +1,9 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 use application\Application\Service\Verbs\GetListService;
 use application\Application\Service\Verbs\SetMistakesService;
 
-defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends CI_Controller {
 

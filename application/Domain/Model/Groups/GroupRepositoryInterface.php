@@ -10,6 +10,8 @@ interface GroupRepositoryInterface
 
 	public function getAllGroups(): array;
 
+	public function getGroupByData(Group $group): bool;
+
 	public function deleteGroup($id): bool;
 
 	public function updateGroup(Group $group): bool;

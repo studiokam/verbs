@@ -36,4 +36,4 @@
 	}
 
 
-//
+// do GroupValidator a przesyłam repo, w konstruktorze odcieram go - czy robię to za pomocą interface w takim wypadku?
