@@ -38,7 +38,7 @@ class Home extends CI_Controller {
 
 	public function getVerbsListFromDB()
 	{
-		$id = file_get_contents("php://input");
+		$id = $this->input->raw_input_stream;
 
 		if (isset($id) && $id != null) {
 			// Get 
@@ -54,12 +54,11 @@ class Home extends CI_Controller {
 	}
 	public function setMistake()
 	{
-		$data = file_get_contents("php://input");
-		$data = json_decode($data, true);
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
 
 		/** @var  SetMistakesService $mistakesService */
 		$mistakesService = app_helper::getContainer()->get('set_mistakes_service');
-		$response = $mistakesService->execute($data['verbId'], $data['status']);
+		$response = $mistakesService->execute($uiDataArray['verbId'], $uiDataArray['status']);
 		echo json_encode(['status' => $response]);
 	}
 }
