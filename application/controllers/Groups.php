@@ -1,21 +1,17 @@
 <?php
 
 
+use application\Application\Service\Exceptions\ValidationException;
 use application\Application\Service\Groups\CreateService;
 use application\Application\Service\Groups\DeleteService;
 use application\Application\Service\Groups\DeleteVerbFromGroupService;
 use application\Application\Service\Groups\GetListService;
 use application\Application\Service\Groups\GetVerbsForGroupService;
+use application\Application\Service\Groups\Payload\CreateServiceRequest;
 use application\Application\Service\Groups\UpdateService;
 
-class Groups extends CI_Controller {
-
-	public function __construct()
-	{
-		parent::__construct();
-		$this->load->model('Group_model', 'groupModel');
-	}
-
+class Groups extends CI_Controller
+{
 	public function index()
 	{
 		$data = [
@@ -36,40 +32,107 @@ class Groups extends CI_Controller {
 
 	public function addNew()
 	{
-		// todo
-		// - sprawdzenie czy dodawana grupa jest już w db
-		// - czy podawana nazwa PL jest podana, jesli tak to zasugerowanie
-		//   podania innej lub dodatkowego opisu do kontekstu
-
-//		$data = $this->input->post(null, false);
-		$data = file_get_contents("php://input");
-		$group = $this->groupModel->createGroupFromPost(json_decode($data, true));
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
 
 		try {
+			$request = $this->createRequest($uiDataArray);
 			$createGroup = app_helper::getContainer()->get('create_group_service');
 			/** @var CreateService $createGroup */
-			$response = $createGroup->execute($group);
-			if ($response != true) {
-				return $this->jsonErrorReturn();
+			if (!$createGroup->execute($request)) {
+				$this->jsonErrorReturn();
 			}
-			$allGroups = $this->getAllGroupsFromDB();
 		} catch (ValidationException $e) {
-			echo json_encode([
-				'status' => 0,
-				'validationErrors' => 1,
-				'errors' => $e->getErrorsMessages()
-			]);
-			return;
+			$this->jsonErrorReturn($e->getErrorsMessages());
+			exit();
 		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
+			$this->jsonErrorReturn();
 		}
 
+		$this->jsonSuccessData($this->getAllGroupsFromDB());
+	}
 
-		echo json_encode([
-			'status' => 1,
-			'allGroups' => $allGroups,
-			'message' => 'Dodano do DBa'
-		]);
+	public function getAllGroups()
+	{
+		echo json_encode([ 'allGroups' => $this->getAllGroupsFromDB()]);
+	}
+
+	public function deleteGroup()
+	{
+		// todo
+		// czy usuwanie grupy powinno czymś skutkować? (powiązania)
+
+		$id = $this->input->raw_input_stream;
+
+		try {
+			$deleteGroup = app_helper::getContainer()->get('delete_group_service');
+			/** @var DeleteService $deleteGroup */
+			if (!$deleteGroup->execute($id)) {
+				$this->jsonErrorReturn();
+			}
+		} catch (\Exception $e) {
+			$this->jsonErrorReturn();
+		}
+
+		$this->jsonSuccessData($this->getAllGroupsFromDB());
+	}
+
+	public function editGroup()
+	{
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
+		$request = $this->createRequest($uiDataArray);
+
+		try {
+			$updateGroup = app_helper::getContainer()->get('update_group_service');
+			/** @var UpdateService $updateGroup */
+			if (!$updateGroup->execute($request)) {
+				$this->jsonErrorReturn();
+			}
+		} catch (ValidationException $e) {
+			$this->jsonErrorReturn($e->getErrorsMessages());
+			exit();
+		} catch (\Exception $e) {
+			$this->jsonErrorReturn();
+			exit();
+		}
+
+		$this->jsonSuccessData($this->getAllGroupsFromDB());
+	}
+
+	public function deleteVerbFromGroup()
+	{
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
+
+		try {
+			$service = app_helper::getContainer()->get('delete_verb_from_group_service');
+			/** @var DeleteVerbFromGroupService $service */
+			if (!$service->execute($uiDataArray['relationId'])) {
+				$this->jsonErrorReturn();
+			}
+			$verbGroupData = $this->getAllVerbsForGroup($uiDataArray['verbId']);
+		} catch (\Exception $e) {
+			$this->jsonErrorReturn();
+		}
+
+		$this->jsonSuccessData($verbGroupData);
+	}
+
+	public function getVerbGroups()
+	{
+		$id = $this->input->raw_input_stream;
+		$this->jsonSuccessData($this->getAllVerbsForGroup($id));
+	}
+
+	public function allVerbsForGroup()
+	{
+		$id = $this->input->raw_input_stream;
+		$this->jsonSuccessData($this->getAllVerbsForGroup($id));
+	}
+
+	private function getAllVerbsForGroup($groupId)
+	{
+		/** @var GetVerbsForGroupService $service */
+		$service = app_helper::getContainer()->get('get_verbs_for_groups_service');
+		return $service->execute($groupId);
 	}
 
 	private function getAllGroupsFromDB()
@@ -85,115 +148,25 @@ class Groups extends CI_Controller {
 		return $response;
 	}
 
-	public function getAllGroups()
+	/**
+	 * @param $uiDataArray
+	 * @return CreateServiceRequest
+	 */
+	private function createRequest($uiDataArray)
 	{
-		echo json_encode([ 'allGroups' => $this->getAllGroupsFromDB()]);
+		$request = new CreateServiceRequest();
+		$request->setId($uiDataArray['id']);
+		$request->setGroupName($uiDataArray['groupName']);
+		$request->setGroupAdditional($uiDataArray['groupAdditional']);
+
+		return $request;
 	}
 
-	public function deleteGroup()
-	{
-
-		// todo
-		// czy usuwanie grupy powinno czymś skutkować? (powiązania)
-
-		$id = file_get_contents("php://input");
-
-		try {
-			$deleteGroup = app_helper::getContainer()->get('delete_group_service');
-			/** @var DeleteService $deleteGroup */
-			$response = $deleteGroup->execute($id);
-			if ($response != true) {
-				return $this->jsonErrorReturn();
-			}
-			$allGroups = $this->getAllGroupsFromDB();
-		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
-		}
-
-		echo json_encode([
-			'status' => 1,
-			'allGroups' => $allGroups,
-			'message' => 'Usunięto grupę'
-		]);
-	}
-
-	public function editGroup() {
-		// todo
-		// sprawdzić czy jest juz grupa o takiej nazwie
-		$test = $this->input->post;
-
-		$data = file_get_contents("php://input");
-		$group = $this->groupModel->createGroupFromPost(json_decode($data, true));
-
-		try {
-			$updateGroup = app_helper::getContainer()->get('update_group_service');
-			/** @var UpdateService $updateGroup */
-			$response = $updateGroup->execute($group);
-			if ($response != true) {
-				return $this->jsonErrorReturn();
-			}
-			$allGroups = $this->getAllGroupsFromDB();
-		} catch (ValidationException $e) {
-			echo json_encode([
-				'status' => 0,
-				'validationErrors' => 1,
-				'errors' => $e->getErrorsMessages()
-			]);
-			return;
-		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
-		}
-
-		echo json_encode([
-			'status' => 1,
-			'allGroups' => $allGroups,
-			'message' => 'Zaktualizowanio'
-		]);
-
-	}
-
-	public function deleteVerbFromGroup()
-	{
-		$data = file_get_contents("php://input");
-		$data = json_decode($data, true);
-
-		try {
-			$service = app_helper::getContainer()->get('delete_verb_from_group_service');
-			/** @var DeleteVerbFromGroupService $service */
-			$response = $service->execute($data['relationId']);
-			if ($response != true) {
-				return $this->jsonErrorReturn();
-			}
-			$verbGroupData = $this->getAllVerbsForGroup($data['verbId']);
-		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
-		}
-
-		return $this->jsonSuccessData($verbGroupData);
-	}
-
-	public function getVerbGroups()
-	{
-		$id = file_get_contents("php://input");
-		$data = $this->getAllVerbsForGroup($id);
-		return $this->jsonSuccessData($data);
-	}
-
-	public function allVerbsForGroup()
-	{
-		$id = file_get_contents("php://input");
-		$data = $this->getAllVerbsForGroup($id);
-		return $this->jsonSuccessData($data);
-	}
-
-	private function getAllVerbsForGroup($groupId)
-	{
-		/** @var GetVerbsForGroupService $service */
-		$service = app_helper::getContainer()->get('get_verbs_for_groups_service');
-		return $service->execute($groupId);
-	}
-
-	private function jsonSuccessData($data)
+	/**
+	 * @param $data
+	 * @return void
+	 */
+	private function jsonSuccessData($data): void
 	{
 		echo json_encode([
 			'status' => 1,
@@ -201,12 +174,15 @@ class Groups extends CI_Controller {
 		]);
 	}
 
-	private function jsonErrorReturn()
+	/**
+	 * @param null $data
+	 * @return void
+	 */
+	private function jsonErrorReturn($data = null): void
 	{
 		echo json_encode([
 			'status' => 0,
-			'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.'
+			'data' => $data
 		]);
 	}
-
 }

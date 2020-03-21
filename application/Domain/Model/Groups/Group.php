@@ -17,20 +17,27 @@ class Group
 	/**
 	 * @var string|null
 	 */
-	private $groupAdditional;
+	private $groupAdditional = null;
+
+	public function __construct(string $groupName, string $groupAdditional = null)
+	{
+		$this->groupName = $groupName;
+		$this->groupAdditional = $groupAdditional;
+	}
 
 	/**
 	 * @return int
 	 */
-	public function getId()
+	public function getId(): int
 	{
 		return $this->id;
 	}
 
 	/**
 	 * @param int $id
+	 * @return void
 	 */
-	public function setId($id)
+	public function setId(int $id): void
 	{
 		$this->id = $id;
 	}
@@ -38,15 +45,16 @@ class Group
 	/**
 	 * @return string
 	 */
-	public function getGroupName()
+	public function getGroupName(): string
 	{
 		return $this->groupName;
 	}
 
 	/**
 	 * @param string $groupName
+	 * @return void
 	 */
-	public function setGroupName($groupName)
+	public function setGroupName(string $groupName): void
 	{
 		$this->groupName = $groupName;
 	}
@@ -54,7 +62,7 @@ class Group
 	/**
 	 * @return string|null
 	 */
-	public function getGroupAdditional()
+	public function getGroupAdditional(): ?string
 	{
 		return $this->groupAdditional;
 	}
@@ -62,7 +70,7 @@ class Group
 	/**
 	 * @param string|null $groupAdditional
 	 */
-	public function setGroupAdditional($groupAdditional)
+	public function setGroupAdditional(?string $groupAdditional): void
 	{
 		$this->groupAdditional = $groupAdditional;
 	}

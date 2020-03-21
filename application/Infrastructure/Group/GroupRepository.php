@@ -39,6 +39,17 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 		return $this->db->selectAll($sql);
 	}
 
+	public function getGroupByData(Group $group): bool
+	{
+		$sql = 'SELECT * FROM groups WHERE groupName = ?';
+
+		$params = [];
+		$params[] = $group->getGroupName();
+
+		$result = $this->db->select($sql, $params);
+		return count($result) > 0;
+	}
+
 	/**
 	 * @param $id
 	 * @return bool
