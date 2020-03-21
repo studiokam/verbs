@@ -77,32 +77,25 @@ class Verbs extends CI_Controller
 			'allVerbs' => $this->getAllVerbs(),
 			'allGroups' => $this->getAllGroups()
 		);
+
 		echo json_encode($data);
 	}
 
 	public function addNew()
 	{
-		$uiDataArray = file_get_contents("php://input");
-		$uiDataArray = json_decode($uiDataArray, true);
+		$uiDataArray = json_decode(file_get_contents("php://input"), true);
 
 		try {
-			$response = $this->createVerbService->execute($uiDataArray);
-			if ($response != true) {
+			if (!$this->createVerbService->execute($uiDataArray)) {
 				return $this->jsonErrorReturn();
 			}
-			$allVerbs = $this->getAllVerbs();
 		} catch (ValidationException $e) {
-			echo json_encode(['status' => 0, 'validationErrors' => 1, 'errors' => $e->getErrorsMessages()]);
-			return;
+			return $this->jsonErrorReturn($e->getErrorsMessages());
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
 
-		echo json_encode([
-			'status' => 1,
-			'allVerbs' => $allVerbs,
-			'message' => 'Dodano do DBa'
-		]);
+		return $this->jsonSuccessData($this->getAllVerbs());
 	}
 
 	public function deleteVerb()
@@ -121,11 +114,7 @@ class Verbs extends CI_Controller
 			return $this->jsonErrorReturn();
 		}
 
-		echo json_encode([
-			'status' => 1,
-			'allVerbs' => $this->getAllVerbs(),
-			'message' => 'Usunięto czasownik'
-		]);
+		return $this->jsonSuccessData($this->getAllVerbs());
 	}
 
 	public function editVerb()
@@ -134,69 +123,60 @@ class Verbs extends CI_Controller
 		// sprawdzić czy jest juz czasownik o takiej nazwie
 		// dodać walidacje na pola
 
-		$data = file_get_contents("php://input");
-		$verb = $this->verbModel->createVerbFromPost(json_decode($data, true));
+		$uiDataArray = file_get_contents("php://input");
+		$verb = $this->verbModel->createVerbFromPost(json_decode($uiDataArray, true));
 
 		try {
 			if (!$this->updateVerbService->execute($verb)) {
 				return $this->jsonErrorReturn();
 			}
 		} catch (ValidationException $e) {
-			echo json_encode([
-				'status' => 0,
-				'validationErrors' => 1,
-				'errors' => $e->getErrorsMessages()
-			]);
-			return;
+			return $this->jsonErrorReturn($e->getErrorsMessages());
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
 
-		echo json_encode([
-			'status' => 1,
-			'allVerbs' => $this->getAllVerbs(),
-			'message' => 'Zaktualizowanio'
-		]);
+		return $this->jsonSuccessData($this->getAllVerbs());
 	}
 
 	public function addVerbToGroup()
 	{
-		$data = file_get_contents("php://input");
-		$data = json_decode($data, true);
+		$uiDataArray = file_get_contents("php://input");
+		$uiDataArray = json_decode($uiDataArray, true);
 
-		// check if the verb is alredy in the group
-		$verbInGroups = $this->getGroupsForVerb($data['verbId']);
+		// check if the verb is already in the group
+		$verbInGroups = $this->getGroupsForVerb($uiDataArray['verbId']);
 		foreach ($verbInGroups as $group) {
-			if ($group->id == $data['groupId']) {
+			if ($group->id == $uiDataArray['groupId']) {
 				return $this->jsonErrorReturn('Czasownik jest już w tej grupie.');
 			}
 		}
 
 		try {
-			if (!$this->addVerbToGroupService->execute($data)) {
+			if (!$this->addVerbToGroupService->execute($uiDataArray)) {
 				return $this->jsonErrorReturn();
 			}
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($this->getGroupsForVerb($data['verbId']));
+		return $this->jsonSuccessData($this->getGroupsForVerb($uiDataArray['verbId']));
 	}
 
 	public function deleteVerbFromGroup()
 	{
-		$data = file_get_contents("php://input");
-		$data = json_decode($data, true);
+		$uiDataArray = file_get_contents("php://input");
+		$uiDataArray = json_decode($uiDataArray, true);
 
 		try {
-			if (!$this->deleteVerbFromGroupService->execute($data['relationId'])) {
+			if (!$this->deleteVerbFromGroupService->execute($uiDataArray['relationId'])) {
 				return $this->jsonErrorReturn();
 			}
 		} catch (\Exception $e) {
 			return $this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($this->getGroupsForVerb($data['verbId']));
+		return $this->jsonSuccessData($this->getGroupsForVerb($uiDataArray['verbId']));
 	}
 
 	public function getVerbGroups()
@@ -218,7 +198,6 @@ class Verbs extends CI_Controller
 	{
 		echo json_encode([
 			'status' => 0,
-			'error' => 'Przepraszamy, wystąpił błąd po stronie serwisu. Spróbuj później.',
 			'data' => $data
 		]);
 	}

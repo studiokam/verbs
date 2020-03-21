@@ -50,3 +50,14 @@
 
 // VerbValidator - zabrałem sprawdzanie czy w verbie są 4 podstawowe pola bo sprawdzam to teraz w konstruktorze a tu
 	sprawzdam czy taki verb jest już w DB, mniej więcej tak?
+
+
+// kiedy powinniśmy pisać komentarze a kiedy nie?
+/**
+ * @param $verbId
+ * @return array
+ */
+private function getGroupsForVerb($verbId): array
+{
+	return $this->getGroupsForVerbService->execute($verbId);
+}
