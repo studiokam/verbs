@@ -87,16 +87,7 @@ class Verbs extends CI_Controller
 		$uiDataArray = json_decode($this->input->raw_input_stream, true);
 
 		try {
-			$request = new CreateServiceRequest();
-			$request->setVerbPL($uiDataArray['verbPL']);
-			$request->setVerbInf($uiDataArray['verbInf']);
-			$request->setVerbPastSimple1($uiDataArray['verbPastSimple1']);
-			$request->setVerbPastParticiple1($uiDataArray['verbPastParticiple1']);
-			$request->setVerbPastSimple2($uiDataArray['verbPastSimple2']);
-			$request->setVerbPastParticiple2($uiDataArray['verbPastParticiple2']);
-			$request->setVerbPLAdditional($uiDataArray['verbPLAdditional']);
-			$request->setVerbPronunciation($uiDataArray['verbPronunciation']);
-
+			$request = $this->createRequest($uiDataArray);
 			if (!$this->createVerbService->execute($request)) {
 				$this->jsonErrorReturn();
 			}
@@ -105,6 +96,7 @@ class Verbs extends CI_Controller
 			exit();
 		} catch (\Exception $e) {
 			$this->jsonErrorReturn();
+			exit();
 		}
 
 		$this->jsonSuccessData($this->getAllVerbs());
@@ -131,15 +123,11 @@ class Verbs extends CI_Controller
 
 	public function editVerb()
 	{
-		// todo
-		// sprawdzić czy jest juz czasownik o takiej nazwie
-		// dodać walidacje na pola
-
 		$uiDataArray = json_decode($this->input->raw_input_stream, true);
-		$verb = $this->verbModel->createVerbFromPost(json_decode($uiDataArray, true));
-
+		
 		try {
-			if (!$this->updateVerbService->execute($verb)) {
+			$request = $this->createRequest($uiDataArray);
+			if (!$this->updateVerbService->execute($request)) {
 				$this->jsonErrorReturn();
 			}
 		} catch (ValidationException $e) {
@@ -195,6 +183,25 @@ class Verbs extends CI_Controller
 	{
 		$id = $this->input->raw_input_stream;
 		$this->jsonSuccessData($this->getGroupsForVerb($id));
+	}
+
+	/**
+	 * @param $uiDataArray
+	 * @return CreateServiceRequest
+	 */
+	private function createRequest($uiDataArray)
+	{
+		$request = new CreateServiceRequest();
+		$request->setVerbPL($uiDataArray['verbPL']);
+		$request->setVerbInf($uiDataArray['verbInf']);
+		$request->setVerbPastSimple1($uiDataArray['verbPastSimple1']);
+		$request->setVerbPastParticiple1($uiDataArray['verbPastParticiple1']);
+		$request->setVerbPastSimple2($uiDataArray['verbPastSimple2']);
+		$request->setVerbPastParticiple2($uiDataArray['verbPastParticiple2']);
+		$request->setVerbPLAdditional($uiDataArray['verbPLAdditional']);
+		$request->setVerbPronunciation($uiDataArray['verbPronunciation']);
+
+		return $request;
 	}
 
 	/**
