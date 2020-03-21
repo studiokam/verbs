@@ -7,6 +7,7 @@ use application\Application\Service\Verbs\GetListService as GetVerbsListService;
 use application\Application\Service\Verbs\CreateService;
 use application\Application\Service\Exceptions\ValidationException;
 use application\Application\Service\Verbs\DeleteService;
+use application\Application\Service\Verbs\Payload\CreateServiceRequest;
 use application\Application\Service\Verbs\UpdateService;
 
 class Verbs extends CI_Controller
@@ -83,19 +84,30 @@ class Verbs extends CI_Controller
 
 	public function addNew()
 	{
-		$uiDataArray = json_decode(file_get_contents("php://input"), true);
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
 
 		try {
-			if (!$this->createVerbService->execute($uiDataArray)) {
-				return $this->jsonErrorReturn();
+			$request = new CreateServiceRequest();
+			$request->setVerbPL($uiDataArray['verbPL']);
+			$request->setVerbInf($uiDataArray['verbInf']);
+			$request->setVerbPastSimple1($uiDataArray['verbPastSimple1']);
+			$request->setVerbPastParticiple1($uiDataArray['verbPastParticiple1']);
+			$request->setVerbPastSimple2($uiDataArray['verbPastSimple2']);
+			$request->setVerbPastParticiple2($uiDataArray['verbPastParticiple2']);
+			$request->setVerbPLAdditional($uiDataArray['verbPLAdditional']);
+			$request->setVerbPronunciation($uiDataArray['verbPronunciation']);
+
+			if (!$this->createVerbService->execute($request)) {
+				$this->jsonErrorReturn();
 			}
 		} catch (ValidationException $e) {
-			return $this->jsonErrorReturn($e->getErrorsMessages());
+			$this->jsonErrorReturn($e->getErrorsMessages());
+			exit();
 		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
+			$this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($this->getAllVerbs());
+		$this->jsonSuccessData($this->getAllVerbs());
 	}
 
 	public function deleteVerb()
@@ -104,17 +116,17 @@ class Verbs extends CI_Controller
 		// todo
 		// czy usuwanie grupy powinno czymś skutkować? (powiązania)
 
-		$id = file_get_contents("php://input");
+		$id = $this->input->raw_input_stream;
 
 		try {
 			if (!$this->deleteVerbService->execute($id)) {
-				return $this->jsonErrorReturn();
+				$this->jsonErrorReturn();
 			}
 		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
+			$this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($this->getAllVerbs());
+		$this->jsonSuccessData($this->getAllVerbs());
 	}
 
 	public function editVerb()
@@ -123,70 +135,73 @@ class Verbs extends CI_Controller
 		// sprawdzić czy jest juz czasownik o takiej nazwie
 		// dodać walidacje na pola
 
-		$uiDataArray = file_get_contents("php://input");
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
 		$verb = $this->verbModel->createVerbFromPost(json_decode($uiDataArray, true));
 
 		try {
 			if (!$this->updateVerbService->execute($verb)) {
-				return $this->jsonErrorReturn();
+				$this->jsonErrorReturn();
 			}
 		} catch (ValidationException $e) {
-			return $this->jsonErrorReturn($e->getErrorsMessages());
+			$this->jsonErrorReturn($e->getErrorsMessages());
+			exit();
 		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
+			$this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($this->getAllVerbs());
+		$this->jsonSuccessData($this->getAllVerbs());
 	}
 
 	public function addVerbToGroup()
 	{
-		$uiDataArray = file_get_contents("php://input");
-		$uiDataArray = json_decode($uiDataArray, true);
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
 
 		// check if the verb is already in the group
 		$verbInGroups = $this->getGroupsForVerb($uiDataArray['verbId']);
 		foreach ($verbInGroups as $group) {
 			if ($group->id == $uiDataArray['groupId']) {
-				return $this->jsonErrorReturn('Czasownik jest już w tej grupie.');
+				$this->jsonErrorReturn('Czasownik jest już w tej grupie.');
+				exit();
 			}
 		}
 
 		try {
 			if (!$this->addVerbToGroupService->execute($uiDataArray)) {
-				return $this->jsonErrorReturn();
+				$this->jsonErrorReturn();
 			}
 		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
+			$this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($this->getGroupsForVerb($uiDataArray['verbId']));
+		$this->jsonSuccessData($this->getGroupsForVerb($uiDataArray['verbId']));
 	}
 
 	public function deleteVerbFromGroup()
 	{
-		$uiDataArray = file_get_contents("php://input");
-		$uiDataArray = json_decode($uiDataArray, true);
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
 
 		try {
 			if (!$this->deleteVerbFromGroupService->execute($uiDataArray['relationId'])) {
-				return $this->jsonErrorReturn();
+				$this->jsonErrorReturn();
 			}
 		} catch (\Exception $e) {
-			return $this->jsonErrorReturn();
+			$this->jsonErrorReturn();
 		}
 
-		return $this->jsonSuccessData($this->getGroupsForVerb($uiDataArray['verbId']));
+		$this->jsonSuccessData($this->getGroupsForVerb($uiDataArray['verbId']));
 	}
 
 	public function getVerbGroups()
 	{
-		$id = file_get_contents("php://input");
-		$data = $this->getGroupsForVerb($id);
-		return $this->jsonSuccessData($data);
+		$id = $this->input->raw_input_stream;
+		$this->jsonSuccessData($this->getGroupsForVerb($id));
 	}
 
-	private function jsonSuccessData($data)
+	/**
+	 * @param $data
+	 * @return void
+	 */
+	private function jsonSuccessData($data): void
 	{
 		echo json_encode([
 			'status' => 1,
@@ -194,7 +209,11 @@ class Verbs extends CI_Controller
 		]);
 	}
 
-	private function jsonErrorReturn($data = null)
+	/**
+	 * @param null $data
+	 * @return void
+	 */
+	private function jsonErrorReturn($data = null): void
 	{
 		echo json_encode([
 			'status' => 0,
@@ -202,7 +221,11 @@ class Verbs extends CI_Controller
 		]);
 	}
 
-	private function getAllVerbs()
+	// todo - zrobić z tego array obiekt z DB (to co pisałem z P)
+	/**
+	 * @return array
+	 */
+	private function getAllVerbs(): array
 	{
 		return $this->allVerbsService->execute();
 	}
@@ -212,7 +235,11 @@ class Verbs extends CI_Controller
 		return $this->allGroupsService->execute();
 	}
 
-	private function getGroupsForVerb($verbId)
+	/**
+	 * @param $verbId
+	 * @return array
+	 */
+	private function getGroupsForVerb($verbId): array
 	{
 		return $this->getGroupsForVerbService->execute($verbId);
 	}
