@@ -57,12 +57,12 @@ var app = new Vue({
 				method: 'post',
 				url: 'Verbs/addNew',
 				data: data,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allVerbs = resp.allVerbs;
+					this.allVerbs = resp.data;
 					this.clearForm();
 				} else {
 					if (resp.validationErrors === 1) {
@@ -85,7 +85,7 @@ var app = new Vue({
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allVerbs = resp.allVerbs;
+					this.allVerbs = resp.data;
 				}
 			}, (error) => {
 				console.log(error);

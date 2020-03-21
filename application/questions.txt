@@ -9,6 +9,31 @@
 // groupRepo - getVerbsForGroup - w new RelationVerbGroupRepository() podaję new CIDatabase() - czy w tym miejscu
 	mogę użyć $this->db?
 
-// application/Application/Service/Groups/GetForVerbService.php - interpretacja jest w zasadzie dowolna ale to powinno
-	być w application/Application/Service/Groups czy może application/Application/Service/Verbs (jest w Groups, używam
-	verb repo)
+
+
+
+
+// w try catch jak zachowa się kod kiedy trafi na exception lub jakiś zdefiniowany exception, pójdzie dalej czy nie
+	powinienem dawać return lub exit() czy nie trzeba?
+	public function addNew()
+	{
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
+
+		try {
+			$request = $this->createRequest($uiDataArray);
+			if (!$this->createVerbService->execute($request)) {
+				$this->jsonErrorReturn();
+			}
+		} catch (ValidationException $e) {
+			$this->jsonErrorReturn($e->getErrorsMessages());
+			exit();
+		} catch (\Exception $e) {
+			$this->jsonErrorReturn();
+			exit();
+		}
+
+		$this->jsonSuccessData($this->getAllVerbs());
+	}
+
+
+//

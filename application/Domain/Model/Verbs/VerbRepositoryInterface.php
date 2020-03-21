@@ -10,6 +10,8 @@ interface VerbRepositoryInterface
 
 	public function getAllVerbs(): array;
 
+	public function getVerbByData(Verb $verb): bool;
+
 	public function deleteVerb(int $id): bool;
 
 	public function updateVerb(Verb $verb): bool;
