@@ -98,7 +98,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'verbs/getVerbGroups',
 				data: this.presentVerb.id,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
@@ -116,7 +116,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'verbs/addVerbToGroup',
 				data: {verbId: this.presentVerb.id, groupId: this.addVerbToGroupGroupChosen},
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
@@ -162,7 +162,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'groups/allVerbsForGroup',
 				data: this.verbsListSelected,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
@@ -273,7 +273,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'home/setMistake',
 				data: {'verbId': this.presentVerb.id, 'status': status},
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
