@@ -28,7 +28,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'groups/addNew',
 				data: data,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
@@ -54,7 +54,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'groups/deleteGroup',
 				data: id,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
@@ -82,7 +82,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'groups/getVerbGroups',
 				data: id,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
@@ -100,7 +100,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'groups/deleteVerbFromGroup',
 				data: {verbId: this.id, relationId: relationId},
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
@@ -129,7 +129,7 @@ var app = new Vue({
 				method: 'post',
 				url: 'groups/editGroup',
 				data: data,
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
