@@ -17,6 +17,20 @@ class SetMistakesService
 
 	public function execute($verbId, $status)
 	{
-		return $this->mistakesRepo->setMistake($verbId, $status);
+		$mistakeForId = $this->mistakesRepo->getMistakeById($verbId);
+		$count = 10;
+
+		if (count($mistakeForId) > 0) {
+			if ($status == 'bad') {
+				$count = $mistakeForId[0]->count + 5;
+			} else {
+				$count = $mistakeForId[0]->count > 0 ? $mistakeForId[0]->count - 1 : 0;
+			}
+			return $this->mistakesRepo->updateMistake($verbId, $count);
+		} else if (count($mistakeForId) < 1 && $status == 'bad') {
+			return $this->mistakesRepo->setMistake($verbId, $count);
+		}
+
+		return false;
 	}
 }
