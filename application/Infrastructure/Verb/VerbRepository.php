@@ -110,7 +110,7 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 	public function getGroupsForVerbs(int $verbId): array
 	{
 		$sql = 'SELECT vgr.id as relationId, g.id, g.groupName, g.groupAdditional FROM verb_group_relation vgr
-				JOIN groups g on g.id = vgr.group_id
+				JOIN verbs_groups g on g.id = vgr.group_id
 				WHERE verb_id = ? ORDER BY g.groupName';
 
 		$params = [];
