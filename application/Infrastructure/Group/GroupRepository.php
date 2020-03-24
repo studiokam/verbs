@@ -20,7 +20,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function addNewGroup(Group $group): bool
 	{
-		$sql = 'INSERT INTO groups (groupName, groupAdditional) 
+		$sql = 'INSERT INTO verbs_groups (groupName, groupAdditional) 
 				VALUES (?, ?)';
 
 		$params = [];
@@ -35,13 +35,13 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function getAllGroups(): array
 	{
-		$sql = 'SELECT * FROM groups ORDER BY groupName';
+		$sql = 'SELECT * FROM verbs_groups ORDER BY groupName';
 		return $this->db->selectAll($sql);
 	}
 
 	public function getGroupByData(Group $group): bool
 	{
-		$sql = 'SELECT * FROM groups WHERE groupName = ?';
+		$sql = 'SELECT * FROM verbs_groups WHERE groupName = ?';
 
 		$params = [];
 		$params[] = $group->getGroupName();
@@ -56,7 +56,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function deleteGroup($id): bool
 	{
-		$sql = 'DELETE FROM groups WHERE id = ?';
+		$sql = 'DELETE FROM verbs_groups WHERE id = ?';
 		$params = [];
 		$params[] = $id;
 		return $this->db->execute($sql, $params);
@@ -68,7 +68,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function updateGroup(Group $group): bool
 	{
-		$sql = 'UPDATE groups SET groupName = ?, groupAdditional = ? WHERE id = ?';
+		$sql = 'UPDATE verbs_groups SET groupName = ?, groupAdditional = ? WHERE id = ?';
 
 		$params = [];
 		$params[] = $group->getGroupName();
@@ -84,7 +84,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function getGroupByName($name): array
 	{
-		$sql = 'SELECT * FROM groups WHERE groupName = ?';
+		$sql = 'SELECT * FROM verbs_groups WHERE groupName = ?';
 		return $this->db->select($sql, [$name]);
 	}
 
