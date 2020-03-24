@@ -237,7 +237,10 @@ class Verbs extends CI_Controller
 		return $this->allVerbsService->execute();
 	}
 
-	private function getAllGroups()
+	/**
+	 * @return array
+	 */
+	private function getAllGroups(): array
 	{
 		return $this->allGroupsService->execute();
 	}

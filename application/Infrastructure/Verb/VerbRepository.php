@@ -39,6 +39,10 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 		return $this->db->selectAll($sql);
 	}
 
+	/**
+	 * @param Verb $verb
+	 * @return bool
+	 */
 	public function getVerbByData(Verb $verb): bool
 	{
 		$sql = 'SELECT * FROM verb WHERE (inf = ? AND pastSimp1 = ? AND pastPrac1 = ?) OR pl = ?';
