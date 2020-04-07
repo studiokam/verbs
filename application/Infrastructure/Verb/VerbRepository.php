@@ -31,12 +31,28 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 	}
 
 	/**
-	 * @return array
+	 * @return Verb[]
 	 */
 	public function getAllVerbs(): array
 	{
 		$sql = 'SELECT * FROM verb ORDER BY inf';
-		return $this->db->selectAll($sql);
+
+		$result = $this->db->selectAll($sql);
+
+		$objects = [];
+		foreach ($result as $row) {
+			$verb = new Verb($row->pl, $row->inf, $row->pastSimp1, $row->pastPrac1);
+			$verb
+				->setId($row->id)
+				->setVerbPastSimple2($row->pastSimp2)
+				->setVerbPastParticiple2($row->pastPrac2)
+				->setVerbPLAdditional($row->plAdditional)
+				->setVerbPronunciation($row->pronunciation);
+
+			$objects[] = $verb;
+		}
+
+		return $objects;
 	}
 
 	/**

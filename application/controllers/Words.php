@@ -75,6 +75,31 @@ class Words extends CI_Controller
 		$this->jsonSuccessData($this->getAllWords());
 	}
 
+	public function editWord()
+	{
+		$uiDataArray = json_decode($this->input->raw_input_stream, true);
+
+		try {
+			/** @var UpdateService $updateWordService*/
+			$updateWordService = app_helper::getContainer()->get('update_word_service');
+			if (!$deleteWordService->execute($id)) {
+				$this->jsonErrorReturn();
+			}
+
+			$request = $this->createRequest($uiDataArray);
+			if (!$this->updateWordService->execute($request)) {
+				$this->jsonErrorReturn();
+			}
+		} catch (ValidationException $e) {
+			$this->jsonErrorReturn($e->getErrorsMessages());
+			exit();
+		} catch (\Exception $e) {
+			$this->jsonErrorReturn();
+		}
+
+		$this->jsonSuccessData($this->getAllWords());
+	}
+
 	private function createRequest($uiDataArray)
 	{
 		$request = new CreateServiceRequest();
@@ -95,6 +120,7 @@ class Words extends CI_Controller
 	/**
 	 * @param $wordId
 	 * @return array
+	 * @throws Exception
 	 */
 	private function getGroupsForWord($wordId): array
 	{

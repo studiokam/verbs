@@ -31,12 +31,24 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	}
 
 	/**
-	 * @return array
+	 * @return Group[]
 	 */
 	public function getAllGroups(): array
 	{
 		$sql = 'SELECT * FROM verbs_groups ORDER BY groupName';
-		return $this->db->selectAll($sql);
+
+		$result = $this->db->selectAll($sql);
+
+		$objects = [];
+		foreach ($result as $row) {
+			$group = new Group($row->groupName);
+			$group->setId($row->id);
+			$group->setGroupAdditional($row->groupAdditional);
+
+			$objects[] = $group;
+		}
+
+		return $objects;
 	}
 
 	public function getGroupByData(Group $group): bool
@@ -112,7 +124,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 			}
 
 			foreach ($allVerbs as $verb) {
-				if (!in_array($verb->id, $verbs)) {
+				if (!in_array($verb->getId(), $verbs)) {
 					$needed[] = $verb;
 				}
 			}
@@ -132,7 +144,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 			}
 
 			foreach ($allVerbs as $verb) {
-				if (!in_array($verb->id, $verbs)) {
+				if (!in_array($verb->getId(), $verbs)) {
 					$needed[] = $verb;
 				}
 			}
@@ -150,7 +162,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 			}
 
 			foreach ($allVerbs as $verb) {
-				if (in_array($verb->id, $verbs)) {
+				if (in_array($verb->getId(), $verbs)) {
 					$needed[] = $verb;
 				}
 			}

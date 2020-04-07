@@ -8,8 +8,8 @@
 					<div class="edit-verb-menu" v-if="showEditWord" @click="endWordEdit">Wyjdź z edycji</div>
 					<form>
 						<div class="form-row">
-							<div class="col verb-pl-name" v-if="showAllWords">Nowy czasownik</div>
-							<div class="col verb-pl-name" v-if="showEditWord">Edycja czasownika</div>
+							<div class="col verb-pl-name" v-if="showAllWords">Nowe słowo</div>
+							<div class="col verb-pl-name" v-if="showEditWord">Edycja słowa</div>
 						</div>
 						<hr class="mb-0">
 						<div class="form-row verbs-form">
@@ -54,7 +54,7 @@
 			<div class="col-sm-6 ml--40" v-if="showAllWords">
 				<div class="add-new-verb">
 					<div class="form-row">
-						<div class="col verb-pl-name">Wszystkie czasowniki</div>
+						<div class="col verb-pl-name">Wszystkie słowa</div>
 					</div>
 					<hr>
 					<input type="text" class="form-control" v-model="searchQuery" placeholder="czego szukamy?"/>
@@ -84,7 +84,7 @@
 			<div class="col-sm-6 ml--40" v-if="showEditWord">
 				<div class="add-new-verb">
 					<div class="form-row">
-						<div class="col verb-pl-name">Dodaj czasownik do grupy</div>
+						<div class="col verb-pl-name">Dodaj słowo do grupy</div>
 					</div>
 					<hr>
 					<div class="verb-about">
@@ -104,11 +104,11 @@
 						</div>
 					</div>
 					<div class="form-row mt-30">
-						<div class="col verb-pl-name">Czasownik przynależy do grup</div>
+						<div class="col verb-pl-name">Słowo przynależy do grup</div>
 					</div>
 					<hr>
 					<div class="verb-about">
-						- Wszystkie czasowniki
+						- Wszystkie słowa
 						<div v-for="group in verbGroups" v-if="group.groupName != 'Wszystkie czasowniki'">
 							<hr class="mt-10 mb-10">
 

@@ -116,6 +116,11 @@
 			<argument type="service" id="verb_repository"/>
 		</service>
 
+		<service id="update_word_service"
+				 class="application\Application\Service\Words\UpdateService">
+			<argument type="service" id="word_repository"/>
+		</service>
+
 
 		<!--Other-->
 		<service id="add_verb_to_group_service"

@@ -82,7 +82,7 @@
 								<div class="verb" v-for="verb in filteredVerbs">
 									<div class="row">
 										<div class="col-sm-10">
-											<strong>{{verb.inf}}</strong> - {{verb.pastSimp1}} - {{verb.pastPrac1}} -> {{verb.pl}}
+											<strong>{{verb.verbInf}}</strong> - {{verb.verbPastSimple1}} - {{verb.verbPastParticiple1}} -> {{verb.verbPL}}
 										</div>
 										<div class="col-sm-2 text-right">
 											<i class="verbs-list-edit fa fa-cog" @click="editVerb(verb.id)"></i>

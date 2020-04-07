@@ -5,6 +5,7 @@ namespace application\Application\Service\Verbs\Payload;
 
 class CreateServiceRequest
 {
+	private $id;
 	private $verbPL;
 	private $verbInf;
 	private $verbPastSimple1;
@@ -13,6 +14,16 @@ class CreateServiceRequest
 	private $verbPastParticiple2;
 	private $verbPLAdditional;
 	private $verbPronunciation;
+
+	/**
+	 * @param mixed $id
+	 * @return CreateServiceRequest
+	 */
+	public function setId($id): CreateServiceRequest
+	{
+		$this->id = $id;
+		return $this;
+	}
 
 	/**
 	 * @param mixed $verbPL
@@ -92,6 +103,14 @@ class CreateServiceRequest
 	{
 		$this->verbPronunciation = $verbPronunciation;
 		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getId()
+	{
+		return $this->id;
 	}
 
 	/**

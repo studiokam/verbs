@@ -91,11 +91,10 @@ var app = new Vue({
 					this.wordEN = this.allWords[i].wordEN;
 					this.wordPLAdditional = this.allWords[i].wordPLAdditional;
 					this.wordPronunciation = this.allWords[i].wordPronunciation;
-					this.showallWords = false;
+					this.showAllWords = false;
 					this.showEditWord = true;
 				}
 			}
-			console.log(this.id);
 			axios({
 				method: 'post',
 				url: 'words/getWordGroups',
@@ -113,12 +112,12 @@ var app = new Vue({
 			});
 		},
 
-		editVerbSend() {
+		editWordSend() {
 			let data = this.dataToSend();
 
 			axios({
 				method: 'post',
-				url: 'verbs/editVerb',
+				url: 'words/editWord',
 				data: data,
 				headers: {'Content-Type': 'application/json'}
 			})

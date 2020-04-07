@@ -29,7 +29,7 @@ var app = new Vue({
 		filteredVerbs() {
 			if (this.searchQuery) {
 				return this.allVerbs.filter((verb) => {
-					return this.searchQuery.toLowerCase().split(' ').every(v => verb.inf.toLowerCase().includes(v))
+					return this.searchQuery.toLowerCase().split(' ').every(v => verb.verbInf.toLowerCase().includes(v))
 				})
 			} else {
 				return this.allVerbs;
@@ -95,14 +95,14 @@ var app = new Vue({
 			for (let i = 0; i < this.allVerbs.length; i++) {
 				if (this.allVerbs[i].id == id) {
 					this.id = this.allVerbs[i].id;
-					this.verbPL = this.allVerbs[i].pl;
-					this.verbInf = this.allVerbs[i].inf;
-					this.verbPastSimple1 = this.allVerbs[i].pastSimp1;
-					this.verbPastSimple2 = this.allVerbs[i].pastSimp2;
-					this.verbPastParticiple1 = this.allVerbs[i].pastPrac1;
-					this.verbPastParticiple2 = this.allVerbs[i].pastPrac2;
-					this.verbPLAdditional = this.allVerbs[i].plAdditional;
-					this.verbPronunciation = this.allVerbs[i].pronunciation;
+					this.verbPL = this.allVerbs[i].verbPL;
+					this.verbInf = this.allVerbs[i].verbInf;
+					this.verbPastSimple1 = this.allVerbs[i].verbPastSimple1;
+					this.verbPastSimple2 = this.allVerbs[i].verbPastSimple2;
+					this.verbPastParticiple1 = this.allVerbs[i].verbPastParticiple1;
+					this.verbPastParticiple2 = this.allVerbs[i].verbPastParticiple2;
+					this.verbPLAdditional = this.allVerbs[i].verbPLAdditional;
+					this.verbPronunciation = this.allVerbs[i].verbPronunciation;
 					this.showAllVerbs = false;
 					this.showEditVerb = true;
 				}
@@ -137,7 +137,7 @@ var app = new Vue({
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allVerbs = resp.allVerbs;
+					this.allVerbs = resp.data;
 					this.endVerbEdit();
 				}
 			}, (error) => {
@@ -209,6 +209,8 @@ var app = new Vue({
             this.baseUrl = resp.baseUrl;
             this.allVerbs = resp.allVerbs;
             this.allGroups = resp.allGroups;
+			console.log('this.allVerbs');
+			console.log(this.allVerbs);
 		});
 
     },

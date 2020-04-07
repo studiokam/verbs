@@ -27,6 +27,7 @@ class UpdateService
 			$request->getVerbPastParticiple1());
 
 		$verb
+			->setId($request->getId())
 			->setVerbPastSimple2($request->getVerbPastSimple2())
 			->setVerbPastParticiple2($request->getVerbPastParticiple2())
 			->setVerbPLAdditional($request->getVerbPLAdditional())

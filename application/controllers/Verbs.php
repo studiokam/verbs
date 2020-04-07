@@ -9,6 +9,8 @@ use application\Application\Service\Exceptions\ValidationException;
 use application\Application\Service\Verbs\DeleteService;
 use application\Application\Service\Verbs\Payload\CreateServiceRequest;
 use application\Application\Service\Verbs\UpdateService;
+use application\Domain\Model\Groups\Group;
+use application\Domain\Model\Verbs\Verb;
 
 class Verbs extends CI_Controller
 {
@@ -124,7 +126,7 @@ class Verbs extends CI_Controller
 	public function editVerb()
 	{
 		$uiDataArray = json_decode($this->input->raw_input_stream, true);
-		
+
 		try {
 			$request = $this->createRequest($uiDataArray);
 			if (!$this->updateVerbService->execute($request)) {
@@ -191,7 +193,9 @@ class Verbs extends CI_Controller
 	 */
 	private function createRequest($uiDataArray)
 	{
+		// todo - zmienić aby set zwracał $this i po tym tutaj na -> ->
 		$request = new CreateServiceRequest();
+		$request->setId($uiDataArray['id']);
 		$request->setVerbPL($uiDataArray['verbPL']);
 		$request->setVerbInf($uiDataArray['verbInf']);
 		$request->setVerbPastSimple1($uiDataArray['verbPastSimple1']);
@@ -228,21 +232,33 @@ class Verbs extends CI_Controller
 		]);
 	}
 
-	// todo - zrobić z tego array obiekt z DB (to co pisałem z P)
 	/**
-	 * @return array
+	 * @return Verb[]
 	 */
 	private function getAllVerbs(): array
 	{
-		return $this->allVerbsService->execute();
+		return $this->objectsListToArrayList($this->allVerbsService->execute());
 	}
 
 	/**
-	 * @return array
+	 * @return Group[]
 	 */
 	private function getAllGroups(): array
 	{
-		return $this->allGroupsService->execute();
+		return $this->objectsListToArrayList($this->allGroupsService->execute());
+	}
+
+	/**
+	 * @param $objectList
+	 * @return array
+	 */
+	private function objectsListToArrayList($objectList): array
+	{
+		$array = [];
+		foreach ($objectList as $object) {
+			$array[] = $object->toArray();
+		}
+		return $array;
 	}
 
 	/**
