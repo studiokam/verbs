@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 15 Mar 2020, 20:24
+-- Czas generowania: 07 Kwi 2020, 22:56
 -- Wersja serwera: 10.4.6-MariaDB
 -- Wersja PHP: 7.3.9
 
@@ -21,26 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `verbs`
 --
-
--- --------------------------------------------------------
-
---
--- Struktura tabeli dla tabeli `groups`
---
-
-CREATE TABLE `groups` (
-  `id` int(11) NOT NULL,
-  `groupName` varchar(100) NOT NULL,
-  `groupAdditional` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Zrzut danych tabeli `groups`
---
-
-INSERT INTO `groups` (`id`, `groupName`, `groupAdditional`) VALUES
-(49, 'Trudne', NULL),
-(50, 'Umiem na 100%', NULL);
 
 -- --------------------------------------------------------
 
@@ -193,6 +173,26 @@ INSERT INTO `verb` (`id`, `pl`, `plAdditional`, `inf`, `pastSimp1`, `pastSimp2`,
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `verbs_groups`
+--
+
+CREATE TABLE `verbs_groups` (
+  `id` int(11) NOT NULL,
+  `groupName` varchar(100) NOT NULL,
+  `groupAdditional` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `verbs_groups`
+--
+
+INSERT INTO `verbs_groups` (`id`, `groupName`, `groupAdditional`) VALUES
+(49, 'Trudne', NULL),
+(50, 'Umiem na 100%', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `verb_group_relation`
 --
 
@@ -259,15 +259,42 @@ INSERT INTO `verb_group_relation` (`id`, `verb_id`, `group_id`) VALUES
 (100, 99, 50),
 (101, 70, 50);
 
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `words`
+--
+
+CREATE TABLE `words` (
+  `id` int(11) NOT NULL,
+  `wordPL` varchar(255) NOT NULL,
+  `wordEN` varchar(255) NOT NULL,
+  `wordPLAdditional` text DEFAULT NULL,
+  `wordPronunciation` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `words`
+--
+
+INSERT INTO `words` (`id`, `wordPL`, `wordEN`, `wordPLAdditional`, `wordPronunciation`) VALUES
+(5, 'stosowany', 'applied', 'When you login to ServiceNow, user authentication is the first level of security applied.', 'applajd'),
+(6, 'Na, po', 'Upon', 'Upon completion of this course you will be able to:', 'opon'),
+(7, 'Zastosować', 'Apply', '', 'aplaj'),
+(8, 'Personifikacja', 'Impersonation', '', 'impersynejszyn'),
+(9, 'Często', 'Frequently ', '', 'frikłentli'),
+(10, 'Zapnij', 'Fasten', 'Fasten your seatbelts and adjust your rear view mirror.', 'fasen'),
+(11, 'Powodowany, spowodowany', 'Caused ', '', 'kozd'),
+(12, 'Podwyższać', 'Elevate', '', 'elewejt'),
+(13, 'Steruj', 'Steer', '', 'stier'),
+(14, 'Niewykorzystane', 'Underutilized', '', 'andijutalaizd'),
+(15, 'Odrębny', 'Distinct', '', 'distinght'),
+(16, 'Zmienić', 'Alter', '', 'alter'),
+(17, 'aa', 'aa', '', '');
+
 --
 -- Indeksy dla zrzutów tabel
 --
-
---
--- Indeksy dla tabeli `groups`
---
-ALTER TABLE `groups`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeksy dla tabeli `mistakes`
@@ -288,20 +315,26 @@ ALTER TABLE `verb`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeksy dla tabeli `verbs_groups`
+--
+ALTER TABLE `verbs_groups`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeksy dla tabeli `verb_group_relation`
 --
 ALTER TABLE `verb_group_relation`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indeksy dla tabeli `words`
 --
+ALTER TABLE `words`
+  ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT dla tabeli `groups`
+-- AUTO_INCREMENT for dumped tables
 --
-ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT dla tabeli `mistakes`
@@ -319,13 +352,25 @@ ALTER TABLE `statusy`
 -- AUTO_INCREMENT dla tabeli `verb`
 --
 ALTER TABLE `verb`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+
+--
+-- AUTO_INCREMENT dla tabeli `verbs_groups`
+--
+ALTER TABLE `verbs_groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT dla tabeli `verb_group_relation`
 --
 ALTER TABLE `verb_group_relation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+
+--
+-- AUTO_INCREMENT dla tabeli `words`
+--
+ALTER TABLE `words`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
