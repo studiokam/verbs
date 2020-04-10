@@ -27,7 +27,8 @@ class UpdateService
 
 		$word->setWordPLAdditional($request->getWordPLAdditional());
 		$word->setWordPronunciation($request->getWordPronunciation());
+		$word->setId($request->getId());
 
-		return $this->verbRepo->updateVerb($verb);
+		return $this->wordRepo->updateWord($word);
 	}
 }

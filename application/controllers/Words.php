@@ -5,6 +5,7 @@ use application\Application\Service\Groups\GetListService as GetGroupsListServic
 use application\Application\Service\Words\CreateService;
 use application\Application\Service\Words\GetListService;
 use application\Application\Service\Words\Payload\CreateServiceRequest;
+use application\Application\Service\Words\UpdateService;
 
 class Words extends CI_Controller
 {
@@ -82,12 +83,8 @@ class Words extends CI_Controller
 		try {
 			/** @var UpdateService $updateWordService*/
 			$updateWordService = app_helper::getContainer()->get('update_word_service');
-			if (!$deleteWordService->execute($id)) {
-				$this->jsonErrorReturn();
-			}
-
 			$request = $this->createRequest($uiDataArray);
-			if (!$this->updateWordService->execute($request)) {
+			if (!$updateWordService->execute($request)) {
 				$this->jsonErrorReturn();
 			}
 		} catch (ValidationException $e) {
@@ -107,6 +104,7 @@ class Words extends CI_Controller
 		$request->setWordEN($uiDataArray['wordEN']);
 		$request->setWordPLAdditional($uiDataArray['wordPLAdditional']);
 		$request->setWordPronunciation($uiDataArray['wordPronunciation']);
+		$request->setId($uiDataArray['id']);
 
 		return $request;
 	}

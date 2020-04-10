@@ -50,6 +50,25 @@ class WordRepository extends AbstractRepository implements WordsRepositoryInterf
 		return $this->db->execute($sql, $params);
 	}
 
+	/**
+	 * @param Word $word
+	 * @return bool
+	 */
+	public function updateWord(Word $word): bool
+	{
+		$sql = 'UPDATE words SET wordPL = ?, wordEN = ?, wordPLAdditional = ?, wordPronunciation = ?
+				WHERE id = ?';
+
+		$params = [];
+		$params[] = $word->getWordPL();
+		$params[] = $word->getWordEN();
+		$params[] = $word->getWordPLAdditional();
+		$params[] = $word->getWordPronunciation();
+		$params[] = $word->getId();
+
+		return $this->db->execute($sql, $params);
+	}
+
 	public function getWordByData(Word $word): bool
 	{
 		$sql = 'SELECT * FROM words WHERE wordPL = ? AND wordEN = ?';

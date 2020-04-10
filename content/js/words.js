@@ -124,7 +124,7 @@ var app = new Vue({
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allWords = resp.allWords;
+					this.allWords = resp.data;
 					this.endWordEdit();
 				}
 			}, (error) => {
@@ -169,7 +169,7 @@ var app = new Vue({
 
 		endWordEdit() {
 			this.showAllWords = true;
-			this.showEditVerb = false;
+			this.showEditWord = false;
 			this.verbsListSelect = '';
 			this.verbGroups = '';
 			this.clearForm();
