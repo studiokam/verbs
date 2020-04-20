@@ -81,7 +81,7 @@
 				<div class="home-container">
 					<div class="home-home-menu" @click="goTo('')">Home</div>
 					<div class="home-verbs-options-menu" @click="goTo('verbs')">Czasowniki</div>
-					<div class="home-words-options-menu" @click="goTo('addWord')">Słowa</div>
+					<div class="home-words-options-menu" @click="goTo('words')">Słowa</div>
 					<div class="home-groups-options-menu" @click="goTo('groups')">Grupy</div>
 
 					<div class="learch-button" :class="{ 'uk-active2' : active == true}"

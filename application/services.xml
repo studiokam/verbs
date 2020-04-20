@@ -17,6 +17,11 @@
 			<argument type="service" id="database"/>
 		</service>
 
+		<service id="word_repository"
+				 class="application\Infrastructure\Word\WordRepository">
+			<argument type="service" id="database"/>
+		</service>
+
 		<service id="group_repository"
 				 class="application\Infrastructure\Group\GroupRepository">
 			<argument type="service" id="database"/>
@@ -35,6 +40,11 @@
 			<argument type="service" id="verb_repository"/>
 		</service>
 
+		<service id="create_word_service"
+				 class="application\Application\Service\Words\CreateService">
+			<argument type="service" id="word_repository"/>
+		</service>
+
 		<service id="create_group_service"
 				 class="application\Application\Service\Groups\CreateService">
 			<argument type="service" id="group_repository"/>
@@ -47,6 +57,11 @@
 			<argument type="service" id="verb_repository"/>
 		</service>
 
+		<service id="get_words_list_service"
+				 class="application\Application\Service\Words\GetListService">
+			<argument type="service" id="word_repository"/>
+		</service>
+
 		<service id="get_groups_list_service"
 				 class="application\Application\Service\Groups\GetListService">
 			<argument type="service" id="group_repository"/>
@@ -55,6 +70,11 @@
 		<service id="get_groups_for_verb_service"
 				 class="application\Application\Service\Verbs\GetGroupsForVerbService">
 			<argument type="service" id="verb_repository"/>
+		</service>
+
+		<service id="get_groups_for_word_service"
+				 class="application\Application\Service\Words\GetGroupsForWordService">
+			<argument type="service" id="word_repository"/>
 		</service>
 
 		<service id="get_verbs_for_groups_service"
@@ -74,6 +94,11 @@
 			<argument type="service" id="verb_repository"/>
 		</service>
 
+		<service id="delete_word_service"
+				 class="application\Application\Service\Words\DeleteService">
+			<argument type="service" id="word_repository"/>
+		</service>
+
 		<service id="delete_verb_from_group_service"
 				 class="application\Application\Service\Groups\DeleteVerbFromGroupService">
 			<argument type="service" id="verb_repository"/>
@@ -89,6 +114,11 @@
 		<service id="update_verb_service"
 				 class="application\Application\Service\Verbs\UpdateService">
 			<argument type="service" id="verb_repository"/>
+		</service>
+
+		<service id="update_word_service"
+				 class="application\Application\Service\Words\UpdateService">
+			<argument type="service" id="word_repository"/>
 		</service>
 
 

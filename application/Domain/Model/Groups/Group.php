@@ -26,6 +26,17 @@ class Group
 	}
 
 	/**
+	 * @return array
+	 */
+	public function toArray(): array
+	{
+		foreach ($this as $key => $value) {
+			$array[$key] = $value;
+		}
+		return $array;
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getId(): int

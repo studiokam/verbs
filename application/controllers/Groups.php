@@ -139,10 +139,10 @@ class Groups extends CI_Controller
 	{
 		/** @var GetListService $allGroups */
 		$allGroups = app_helper::getContainer()->get('get_groups_list_service');
-		$response = $allGroups->execute();
+		$response = $this->objectsListToArrayList($allGroups->execute());
 		foreach ($response as $key => $value) {
-			$verbsInGroup = $this->getAllVerbsForGroup($value->id);
-			$response[$key]->verbsInGroup = count($verbsInGroup);
+			$verbsInGroup = $this->getAllVerbsForGroup($value['id']);
+			$response[$key]['verbsInGroup'] = count($verbsInGroup);
 		}
 
 		return $response;
@@ -160,6 +160,19 @@ class Groups extends CI_Controller
 		$request->setGroupAdditional($uiDataArray['groupAdditional']);
 
 		return $request;
+	}
+
+	/**
+	 * @param $objectList
+	 * @return array
+	 */
+	private function objectsListToArrayList($objectList): array
+	{
+		$array = [];
+		foreach ($objectList as $object) {
+			$array[] = $object->toArray();
+		}
+		return $array;
 	}
 
 	/**

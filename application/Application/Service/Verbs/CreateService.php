@@ -13,9 +13,6 @@ use application\Domain\Model\Verbs\VerbRepositoryInterface;
 
 class CreateService
 {
-	/**
-	 * @var VerbRepositoryInterface
-	 */
 	private $verbRepo;
 
 	public function __construct(VerbRepositoryInterface $verbRepo)

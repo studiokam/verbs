@@ -1,38 +1,34 @@
 var app = new Vue({
     el: '#app',
     data: {
-    	id: '',
-        verbPL: '',
-        verbInf: '',
-        verbPastSimple1: '',
-        verbPastSimple2: '',
-        verbPastParticiple1: '',
-        verbPastParticiple2: '',
-        verbPLAdditional: '',
-		verbPronunciation: '',
+			id: '',
+			wordPL: '',
+			wordEN: '',
+			wordPLAdditional: '',
+			wordPronunciation: '',
         emptyFieldsError: false,
-        verbExistsError: false,
+		wordExistsError: false,
         insertOK: false,
         baseUrl: '',
 		searchQuery: null,
 
-		allVerbs: '',
+			allWords: '',
 		allGroups: '',
-		verbGroups: '',
+			wordGroups: '',
 
 		verbsListSelect: '',
 
-		showAllVerbs: true,
-		showEditVerb: false
+			showAllWords: true,
+			showEditWord: false
     },
 	computed: {
-		filteredVerbs() {
+		filteredWords() {
 			if (this.searchQuery) {
-				return this.allVerbs.filter((verb) => {
-					return this.searchQuery.toLowerCase().split(' ').every(v => verb.verbInf.toLowerCase().includes(v))
+				return this.allWords.filter((word) => {
+					return this.searchQuery.toLowerCase().split(' ').every(v => word.wordPL.toLowerCase().includes(v))
 				})
 			} else {
-				return this.allVerbs;
+				return this.allWords;
 			}
 		}
 	},
@@ -41,28 +37,24 @@ var app = new Vue({
         dataToSend() {
 			return {
 				'id': this.id,
-				'verbPL': this.verbPL,
-				'verbInf': this.verbInf,
-				'verbPastSimple1': this.verbPastSimple1,
-				'verbPastSimple2': this.verbPastSimple2,
-				'verbPastParticiple1': this.verbPastParticiple1,
-				'verbPastParticiple2': this.verbPastParticiple2,
-				'verbPLAdditional': this.verbPLAdditional,
-				'verbPronunciation': this.verbPronunciation
+				'wordPL': this.wordPL,
+				'wordEN': this.wordEN,
+				'wordPLAdditional': this.wordPLAdditional,
+				'wordPronunciation': this.wordPronunciation
 			};
         },
-        addVerbs() {
+        addWord() {
             let data = this.dataToSend();
 			axios({
 				method: 'post',
-				url: 'Verbs/addNew',
+				url: 'words/addNew',
 				data: data,
 				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allVerbs = resp.data;
+					this.allWords = resp.data;
 					this.clearForm();
 				} else {
 					if (resp.validationErrors === 1) {
@@ -75,42 +67,37 @@ var app = new Vue({
 				console.log(error);
 			});
         },
-		deleteVerb(id) {
+		deleteWord(id) {
 			axios({
 				method: 'post',
-				url: 'verbs/deleteVerb',
+				url: 'words/deleteWord',
 				data: id,
 				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allVerbs = resp.data;
+					this.allWords = resp.data;
 				}
 			}, (error) => {
 				console.log(error);
 			});
 		},
-		editVerb(id) {
-			for (let i = 0; i < this.allVerbs.length; i++) {
-				if (this.allVerbs[i].id == id) {
-					this.id = this.allVerbs[i].id;
-					this.verbPL = this.allVerbs[i].verbPL;
-					this.verbInf = this.allVerbs[i].verbInf;
-					this.verbPastSimple1 = this.allVerbs[i].verbPastSimple1;
-					this.verbPastSimple2 = this.allVerbs[i].verbPastSimple2;
-					this.verbPastParticiple1 = this.allVerbs[i].verbPastParticiple1;
-					this.verbPastParticiple2 = this.allVerbs[i].verbPastParticiple2;
-					this.verbPLAdditional = this.allVerbs[i].verbPLAdditional;
-					this.verbPronunciation = this.allVerbs[i].verbPronunciation;
-					this.showAllVerbs = false;
-					this.showEditVerb = true;
+		editWord(id) {
+			for (let i = 0; i < this.allWords.length; i++) {
+				if (this.allWords[i].id == id) {
+					this.id = this.allWords[i].id;
+					this.wordPL = this.allWords[i].wordPL;
+					this.wordEN = this.allWords[i].wordEN;
+					this.wordPLAdditional = this.allWords[i].wordPLAdditional;
+					this.wordPronunciation = this.allWords[i].wordPronunciation;
+					this.showAllWords = false;
+					this.showEditWord = true;
 				}
 			}
-			console.log(this.id);
 			axios({
 				method: 'post',
-				url: 'verbs/getVerbGroups',
+				url: 'words/getWordGroups',
 				data: this.id,
 				headers: {'Content-Type': 'application/json'}
 			})
@@ -118,27 +105,27 @@ var app = new Vue({
 				let resp = response.data;
 				console.log(resp);
 				if (resp.status === 1) {
-					this.verbGroups = resp.data;
+					this.wordGroups = resp.data;
 				}
 			}, (error) => {
 				console.log(error);
 			});
 		},
 
-		editVerbSend() {
+		editWordSend() {
 			let data = this.dataToSend();
 
 			axios({
 				method: 'post',
-				url: 'verbs/editVerb',
+				url: 'words/editWord',
 				data: data,
 				headers: {'Content-Type': 'application/json'}
 			})
 			.then((response) => {
 				let resp = response.data;
 				if (resp.status === 1) {
-					this.allVerbs = resp.data;
-					this.endVerbEdit();
+					this.allWords = resp.data;
+					this.endWordEdit();
 				}
 			}, (error) => {
 				console.log(error);
@@ -155,9 +142,6 @@ var app = new Vue({
 				let resp = response.data;
 				if (resp.status === 1) {
 					this.verbGroups = resp.data;
-					// this.endVerbEdit();
-					console.log('ok');
-					console.log(resp.data);
 				}
 			}, (error) => {
 				console.log(error);
@@ -174,7 +158,7 @@ var app = new Vue({
 				let resp = response.data;
 				if (resp.status === 1) {
 					this.verbGroups = resp.data;
-					// this.endVerbEdit();
+					// this.endWordEdit();
 					console.log('ok');
 					console.log(resp.data);
 				}
@@ -183,34 +167,28 @@ var app = new Vue({
 			});
 		},
 
-		endVerbEdit() {
-			this.showAllVerbs = true;
-			this.showEditVerb = false;
+		endWordEdit() {
+			this.showAllWords = true;
+			this.showEditWord = false;
 			this.verbsListSelect = '';
 			this.verbGroups = '';
 			this.clearForm();
 		},
 		clearForm() {
-        	this.id = '';
-			this.verbPL = '';
-			this.verbInf = '';
-			this.verbPastSimple1 = '';
-			this.verbPastSimple2 = '';
-			this.verbPastParticiple1 = '';
-			this.verbPastParticiple2 = '';
-			this.verbPLAdditional = '';
-			this.verbPronunciation = '';
+			this.id = '';
+			this.wordPL = '';
+			this.wordEN = '';
+			this.wordPLAdditional = '';
+			this.wordPronunciation = '';
 		}
     },
     mounted() {
-		axios.get('Verbs/startData')
+		axios.get('Words/startData')
 		.then((response) => {
 			let resp = response.data;
             this.baseUrl = resp.baseUrl;
-            this.allVerbs = resp.allVerbs;
-            this.allGroups = resp.allGroups;
-			console.log('this.allVerbs');
-			console.log(this.allVerbs);
+            this.allWords = resp.allWords;
+            // this.allGroups = resp.allGroups;
 		});
 
     },
