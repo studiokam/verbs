@@ -17,7 +17,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	/**
 	 * @param Group $group
 	 * @return bool
-	 * 
+	 *
 	 */
 	public function addNewGroup(Group $group): bool
 	{
