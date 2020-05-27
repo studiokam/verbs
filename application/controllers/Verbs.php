@@ -191,19 +191,19 @@ class Verbs extends CI_Controller
 	 * @param $uiDataArray
 	 * @return CreateServiceRequest
 	 */
-	private function createRequest($uiDataArray)
+	private function createRequest($uiDataArray): CreateServiceRequest
 	{
-		// todo - zmienić aby set zwracał $this i po tym tutaj na -> ->
 		$request = new CreateServiceRequest();
-		$request->setId($uiDataArray['id']);
-		$request->setVerbPL($uiDataArray['verbPL']);
-		$request->setVerbInf($uiDataArray['verbInf']);
-		$request->setVerbPastSimple1($uiDataArray['verbPastSimple1']);
-		$request->setVerbPastParticiple1($uiDataArray['verbPastParticiple1']);
-		$request->setVerbPastSimple2($uiDataArray['verbPastSimple2']);
-		$request->setVerbPastParticiple2($uiDataArray['verbPastParticiple2']);
-		$request->setVerbPLAdditional($uiDataArray['verbPLAdditional']);
-		$request->setVerbPronunciation($uiDataArray['verbPronunciation']);
+		$request
+			->setId($uiDataArray['id'])
+			->setVerbPL($uiDataArray['verbPL'])
+			->setVerbInf($uiDataArray['verbInf'])
+			->setVerbPastSimple1($uiDataArray['verbPastSimple1'])
+			->setVerbPastParticiple1($uiDataArray['verbPastParticiple1'])
+			->setVerbPastSimple2($uiDataArray['verbPastSimple2'])
+			->setVerbPastParticiple2($uiDataArray['verbPastParticiple2'])
+			->setVerbPLAdditional($uiDataArray['verbPLAdditional'])
+			->setVerbPronunciation($uiDataArray['verbPronunciation']);
 
 		return $request;
 	}
