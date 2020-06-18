@@ -17,10 +17,11 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	/**
 	 * @param Group $group
 	 * @return bool
+	 *
 	 */
 	public function addNewGroup(Group $group): bool
 	{
-		$sql = 'INSERT INTO verbs_groups (groupName, groupAdditional) 
+        $sql = 'INSERT INTO groups (groupName, groupAdditional) 
 				VALUES (?, ?)';
 
 		$params = [];
@@ -35,7 +36,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function getAllGroups(): array
 	{
-		$sql = 'SELECT * FROM verbs_groups ORDER BY groupName';
+		$sql = 'SELECT * FROM groups ORDER BY groupName';
 
 		$result = $this->db->selectAll($sql);
 
@@ -53,7 +54,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 
 	public function getGroupByData(Group $group): bool
 	{
-		$sql = 'SELECT * FROM verbs_groups WHERE groupName = ?';
+		$sql = 'SELECT * FROM groups WHERE groupName = ?';
 
 		$params = [];
 		$params[] = $group->getGroupName();
@@ -68,7 +69,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function deleteGroup($id): bool
 	{
-		$sql = 'DELETE FROM verbs_groups WHERE id = ?';
+		$sql = 'DELETE FROM groups WHERE id = ?';
 		$params = [];
 		$params[] = $id;
 		return $this->db->execute($sql, $params);
@@ -80,7 +81,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function updateGroup(Group $group): bool
 	{
-		$sql = 'UPDATE verbs_groups SET groupName = ?, groupAdditional = ? WHERE id = ?';
+		$sql = 'UPDATE groups SET groupName = ?, groupAdditional = ? WHERE id = ?';
 
 		$params = [];
 		$params[] = $group->getGroupName();
@@ -96,7 +97,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 	 */
 	public function getGroupByName($name): array
 	{
-		$sql = 'SELECT * FROM verbs_groups WHERE groupName = ?';
+		$sql = 'SELECT * FROM groups WHERE groupName = ?';
 		return $this->db->select($sql, [$name]);
 	}
 
@@ -171,7 +172,7 @@ class GroupRepository extends AbstractRepository implements GroupRepositoryInter
 
 		} else {
 
-			$sql = 'SELECT vgr.id as relationId, v.* FROM verb_group_relation vgr
+			$sql = 'SELECT vgr.id as relationId, v.* FROM group_relation vgr
 				JOIN verb v on v.id = vgr.verb_id
 				WHERE group_id = ? ORDER BY v.inf';
 
