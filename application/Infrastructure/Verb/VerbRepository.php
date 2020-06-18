@@ -114,7 +114,7 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 	 */
 	public function addVerbToGroup(array $data): bool
 	{
-		$sql = 'INSERT INTO verb_group_relation (verb_id, group_id)
+		$sql = 'INSERT INTO group_relation (verb_id, group_id)
 					VALUES (?, ?)';
 		$params = [];
 		$params[] = $data['verbId'];
@@ -129,7 +129,7 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 	 */
 	public function getGroupsForVerbs(int $verbId): array
 	{
-		$sql = 'SELECT vgr.id as relationId, g.id, g.groupName, g.groupAdditional FROM verb_group_relation vgr
+		$sql = 'SELECT vgr.id as relationId, g.id, g.groupName, g.groupAdditional FROM group_relation vgr
 				JOIN verbs_groups g on g.id = vgr.group_id
 				WHERE verb_id = ? ORDER BY g.groupName';
 
@@ -145,7 +145,7 @@ class VerbRepository extends AbstractRepository implements VerbRepositoryInterfa
 	 */
 	public function deleteVerbFromGroup(int $id): bool
 	{
-		$sql = 'DELETE FROM verb_group_relation WHERE id = ?';
+		$sql = 'DELETE FROM group_relation WHERE id = ?';
 		$params = [];
 		$params[] = $id;
 		return $this->db->execute($sql, $params);

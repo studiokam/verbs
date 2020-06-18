@@ -11,12 +11,12 @@ class RelationVerbGroupRepository extends AbstractRepository implements Relation
 {
 	public function getAllRelations()
 	{
-		$sql = 'SELECT * FROM verb_group_relation';
+		$sql = 'SELECT * FROM group_relation';
 		return $this->db->selectAll($sql);
 	}
 
 	public function getRelationByGroupId($groupId) {
-		$sql = 'SELECT * FROM verb_group_relation WHERE group_id = ?';
+		$sql = 'SELECT * FROM group_relation WHERE group_id = ?';
 		return $this->db->select($sql, [$groupId]);
 	}
 }
